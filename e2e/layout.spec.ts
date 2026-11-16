@@ -7,7 +7,7 @@ test("wide layouts fill the screen and filters align without a search outline", 
     const input = page.getByRole("textbox", { name: "Tìm từ" });
     await expect(input).toBeEnabled();
     await page.evaluate(() => document.fonts.ready);
-    const boxes = await page.locator(".vocabulary-filter").evaluateAll(fields => fields.map(field => {
+    const boxes = await page.locator(".learning-filters .vocabulary-filter").evaluateAll(fields => fields.map(field => {
       const { y, height } = field.getBoundingClientRect();
       return { y, height };
     }));
@@ -16,7 +16,7 @@ test("wide layouts fill the screen and filters align without a search outline", 
     expect(boxes[2]).toEqual(boxes[0]);
     await input.focus();
     await expect(input).toHaveCSS("outline-style", "none");
-    for (const select of await page.locator("main select").all()) {
+    for (const select of await page.locator(".learning-filters select").all()) {
       await select.focus();
       await expect(select).toHaveCSS("outline-style", "none");
     }

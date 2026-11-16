@@ -1,6 +1,12 @@
 ﻿@import "tailwindcss";
 :root { --background: #faf8ef; --foreground: #29392a; }
 html { scrollbar-gutter: stable; }
+html:has(dialog[open]) { overflow: hidden; }
+.flashcard-dialog { margin: auto; width: min(1100px, calc(100% - 32px)); max-height: calc(100dvh - 48px); color: var(--foreground); overflow-y: auto; overscroll-behavior: contain; }
+.flashcard-dialog::backdrop { background: rgb(29 42 30 / .5); backdrop-filter: blur(3px); }
+.flashcard-dialog input, .flashcard-dialog select { height: 48px; }
+.flashcard-dialog[open] { animation: dialog-open 180ms ease-out; }
+@keyframes dialog-open { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @theme inline { --color-background: var(--background); --color-foreground: var(--foreground); --font-sans: var(--font-pixel); --font-mono: var(--font-pixel); }
 body { background: var(--background); color: var(--foreground); font-family: var(--font-pixel), monospace; font-size: 22px; }
 .text-xs { font-size: 16px; }
@@ -8,7 +14,7 @@ body { background: var(--background); color: var(--foreground); font-family: var
 button, a, input, select { -webkit-tap-highlight-color: transparent; }
 button, select { cursor: pointer; }
 :focus-visible { outline: 3px solid #5766b1; outline-offset: 5px; }
-input.vocabulary-filter:focus, select:focus { outline: none; background: #edf2e4; }
+input.vocabulary-filter:focus, textarea.vocabulary-filter:focus, select:focus { outline: none; background: #edf2e4; }
 .flip-card:focus-visible, .pixel-panel:focus-visible { outline: none; }
 main:focus { outline: none; }
 .flip-card:focus-visible .pixel-label { background: #f9cd65; }

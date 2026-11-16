@@ -1,6 +1,6 @@
 export const topics = ["Chào hỏi", "Gia đình", "Đồ ăn", "Nhà cửa", "Sinh hoạt"] as const;
 export type Word = {
-  id: string; topic: typeof topics[number]; german: string; vietnamese: string;
+  id: string; topic: string; german: string; vietnamese: string;
   article?: "der" | "die" | "das"; plural?: string; example: string; translation: string;
 };
 export const vocabulary: Word[] = [

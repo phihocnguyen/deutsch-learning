@@ -1,4 +1,5 @@
 import { vocabulary } from "./vocabulary.ts";
+import { customWordId } from "./custom-vocabulary.ts";
 export type WordStatus = "known" | "review";
 export type ExerciseResult = { id: string; mode: "gap" | "article" | "translate"; kind: "practice" | "review"; completedAt: string; total: number; correct: number; wrongIds: string[] };
 export type Progress = { version: 1; words: Record<string, WordStatus>; exercises?: ExerciseResult[] };
@@ -17,6 +18,9 @@ export function parseProgress(raw: string | null): Progress {
   for (const word of vocabulary) {
     const status = value.words[word.id];
     if (status === "known" || status === "review") words[word.id] = status;
+  }
+  for (const [id, status] of Object.entries(value.words)) {
+    if (customWordId.test(id) && (status === "known" || status === "review")) words[id] = status;
   }
   const exercises: ExerciseResult[] = [];
   if (Array.isArray(value.exercises)) {

@@ -1,0 +1,63 @@
+import { test, expect } from "@playwright/test";
+
+test("create topic first, author a card, study, edit and delete with persistent progress", async ({ page }) => {
+  await page.goto("/flashcards");
+  await page.getByRole("button", { name: "＋ Tạo chủ đề / flashcard", exact: true }).click();
+  const editor = page.getByRole("dialog", { name: "Chủ đề & flashcard của tôi", exact: true });
+  await expect(page.getByText("Tạo hoặc chọn một chủ đề trước khi thêm thẻ.")).toBeVisible();
+  await page.getByRole("textbox", { name: "Tên chủ đề", exact: true }).fill("Du lịch");
+  await page.getByRole("button", { name: "Tạo chủ đề", exact: true }).click();
+  await page.getByRole("textbox", { name: "Từ tiếng Đức *", exact: true }).fill("der Bahnhof");
+  await page.getByRole("textbox", { name: "Nghĩa tiếng Việt *", exact: true }).fill("Nhà ga");
+  await page.getByRole("textbox", { name: "Số nhiều", exact: true }).fill("die Bahnhöfe");
+  await page.getByRole("textbox", { name: "Câu ví dụ tiếng Đức", exact: true }).fill("Der Bahnhof ist groß.");
+  await page.getByRole("textbox", { name: "Bản dịch câu ví dụ", exact: true }).fill("Nhà ga lớn.");
+  await page.getByRole("button", { name: "Thêm flashcard", exact: true }).click();
+  await expect(page.getByRole("combobox", { name: "Chủ đề", exact: true })).toHaveValue("Du lịch");
+  await page.getByRole("button", { name: "Đóng popup", exact: true }).click();
+  const card = page.locator("button.flip-card");
+  await expect(card).toContainText("der Bahnhof");
+  await expect(card).toContainText("die Bahnhöfe");
+  await expect(card).not.toContainText("der der");
+  await card.click();
+  await expect(card).toContainText("Der Bahnhof ist groß.");
+  await page.getByRole("button", { name: "✓ Đã nhớ", exact: true }).click();
+  await page.reload();
+  await expect(page.getByRole("combobox", { name: "Chủ đề", exact: true })).toBeEnabled();
+  await page.getByRole("combobox", { name: "Chủ đề", exact: true }).selectOption("Du lịch");
+  await expect(card).toContainText("Đã nhớ");
+  await page.getByRole("button", { name: "＋ Tạo chủ đề / flashcard", exact: true }).click();
+  await page.getByRole("combobox", { name: "Chủ đề của tôi", exact: true }).selectOption({ label: "Du lịch (1 thẻ)" });
+  await page.getByRole("button", { name: "Sửa der Bahnhof", exact: true }).click();
+  await page.getByRole("textbox", { name: "Nghĩa tiếng Việt *", exact: true }).fill("Ga tàu");
+  await page.getByRole("button", { name: "Lưu thay đổi", exact: true }).click();
+  await expect(editor.getByText("Ga tàu", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Xóa chủ đề", exact: true }).click();
+  await page.getByRole("button", { name: "Hủy", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Sửa der Bahnhof", exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Xóa chủ đề", exact: true }).click();
+  await page.getByRole("button", { name: "Xác nhận xóa", exact: true }).click();
+  await page.reload();
+  await expect(page.getByRole("combobox", { name: "Chủ đề", exact: true })).toBeEnabled();
+  await expect(page.getByRole("combobox", { name: "Chủ đề", exact: true }).locator("option")).toHaveCount(6);
+});
+
+test("custom authoring fits a small phone and reports blocked storage honestly", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 850 });
+  await page.addInitScript(() => {
+    Storage.prototype.setItem = () => { throw new DOMException("Denied", "SecurityError"); };
+  });
+  await page.goto("/flashcards");
+  await page.getByRole("button", { name: "＋ Tạo chủ đề / flashcard", exact: true }).click();
+  await page.getByRole("textbox", { name: "Tên chủ đề", exact: true }).fill("Công việc");
+  await page.getByRole("button", { name: "Tạo chủ đề", exact: true }).click();
+  await expect(page.getByRole("dialog").getByRole("alert")).toContainText("phiên hiện tại");
+  await page.getByRole("textbox", { name: "Từ tiếng Đức *", exact: true }).fill("arbeiten");
+  await page.getByRole("textbox", { name: "Nghĩa tiếng Việt *", exact: true }).fill("Làm việc");
+  await page.getByRole("button", { name: "Thêm flashcard", exact: true }).click();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.getByRole("button", { name: "Xóa arbeiten", exact: true }).click();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("dialog")).not.toBeVisible();
+  await expect(page.getByText("Chưa có từ phù hợp", { exact: true })).toBeVisible();
+});

@@ -25,6 +25,7 @@ Tests dùng khả năng chạy TypeScript trực tiếp của Node.js; dùng Nod
 - 25 từ/cụm từ A1, 5 chủ đề, nghĩa Việt, ví dụ và dạng số nhiều cho danh từ.
 - `/vocabulary`: tìm kiếm, lọc chủ đề/trạng thái và nghe phát âm.
 - `/flashcards`: bấm toàn bộ mặt thẻ để lật 3D (hoặc Enter/Space), chuyển thẻ, đánh dấu đã nhớ/cần ôn; hiển thị cả mạo từ và số nhiều, nghe số nhiều ngay ở mặt trước.
+- Popup “Tạo chủ đề / flashcard” trong thư viện và flashcard: tạo chủ đề trước, thêm/sửa/xóa từ, nghĩa, mạo từ, số nhiều, câu ví dụ và bản dịch. Chọn chủ đề để học bộ thẻ riêng, có phát âm và lưu tiến độ. Bộ thẻ tự tạo chưa dùng trong game/bài tập có sẵn.
 - `/progress`: thống kê từ, danh sách từ theo trạng thái thực tế và lịch sử 50 lượt bài tập gần nhất.
 - `/games`: nối từ, chọn nghĩa, nghe đoán từ, sắp xếp chữ; chọn chủ đề, 5 từ/lượt, chấm điểm lần đầu, xem kết quả, chơi lại và lưu các từ sai vào danh sách cần ôn.
 - `/exercises`: điền từ đúng dạng vào câu, chọn mạo từ và dịch Việt–Đức. Có giải thích, nghe đáp án, thử lại và lượt ôn riêng cho những từ sai; lọc theo chủ đề hoặc từ cần ôn.
@@ -56,6 +57,12 @@ Khi hoàn thành, các từ sai được đánh dấu cần ôn; trả lời đ�
 Dữ liệu được lọc theo các ID hợp lệ; dữ liệu lỗi hoặc phiên bản không hỗ trợ được báo cho người dùng.
 Khi lưu thất bại, trạng thái tiếp tục được giữ trong bộ nhớ của phiên. Các tab nhận thay đổi qua storage event.
 Không có tài khoản hay đồng bộ cloud. Xóa dữ liệu trình duyệt sẽ mất tiến độ.
+
+Bộ thẻ cá nhân lưu riêng trong `deutsch-quest-custom-v1`, gồm chủ đề có ID và thẻ thuộc chủ đề đó.
+Từ và nghĩa là bắt buộc; câu ví dụ, bản dịch, mạo từ và số nhiều là tùy chọn.
+Nhập `der Bahnhof` sẽ tự tách mạo từ; nhập số nhiều `die Bahnhöfe` sẽ bỏ phần `die` thừa.
+Xóa chủ đề yêu cầu xác nhận và xóa các thẻ bên trong. Dữ liệu lỗi không bị tự ghi đè;
+khi không thể lưu, bộ thẻ mới chỉ còn trong phiên hiện tại và có thông báo rõ.
 
 Ngữ pháp lưu riêng trong `deutsch-quest-grammar-v1`: danh sách bài đã đọc và tối đa
 50 lượt luyện gần nhất, không ghi vào dữ liệu từ vựng. Kết quả gần nhất từng câu
@@ -101,7 +108,7 @@ Giữ cổng 3100 trống trước khi chạy. Dev server cổng 3000 vẫn có 
 ## Kết quả bàn giao
 
 - Lint, TypeScript và production build thành công.
-- 29 unit tests và 22 kiểm tra trình duyệt Chromium trên bản production đều qua.
+- 31 unit tests và 24 kiểm tra trình duyệt Chromium trên bản production đều qua.
 - Đã kiểm tra 6 trang ở độ rộng 320, 390, 768 và 1366px; bảng game đang chơi cũng vừa màn hình 320px.
 - Kiểm tra bàn phím, giảm chuyển động, font pixel, số nhiều, tải giọng chậm/hủy chờ, dữ liệu lỗi và đồng bộ giữa hai tab.
 - Có trang 404 tiếng Việt, tiêu đề riêng từng trang và biểu tượng pixel của ứng dụng.
