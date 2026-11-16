@@ -60,5 +60,6 @@ Tác giả commit: kris <ng.phihoc123@gmail.com>.
 - Cập nhật trạng thái phase trong file này theo kết quả thực tế.
 
 ## Trạng thái
-- Phase 0: hoàn tất kế hoạch; scaffold chưa được kiểm tra build.
-- Phase 1–5: chưa triển khai.
+- Phase 0: hoàn tất, commit `ea36307` (`intialize`).
+- Phase 1: hoàn tất giao diện pixel, điều hướng 6 khu học, bố cục responsive, focus bàn phím và reduced motion. `npm.cmd run build` (bao gồm TypeScript) và `npm.cmd run lint` đều thành công. Chưa kiểm tra trực quan bằng trình duyệt hoặc thao tác bàn phím thực tế; các khu học là khung giao diện có ghi rõ trạng thái.
+- Phase 2–5: chưa triển khai.
