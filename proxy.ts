@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
 import { NextResponse } from "next/server";
 
-export default auth(request => {
+export const proxy = auth(request => {
   const pathname = request.nextUrl.pathname;
   const isLogin = pathname === "/login";
   const isAuthEndpoint = pathname.startsWith("/api/auth/");
