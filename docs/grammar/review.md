@@ -58,3 +58,16 @@ vùng miền; không xem một cách đọc là lựa chọn duy nhất ở mọ
 
 Tests kiểm tra phần mềm và tính nhất quán dữ liệu; không tự chứng minh nội dung
 ngôn ngữ là đúng tuyệt đối. Cần tiếp tục rà soát khi thêm bài hoặc có phản hồi.
+
+## Đối chiếu bản PDF đọc thử do người dùng cung cấp
+
+Bản PDF 125 trang tự nhận là bản đọc thử đã lược bớt nội dung. Đã đọc các nhóm
+trang về đại từ, danh từ và bốn cách, giới từ, Präteritum, đồng vị, Futur I và
+Konjunktiv I. [Sổ tay bổ sung](bo-sung-tu-pdf.md) ghi rõ trang và cung cấp ví dụ,
+bài tập do dự án viết mới.
+
+Các phần đại từ, cách, giới từ và Präteritum củng cố bài A1/A2 hiện có. Đồng vị,
+Futur I và Konjunktiv I được ghi là phần mở rộng sau A2, chưa đưa vào giao diện
+hay tính là nội dung của 28 bài. Khi rà lại, không dùng mẹo “hễ chuyển động là
+Akkusativ” hoặc “Futur I là mọi hành động tương lai” như quy tắc tuyệt đối.
+Các điểm này đã được đối chiếu thêm với các mục IDS grammis liên kết trong sổ tay.

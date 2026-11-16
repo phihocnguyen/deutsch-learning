@@ -12,7 +12,7 @@ export async function POST(request: Request) {
   const ids = body?.wordIds;
   if (!Array.isArray(ids) || !ids.length || ids.length > 5 || new Set(ids).size !== ids.length || ids.some(id => typeof id !== "string" || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) || !["gap", "article", "translate"].includes(body?.mode) || !aiExerciseLevels.includes(body?.level))
     return Response.json({ error: "Chọn từ 1 đến 5 từ, dạng bài và trình độ hợp lệ." }, { status: 400 });
-  if (!process.env.DEUTSCH_AI_API_KEY) return Response.json({ error: "Máy chủ chưa cấu hình token Qwen (DEUTSCH_AI_API_KEY)." }, { status: 503 });
+  if (!process.env.AI_SERVICE_TOKEN?.trim()) return Response.json({ error: "Máy chủ chưa cấu hình AI_SERVICE_TOKEN." }, { status: 503 });
   try {
     const result = await neonPool().query(
       `SELECT f.id, t.name AS topic, f.german, f.vietnamese, f.article, f.plural, f.example, f.translation

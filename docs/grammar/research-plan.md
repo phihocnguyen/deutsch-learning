@@ -21,6 +21,11 @@ Không bắt buộc người dùng cung cấp giáo trình. Nếu có giáo trì
 4. [Leibniz-Institut für Deutsche Sprache — grammis](https://grammis.ids-mannheim.de/)
    Cổng tham chiếu nghiên cứu, thuật ngữ và ngữ pháp. Khi đối chiếu, lưu URL mục cụ thể;
    trang chủ không được tính là bằng chứng cho một quy tắc cụ thể.
+5. **Ngữ pháp tiếng Đức theo cách dễ hiểu, Version 2.0**, bản PDF
+   đọc thử 125 trang do người dùng cung cấp. Tài liệu tự ghi đã lược bỏ nhiều chương
+   và bài tập. Dùng để rà các chủ đề còn thiếu và thứ tự ôn tập; không sao chép
+   lời giải thích, ví dụ hoặc bài tập. Bản đồ trang và nội dung bổ sung do dự án
+   viết mới nằm trong [sổ tay bổ sung](bo-sung-tu-pdf.md).
 
 ## Cách biên soạn
 

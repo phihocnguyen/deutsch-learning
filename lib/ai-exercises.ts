@@ -16,7 +16,7 @@ export function parseQwenExercises(payload: unknown, words: Word[], mode: Exerci
   for (let depth = 0; depth < 4; depth++) {
     if (typeof value === "string") {
       const text = value.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "");
-      try { value = JSON.parse(text); } catch { throw new Error("Qwen chưa trả về bài tập đúng định dạng. Hãy tạo lại."); }
+      try { value = JSON.parse(text); } catch { throw new Error("AI chưa trả về bài tập đúng định dạng. Hãy tạo lại."); }
       continue;
     }
     if (!value || typeof value !== "object" || Array.isArray(value)) break;
@@ -26,11 +26,11 @@ export function parseQwenExercises(payload: unknown, words: Word[], mode: Exerci
     value = data.response ?? data.text ?? data.output ?? data.content ?? data.answer ?? (Array.isArray(choices) ? choices[0]?.message?.content : undefined);
   }
   const rows = value && typeof value === "object" ? (value as { exercises?: unknown }).exercises : null;
-  if (!Array.isArray(rows) || rows.length !== words.length || !words.length || words.length > 5) throw new Error("Qwen chưa trả đủ bài tập hợp lệ. Hãy tạo lại.");
+  if (!Array.isArray(rows) || rows.length !== words.length || !words.length || words.length > 5) throw new Error("AI chưa trả đủ bài tập hợp lệ. Hãy tạo lại.");
   const seen = new Set<string>();
   return rows.map(row => {
     const word = words.find(word => word.id === row?.wordId);
-    if (!word || seen.has(word.id)) throw new Error("Qwen trả về từ không thuộc bộ bài tập. Hãy tạo lại.");
+    if (!word || seen.has(word.id)) throw new Error("AI trả về từ không thuộc bộ bài tập. Hãy tạo lại.");
     seen.add(word.id);
     for (const field of ["example", "translation", "explanation"]) {
       if (typeof row[field] !== "string" || !row[field].trim() || row[field].length > 1000) throw new Error("Nội dung bài tập AI không hợp lệ. Hãy tạo lại.");

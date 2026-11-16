@@ -3,6 +3,7 @@ import { useRef, useState, type FormEvent } from "react";
 import { fullWord } from "@/lib/vocabulary";
 import { validateTopicName, type CustomWord } from "@/lib/custom-vocabulary";
 import { useCustomVocabulary } from "./custom-vocabulary-store";
+import { AIExample } from "./ai-example";
 
 const field = "vocabulary-filter mt-2 block w-full min-w-0 border-2 border-[#29392a] bg-[#fffdf5] px-3 py-2";
 export function FlashcardEditor({ selectedTopic, onSelect, mode = "all" }: { selectedTopic: string; onSelect: (topic: string) => void; mode?: "topics" | "cards" | "all" }) {
@@ -148,6 +149,7 @@ export function FlashcardEditor({ selectedTopic, onSelect, mode = "all" }: { sel
               <label className="min-w-0 text-sm">IPA<input className={field} name="ipa" maxLength={300} placeholder="/tyːɐ/" /></label><label className="min-w-0 text-sm sm:col-span-2">Câu ví dụ tiếng Đức<textarea className={field} lang="de" name="example" rows={2} maxLength={1000} placeholder="Der Bahnhof ist in der Nähe." /></label>
               <label className="min-w-0 text-sm sm:col-span-2">Bản dịch câu ví dụ<textarea className={field} name="translation" rows={2} maxLength={1000} placeholder="Nhà ga ở gần đây." /></label>
             </div>
+            {!editing && <AIExample />}
             <div className="mt-5"><button disabled={savingTopic} className="pixel-button bg-[#dbe8cc]">{savingTopic ? "Đang lưu…" : "Thêm flashcard"}</button></div>
           </form>
           <h3 className="mt-7 font-bold">Các thẻ trong chủ đề ({words.length})</h3>

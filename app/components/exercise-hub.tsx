@@ -1,17 +1,16 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
-import { createExerciseQuestions, checkExerciseAnswer, exerciseNames, type ExerciseMode, type ExerciseQuestion } from "@/lib/exercises";
+import { useEffect, useRef, useState } from "react";
+import { checkExerciseAnswer, exerciseNames, type ExerciseMode, type ExerciseQuestion } from "@/lib/exercises";
 import { fullWord } from "@/lib/vocabulary";
 import { useCustomVocabulary } from "./custom-vocabulary-store";
 import { EmptyVocabulary } from "./empty-vocabulary";
-import { recordAnswer, type Answers } from "@/lib/games";
+import { recordAnswer, shuffle, type Answers } from "@/lib/games";
 import type { ExerciseResult } from "@/lib/progress";
 import { useProgress } from "./progress-store";
 import { Pronunciation } from "./pronunciation";
-import { AIExerciseBuilder } from "./ai-exercise-builder";
 
-type Session = { id: string; mode: ExerciseMode; kind: "practice" | "review"; questions: ExerciseQuestion[]; ai?: boolean };
+type Session = { id: string; mode: ExerciseMode; kind: "practice" | "review"; questions: ExerciseQuestion[] };
 const modes: { mode: ExerciseMode; icon: string; detail: string; color: string }[] = [
   { mode: "gap", icon: "_", detail: "Chọn đúng từ và dạng chia để hoàn thành một câu tiếng Đức.", color: "bg-[#dbe8cc]" },
   { mode: "article", icon: "D", detail: "Nhớ giống danh từ qua ba mạo từ der, die, das.", color: "bg-[#f8dda7]" },
@@ -64,24 +63,59 @@ function ExerciseRound({ session, leave, replay, review }: { session: Session; l
 }
 
 export function ExerciseHub() {
-  const { progress, ready: progressReady } = useProgress();
+  const { ready: progressReady } = useProgress();
   const custom = useCustomVocabulary();
   const ready = progressReady && custom.ready;
-  const topics = custom.data.topics.map(t => t.name);
-  const [topic, setTopic] = useState("");
-  const [reviewOnly, setReviewOnly] = useState(false);
   const [session, setSession] = useState<Session | null>(null);
-  const [message, setMessage] = useState("");
-  function start(mode: ExerciseMode, retryIds?: string[]) {
-    const ids = retryIds ?? (reviewOnly ? Object.keys(progress.words).filter(id => progress.words[id] === "review") : undefined);
-    const questions = createExerciseQuestions(mode, topic, ids, 5, custom.data.words);
-    if (!questions.length) { setMessage(mode === "article" ? "Bộ lọc này chưa có danh từ để luyện mạo từ. Hãy đổi chủ đề hoặc bỏ lọc từ cần ôn." : mode === "gap" ? "Chưa có câu ví dụ chứa nguyên từ đã nhập. Thêm câu ví dụ phù hợp hoặc đổi bộ lọc để luyện điền từ." : "Chưa có từ phù hợp. Hãy đổi chủ đề hoặc bỏ lọc từ cần ôn."); return; }
-    setMessage(""); setSession({ id: crypto.randomUUID(), mode, kind: retryIds || reviewOnly ? "review" : "practice", questions });
+  const [choosingMode, setChoosingMode] = useState<ExerciseMode | null>(null);
+  const [generating, setGenerating] = useState(false);
+  const [error, setError] = useState("");
+  const dialog = useRef<HTMLDialogElement>(null);
+  const pending = useRef<AbortController | null>(null);
+  const topics = custom.data.topics.map(topic => ({ ...topic, cardCount: custom.data.words.filter(word => word.topicId === topic.id).length }));
+
+  useEffect(() => {
+    const current = dialog.current;
+    if (!current) return;
+    if (choosingMode && !current.open) current.showModal();
+    if (!choosingMode && current.open) current.close();
+  }, [choosingMode]);
+  useEffect(() => () => pending.current?.abort(), []);
+
+  function closeDialog() {
+    pending.current?.abort(); pending.current = null;
+    setGenerating(false); setChoosingMode(null); setError("");
+  }
+
+  async function generate(mode: ExerciseMode, topicId: string) {
+    const pool = custom.data.words.filter(word => word.topicId === topicId && (mode !== "article" || word.article));
+    if (!pool.length) { setError(mode === "article" ? "Chủ đề này chưa có danh từ với mạo từ der, die hoặc das." : "Chủ đề này chưa có từ phù hợp."); return; }
+    const controller = new AbortController();
+    pending.current = controller;
+    setGenerating(true); setError("");
+    const timeout = setTimeout(() => controller.abort(), 110000);
+    try {
+      const response = await fetch("/api/deutsch-ai/exercises", {
+        method: "POST", headers: { "Content-Type": "application/json" }, signal: controller.signal,
+        body: JSON.stringify({ wordIds: shuffle(pool).slice(0, 5).map(word => word.id), mode, level: "A1" }),
+      });
+      const data = await response.json().catch(() => null);
+      if (!response.ok || !Array.isArray(data?.questions) || !data.questions.length)
+        throw new Error(data?.error || "Không tạo được bài tập. Hãy thử lại.");
+      if (controller.signal.aborted) return;
+      setSession({ id: crypto.randomUUID(), mode, kind: "practice", questions: data.questions });
+      setChoosingMode(null);
+    } catch (cause) {
+      if (pending.current === controller) setError(controller.signal.aborted ? "Tạo bài tập quá lâu. Hãy thử lại." : cause instanceof Error ? cause.message : "Không tạo được bài tập. Hãy thử lại.");
+    } finally {
+      clearTimeout(timeout);
+      if (pending.current === controller) { pending.current = null; setGenerating(false); }
+    }
   }
   return <><p className="eyebrow">LUYỆN TỪ TRONG NGỮ CẢNH</p><div className="mt-4 flex flex-wrap justify-between gap-4"><h1 className="text-4xl">{session ? exerciseNames[session.mode] : "Bài tập"}</h1>{session && <button className="pixel-button bg-[#fffdf5]" onClick={() => setSession(null)}>← Chọn bài khác</button>}</div><p className="my-5 text-[#647059]">Tối đa 5 câu mỗi lượt. Điểm tính theo lần trả lời đầu; từ sai được tự đánh dấu cần ôn khi hoàn thành.</p>
     {custom.error && <p role="alert" className="my-5 bg-[#fff0d5] p-4">{custom.error}</p>}
-    {!session && <AIExerciseBuilder key={`${topic}-${reviewOnly}`} ready={ready} words={custom.data.words.filter(word => (!topic || word.topic === topic) && (!reviewOnly || progress.words[word.id] === "review"))} onStart={(questions, mode) => { setMessage(""); setSession({ id: crypto.randomUUID(), mode, kind: reviewOnly ? "review" : "practice", questions, ai: true }); }} />}
     {custom.ready && !custom.data.words.length && <EmptyVocabulary />}
-    {session ? <ExerciseRound key={session.id} session={session} leave={() => setSession(null)} replay={() => session.ai ? setSession(null) : start(session.mode)} review={ids => session.ai ? setSession({ ...session, id: crypto.randomUUID(), kind: "review", questions: session.questions.filter(question => ids.includes(question.word.id)) }) : start(session.mode, ids)} /> : <><div className="my-7 flex flex-wrap items-end gap-6"><label className="block min-w-60">Chủ đề<select disabled={!ready} className="mt-2 block w-full border-2 border-[#29392a] bg-[#fffdf5] p-3" value={topic} onChange={e => { setTopic(e.target.value); setMessage(""); }}><option value="">Tất cả chủ đề</option>{topics.map(t => <option key={t}>{t}</option>)}</select></label><label className="flex min-h-12 cursor-pointer items-center gap-3"><input type="checkbox" className="h-5 w-5 accent-[#63814a]" checked={reviewOnly} disabled={!ready} onChange={e => { setReviewOnly(e.target.checked); setMessage(""); }} />Chỉ luyện từ cần ôn</label></div><p role="status" className="mb-5 text-[#80421e]">{message}</p><div className="grid gap-6 xl:grid-cols-3">{modes.map(item => <article key={item.mode} className={`pixel-panel p-6 ${item.color}`}><span className="pixel-icon bg-[#fffdf5]" aria-hidden="true">{item.icon}</span><h2 className="mt-6 text-3xl">{exerciseNames[item.mode]}</h2><p className="mt-3 min-h-28 text-[#52604a]">{item.detail}</p><button className="pixel-button mt-5 bg-[#fffdf5]" disabled={!ready} onClick={() => start(item.mode)}>Luyện {exerciseNames[item.mode].toLocaleLowerCase("vi")} →</button></article>)}</div><p className="mt-7 text-sm text-[#647059]">Bài đang làm chưa được lưu giữa chừng. Hãy hoàn thành lượt để ghi nhận kết quả trên thiết bị.</p></>}
+    {session ? <ExerciseRound key={session.id} session={session} leave={() => setSession(null)} replay={() => { setChoosingMode(session.mode); setSession(null); }} review={ids => setSession({ ...session, id: crypto.randomUUID(), kind: "review", questions: session.questions.filter(question => ids.includes(question.word.id)) })} /> : <><div className="grid gap-6 xl:grid-cols-3">{modes.map(item => <article key={item.mode} className={`pixel-panel p-6 ${item.color}`}><span className="pixel-icon bg-[#fffdf5]" aria-hidden="true">{item.icon}</span><h2 className="mt-6 text-3xl">{exerciseNames[item.mode]}</h2><p className="mt-3 min-h-28 text-[#52604a]">{item.detail}</p><button className="pixel-button mt-5 bg-[#fffdf5]" disabled={!ready} onClick={() => { setChoosingMode(item.mode); setError(""); }}>Luyện {exerciseNames[item.mode].toLocaleLowerCase("vi")} →</button></article>)}</div><p className="mt-7 text-sm text-[#647059]">Bài đang làm chưa được lưu giữa chừng. Hãy hoàn thành lượt để ghi nhận kết quả trên thiết bị.</p></>}
+    {choosingMode && <dialog ref={dialog} aria-labelledby="exercise-topic-title" className="flashcard-dialog topic-dialog pixel-panel bg-[#f5f3e8] p-6 sm:p-8" onCancel={event => { event.preventDefault(); closeDialog(); }}><div className="flex items-center justify-between gap-4"><h2 id="exercise-topic-title" className="text-2xl font-bold">Chọn chủ đề</h2><button type="button" className="pixel-button bg-[#fffdf5]" onClick={closeDialog}>Đóng</button></div><p className="mt-3 text-sm text-[#647059]">Chọn chủ đề để luyện {exerciseNames[choosingMode].toLocaleLowerCase("vi")}.</p>{generating ? <p className="mt-6 flex items-center gap-3" role="status"><span className="inline-block h-5 w-5 animate-spin border-2 border-[#29392a] border-t-transparent" aria-hidden="true" />Đang tạo bài tập bằng AI…</p> : error ? <p className="mt-5 text-[#b42318]" role="alert">{error}</p> : topics.length ? <div className="mt-5 grid gap-3">{topics.map(topic => <button type="button" key={topic.id} disabled={!topic.cardCount} className="pixel-button justify-between bg-[#fffdf5] disabled:cursor-not-allowed disabled:opacity-60" onClick={() => void generate(choosingMode, topic.id)}><span>{topic.name}</span><span className={topic.cardCount ? "pixel-label" : "text-sm text-[#b42318]"}>{topic.cardCount ? `${topic.cardCount} thẻ` : "Chủ đề chưa có từ"}</span></button>)}</div> : <p className="mt-5 text-[#647059]">Bạn chưa tạo chủ đề nào.</p>}{error && <button type="button" className="pixel-button mt-4 bg-[#dbe8cc]" onClick={() => setError("")}>Chọn chủ đề khác</button>}</dialog>}
   </>;
 }

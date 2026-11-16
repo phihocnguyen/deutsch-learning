@@ -1,0 +1,46 @@
+import { expect, test } from "@playwright/test";
+
+test("records a learner's voice, sends the card ID and audio, then shows the score", async ({ page, context }) => {
+  const topicId = "11111111-1111-4111-8111-111111111111";
+  const wordId = "22222222-2222-4222-8222-222222222222";
+  await context.addCookies([{ name: "authjs.session-token", value: "test-session", domain: "localhost", path: "/" }]);
+  await page.route("**/api/topics", route => route.fulfill({ json: { topics: [{ id: topicId, name: "Từ luyện âm" }] } }));
+  await page.route(`**/api/topics/${topicId}/flashcards`, route => route.fulfill({ json: { flashcards: [{
+    id: wordId, topicId, topic: "Từ luyện âm", german: "Tür", vietnamese: "cửa",
+    article: "die", example: "Die Tür ist offen.", translation: "Cửa đang mở.", ipa: "/tyːɐ/",
+  }] } }));
+  let upload = "";
+  await page.route("**/api/deutsch-ai/score", route => {
+    upload = route.request().postDataBuffer()?.toString("latin1") ?? "";
+    return route.fulfill({ json: { score: 87.5 } });
+  });
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "mediaDevices", { configurable: true, value: {
+      getUserMedia: async () => ({ getTracks: () => [{ stop() {} }] }),
+    } });
+    class FakeRecorder {
+      static isTypeSupported() { return true; }
+      state = "inactive";
+      mimeType = "audio/webm;codecs=opus";
+      ondataavailable: ((event: { data: Blob }) => void) | null = null;
+      onstop: (() => void) | null = null;
+      onerror: (() => void) | null = null;
+      start() { this.state = "recording"; }
+      stop() {
+        this.state = "inactive";
+        this.ondataavailable?.({ data: new Blob(["audio sample"], { type: this.mimeType }) });
+        this.onstop?.();
+      }
+    }
+    Object.defineProperty(window, "MediaRecorder", { configurable: true, value: FakeRecorder });
+  });
+
+  await page.goto(`/flashcards/study?topic=${topicId}`);
+  await expect(page.getByRole("button", { name: "Ghi âm phát âm" })).toBeEnabled();
+  await page.getByRole("button", { name: "Ghi âm phát âm" }).click();
+  await expect(page.getByRole("button", { name: "Dừng và chấm điểm" })).toBeVisible();
+  await page.getByRole("button", { name: "Dừng và chấm điểm" }).click();
+  await expect(page.getByText("Điểm phát âm: 87.5/100")).toBeVisible();
+  expect(upload).toContain(wordId);
+  expect(upload).toContain("audio sample");
+});

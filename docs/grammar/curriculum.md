@@ -4,6 +4,10 @@ Ngày đối chiếu: 2026-11-16. Đề cương do dự án biên soạn, không
 chứng nhận hoặc bản sao toàn bộ giáo trình của tổ chức nào. A1 và A2 là hai mục
 độc lập trên giao diện; các bài bên trong có trình tự và kiến thức tiên quyết.
 
+Đọc thêm [sổ tay bổ sung từ bản PDF đọc thử](bo-sung-tu-pdf.md) để ôn bảng đại từ,
+bốn cách, giới từ và các chủ đề mở rộng sau A2. Tài liệu bổ sung không thay đổi
+phạm vi 28 bài đang có trong ứng dụng.
+
 ## Nguồn nền
 
 - **G1**: [Goethe-Institut, Deutsch Online A1 — Kapitel 1–18](https://lernen.goethe.de/deutschonline/A1/PDF/DE/deutschonline_Redemittel_und_Grammatik_1-18.pdf).
