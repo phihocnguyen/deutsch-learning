@@ -1,4 +1,4 @@
-# Deutsch Quest — kế hoạch triển khai
+﻿# Deutsch Learning — kế hoạch triển khai
 
 Website học từ vựng Đức–Việt bằng Next.js App Router, TypeScript và Tailwind CSS 4.
 Làm việc trong repository hiện tại; chưa triển khai hosting.
@@ -95,3 +95,4 @@ Tác giả commit: kris <ng.phihoc123@gmail.com>.
 - Theo phản hồi tiếp theo, mở rộng vùng bấm ra toàn bộ mặt thẻ (bao gồm padding/khoảng trống), dùng hai mặt xếp chồng và rotateY 180 độ trong 420ms; chiều cao giữ theo mặt cao nhất. Nút nghe/đánh dấu nằm ngoài vùng lật. Kiểm tra trình duyệt đã xác nhận font VT323 được tải và sử dụng.
 - Đổi tích hợp Tailwind sang PostCSS theo tài liệu Next.js sau khi quan sát CSS dev giữ Arial cũ dù build đã có VT323. Đã kiểm tra CSS cập nhật ngay mà không phải khởi động lại dev server.
 - Điều chỉnh mới nhất: nút nghe số nhiều hiện ở cả mặt trước; bỏ outline xanh của flashcard và thẻ danh sách, giữ tín hiệu focus bằng màu nền/nhãn.
+

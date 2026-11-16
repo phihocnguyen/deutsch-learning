@@ -1,6 +1,7 @@
-import { Suspense } from "react";
+﻿import { Suspense } from "react";
 import { TopicStudy } from "../../components/topic-study";
-export const metadata = { title: "Học theo chủ đề | Deutsch Quest" };
+export const metadata = { title: "Học theo chủ đề | Deutsch Learning" };
 export default function Page() {
   return <Suspense fallback={<p role="status">Đang mở bộ flashcard…</p>}><TopicStudy /></Suspense>;
 }
+

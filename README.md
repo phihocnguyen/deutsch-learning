@@ -1,4 +1,4 @@
-﻿# Deutsch Quest
+﻿# Deutsch Learning
 
 Website học từ vựng Đức–Việt và ngữ pháp A1–A2 bằng Next.js 16, React 19 và Tailwind CSS 4, giao diện pixel.
 
@@ -132,3 +132,4 @@ A1/A2 và chưa có giáo viên độc lập duyệt toàn bộ. Nguồn, phạm
 được ghi trong `docs/grammar/`; tests phần mềm không phải kiểm định học thuật.
 Tiến độ và lịch sử chỉ nằm trên trình duyệt hiện tại, không có tài khoản hay đồng bộ cloud.
 Mã nguồn đã sẵn sàng chạy local; chưa triển khai hosting.
+

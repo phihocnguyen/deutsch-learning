@@ -1,3 +1,4 @@
-import { FlashcardTopics } from "../components/flashcard-topics";
-export const metadata = { title: "Flashcard | Deutsch Quest" };
+﻿import { FlashcardTopics } from "../components/flashcard-topics";
+export const metadata = { title: "Flashcard | Deutsch Learning" };
 export default function Page() { return <FlashcardTopics />; }
+
