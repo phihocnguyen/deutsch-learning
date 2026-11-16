@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { fullWord, fullPlural, type Word } from "@/lib/vocabulary";
 import { useProgress } from "./progress-store";
-import { Pronunciation } from "./pronunciation";
+import { Pronunciation } from "./ai-pronunciation";
 import { FlashcardFace } from "./flashcard-face";
 import { AIExample } from "./ai-example";
 import { ProgressInsights } from "./progress-insights";
