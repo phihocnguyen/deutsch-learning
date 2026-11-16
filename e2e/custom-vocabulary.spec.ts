@@ -12,6 +12,33 @@ function topicLink(page: Page, name: string) {
 }
 const manage = (page: Page) => page.getByRole("button", { name: "＋ Thêm / quản lý flashcard", exact: true });
 
+test("German character buttons replace the selection, keep the caret and respect the word limit", async ({ page }) => {
+  await page.goto("/flashcards");
+  await createTopic(page, "Luyện viết");
+  await topicLink(page, "Luyện viết").click();
+  await manage(page).click();
+  const input = page.getByRole("textbox", { name: "Từ tiếng Đức *", exact: true });
+  await input.fill("Schuler");
+  await input.evaluate((element: HTMLInputElement) => element.setSelectionRange(3, 4));
+  await page.getByRole("button", { name: "Chèn ü", exact: true }).click();
+  await expect(input).toHaveValue("Schüler");
+  await expect(input).toBeFocused();
+  expect(await input.evaluate((element: HTMLInputElement) => element.selectionStart)).toBe(4);
+  await input.fill("a".repeat(160));
+  await page.getByRole("button", { name: "Chèn ß", exact: true }).click();
+  await expect(input).toHaveValue("a".repeat(160));
+  await input.fill("Ubung");
+  await input.evaluate((element: HTMLInputElement) => element.setSelectionRange(0, 1));
+  await page.getByRole("button", { name: "Chèn Ü", exact: true }).focus();
+  await page.keyboard.press("Enter");
+  await expect(input).toHaveValue("Übung");
+  await page.getByRole("textbox", { name: "Nghĩa tiếng Việt *", exact: true }).fill("Bài luyện tập");
+  await page.getByRole("button", { name: "Thêm flashcard", exact: true }).click();
+  await page.keyboard.press("Escape");
+  await page.reload();
+  await expect(page.locator("button.flip-card")).toContainText("Übung");
+});
+
 test("topics are a separate page; opening a topic authors, studies and edits only its cards", async ({ page }) => {
   await page.goto("/flashcards");
   await expect(page.locator("button.flip-card")).toHaveCount(0);

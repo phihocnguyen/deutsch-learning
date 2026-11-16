@@ -7,6 +7,7 @@ import { useCustomVocabulary } from "./custom-vocabulary-store";
 const field = "vocabulary-filter mt-2 block w-full min-w-0 border-2 border-[#29392a] bg-[#fffdf5] px-3 py-2";
 export function FlashcardEditor({ selectedTopic, onSelect, mode = "all" }: { selectedTopic: string; onSelect: (topic: string) => void; mode?: "topics" | "cards" | "all" }) {
   const dialog = useRef<HTMLDialogElement>(null);
+  const germanInput = useRef<HTMLInputElement>(null);
   const { data, ready, error, update } = useCustomVocabulary();
   const [editing, setEditing] = useState<CustomWord | null>(null);
   const [message, setMessage] = useState("");
@@ -14,6 +15,15 @@ export function FlashcardEditor({ selectedTopic, onSelect, mode = "all" }: { sel
   const [deleting, setDeleting] = useState(false);
   const topic = data.topics.find(t => t.name === selectedTopic);
   const words = data.words.filter(w => w.topicId === topic?.id);
+  function insertGermanCharacter(character: string) {
+    const input = germanInput.current;
+    if (!input) return;
+    const start = input.selectionStart ?? input.value.length;
+    const end = input.selectionEnd ?? start;
+    input.focus();
+    if (input.value.length - (end - start) + character.length > input.maxLength) return;
+    input.setRangeText(character, start, end, "end");
+  }
   function run(action: () => void) {
     setFailure(""); setMessage("");
     try { action(); } catch (error) { setFailure(error instanceof Error ? error.message : "Không thể lưu thay đổi."); }
@@ -94,7 +104,9 @@ export function FlashcardEditor({ selectedTopic, onSelect, mode = "all" }: { sel
         {!topic ? <p className="mt-4 text-[#647059]">Tạo hoặc chọn một chủ đề trước khi thêm thẻ.</p> : <>
           <form key={`${topic.id}-${editing?.id ?? "new"}`} onSubmit={saveWord} className="mt-4">
             <div className="grid min-w-0 gap-4 sm:grid-cols-2">
-              <label className="min-w-0 text-sm">Từ tiếng Đức *<input className={field} lang="de" name="german" required maxLength={160} defaultValue={editing?.german} placeholder="Bahnhof hoặc der Bahnhof" /></label>
+              <div className="min-w-0"><label className="block text-sm">Từ tiếng Đức *<input ref={germanInput} className={field} lang="de" name="german" required maxLength={160} defaultValue={editing?.german} placeholder="Bahnhof hoặc der Bahnhof" /></label>
+                <div role="group" aria-label="Ký tự tiếng Đức cho từ vựng" className="mt-3 grid grid-cols-4 gap-2">{["ä", "ö", "ü", "ß", "Ä", "Ö", "Ü", "ẞ"].map(character => <button key={character} type="button" lang="de" aria-label={`Chèn ${character}`} className="min-h-11 border-2 border-[#29392a] bg-[#f8dda7] px-3 py-1 shadow-[2px_2px_0_#29392a] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none" onPointerDown={event => event.preventDefault()} onClick={() => insertGermanCharacter(character)}>{character}</button>)}</div>
+              </div>
               <label className="min-w-0 text-sm">Nghĩa tiếng Việt *<input className={field} name="vietnamese" required maxLength={300} defaultValue={editing?.vietnamese} placeholder="Nhà ga" /></label>
               <label className="min-w-0 text-sm">Mạo từ<select className={field} name="article" defaultValue={editing?.article ?? ""}><option value="">Không có / nhận từ ô từ vựng</option><option>der</option><option>die</option><option>das</option></select></label>
               <label className="min-w-0 text-sm">Số nhiều<input className={field} lang="de" name="plural" maxLength={160} defaultValue={editing?.plural} placeholder="Bahnhöfe (bỏ trống nếu không có)" /></label>
