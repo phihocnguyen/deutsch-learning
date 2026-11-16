@@ -52,6 +52,17 @@ Tác giả commit: kris <ng.phihoc123@gmail.com>.
 - Cập nhật README: cách chạy, cấu trúc, nguồn audio và giới hạn lưu dữ liệu trên thiết bị.
 - Commit: `chore: verify learning flows and document setup`.
 
+## Phase 6 — Ngữ pháp tiếng Đức A1–A2 có nguồn đối chiếu
+- 6.1: Research và lập ma trận chủ đề/trình độ/điều kiện tiên quyết/nguồn. Dùng CEFR cho mục tiêu năng lực; dùng giáo trình tiếng Đức cụ thể để phân chia ngữ pháp, không coi CEFR là danh sách quy tắc cố định.
+- 6.2: Biên soạn bài học tiếng Việt, thuật ngữ Đức, bảng quy tắc, ví dụ tự viết, phạm vi áp dụng, ngoại lệ và lỗi thường gặp. Mỗi bài có nguồn cụ thể đến chương/trang/mục và ngày truy cập.
+- 6.3: Thêm khu ngữ pháp theo A1/A2, bài tập có giải thích, ôn lỗi và tiến độ. Giữ giao diện pixel và giọng đọc trình duyệt hiện tại.
+- 6.4: Đối chiếu nội dung với nguồn; kiểm tra bảng chia, Kasus, vị trí động từ và tập đáp án hợp lệ. Chấm hoa/thường, dấu câu và trật tự từ theo mục tiêu từng bài; không dùng mặc định chấm không phân biệt hoa/thường của bài từ vựng cho mọi bài ngữ pháp.
+- Tham khảo nguồn để tự biên soạn, không sao chép nguyên bài tập/bảng giải thích từ giáo trình.
+- Tài liệu tự học có nguồn tham chiếu; không tự nhận được Goethe/CEFR chứng nhận, hoặc đảm bảo không có lỗi chỉ vì tests phần mềm chạy qua.
+- Có thể bổ sung người dạy tiếng Đức rà soát học thuật; đây là lớp kiểm tra khuyến nghị, không phải điều kiện phải có tài liệu người dùng mới bắt đầu research.
+- Chi tiết nguồn và tiêu chí nghiệm thu: `docs/grammar/research-plan.md`.
+- Commit riêng sau mỗi phần 6.1–6.4; chưa triển khai nội dung ngữ pháp trong lần bổ sung kế hoạch này.
+
 ## Nguyên tắc triển khai
 - Đọc tài liệu tương ứng trong node_modules/next/dist/docs trước khi viết code Next.js.
 - Dùng chung bộ dữ liệu và logic tiến độ cho flashcard, game và bài tập.
@@ -67,6 +78,7 @@ Tác giả commit: kris <ng.phihoc123@gmail.com>.
 - Phase 4: hoàn tất 3 dạng bài điền từ/chọn mạo từ/dịch Việt–Đức. Có giải thích, nghe đáp án, thử lại không tăng điểm lần đầu, lượt ôn chỉ gồm từ sai, bộ lọc chủ đề/từ cần ôn. Lưu tối đa 50 kết quả, tránh lưu trùng ID, giữ dữ liệu từ đã học trước đây và tự đánh dấu từ sai cần ôn. Trang tiến độ hiển thị lịch sử và thống kê câu đúng thực tế. 18 unit tests và kiểm tra trình duyệt các lượt bài tập/game đều qua; bao gồm tải lại trang, sửa từ không mất lịch sử và mobile.
 - Kiểm tra cuối Phase 4: build/TypeScript, lint, 18 unit tests và 8 tests trình duyệt đã qua (4 luồng học/game, 4 luồng bài tập). Khi storage từ chối ghi, có cảnh báo và kết quả vẫn được giữ trong phiên, không thông báo đã lưu thành công.
 - Phase 5: hoàn tất. Lint, TypeScript/production build, 18 unit tests và 14 tests Chromium trên bản production đều qua. Kiểm tra 6 trang ở 320/390/768/1366px, các bảng game ở 320px, keyboard/skip link/reduced motion, dữ liệu lỗi/phục hồi và đồng bộ hai tab. Có 404 tiếng Việt, tiêu đề từng trang, icon pixel riêng và cấu hình kiểm tra production tự mở/dừng server trên Windows. Đã cập nhật README và giới hạn: chưa nghe giọng thật trên từng thiết bị, chưa kiểm tra Safari/Firefox, lưu browser-local, chưa hosting.
+- Phase 6: đã bổ sung kế hoạch và xác minh các nguồn xuất phát; chưa research đầy đủ từng chủ đề, biên soạn bài hoặc triển khai tính năng ngữ pháp.
 
 ## Điều chỉnh sau Phase 2
 - Đổi toàn bộ font sang VT323 (latin, latin-ext, vietnamese), bỏ Arial và chú thích giọng đọc.
