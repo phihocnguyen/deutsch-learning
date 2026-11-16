@@ -89,7 +89,7 @@ không phân biệt hoa/thường của bài từ vựng cho mọi bài ngữ ph
 - `lib/grammar/`: bài A1/A2, thông tin đối chiếu, chấm đáp án, schema tiến độ và cách đọc giờ.
 - `app/components/`: giao diện học, lưu tiến độ, phát âm và điều hướng.
 - `tests/progress.test.mjs`: kiểm tra dữ liệu lưu, bộ từ và mạo từ trong văn bản phát âm.
-- `tests/games.test.mjs`, `tests/speech.test.mjs`: kiểm tra điểm, bộ câu hỏi, Unicode tiếng Đức và tải giọng bất đồng bộ.
+- `tests/games.test.mjs`: kiểm tra điểm, bộ câu hỏi và Unicode tiếng Đức.
 - `tests/exercises.test.mjs`: câu hỏi/đáp án, dữ liệu cũ, giới hạn lịch sử và tránh lưu trùng kết quả.
 - `tests/grammar.test.mjs`, `tests/time.test.mjs`: phạm vi bài học, đáp án thay thế, chữ hoa/dấu, dữ liệu ngữ pháp và các mốc giờ.
 - `e2e/learning.spec.ts`, `e2e/exercises.spec.ts`: kiểm tra giao diện, lượt chơi và bài tập bằng Playwright.

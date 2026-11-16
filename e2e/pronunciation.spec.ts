@@ -33,14 +33,28 @@ test("records a learner's voice, sends the card ID and audio, then shows the sco
       }
     }
     Object.defineProperty(window, "MediaRecorder", { configurable: true, value: FakeRecorder });
+    class FakeAudio {
+      src: string;
+      constructor(src: string) { this.src = src; }
+      play() { document.body.dataset.recordingPlayed = this.src; return Promise.resolve(); }
+      pause() {}
+    }
+    Object.defineProperty(window, "Audio", { configurable: true, value: FakeAudio });
   });
 
   await page.goto(`/flashcards/study?topic=${topicId}`);
+  await expect(page.getByRole("button", { name: "Mở kiểm tra phát âm" })).toBeVisible();
+  await page.getByRole("button", { name: "Mở kiểm tra phát âm" }).click();
+  await expect(page.getByRole("dialog", { name: "Kiểm tra phát âm" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Ghi âm phát âm" })).toBeEnabled();
   await page.getByRole("button", { name: "Ghi âm phát âm" }).click();
   await expect(page.getByRole("button", { name: "Dừng và chấm điểm" })).toBeVisible();
   await page.getByRole("button", { name: "Dừng và chấm điểm" }).click();
   await expect(page.getByText("Điểm phát âm: 87.5/100")).toBeVisible();
+  await page.getByRole("button", { name: "Nghe lại bản ghi âm" }).click();
+  await expect(page.locator("body")).toHaveAttribute("data-recording-played", /^blob:/);
   expect(upload).toContain(wordId);
   expect(upload).toContain("audio sample");
+  await page.getByRole("button", { name: "Đóng" }).click();
+  await expect(page.getByRole("dialog", { name: "Kiểm tra phát âm" })).toHaveCount(0);
 });

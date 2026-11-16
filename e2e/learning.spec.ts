@@ -3,17 +3,14 @@ import { fullWord } from "../lib/vocabulary";
 import { vocabulary, seedVocabulary } from "./fixtures/vocabulary";
 test.beforeEach(async ({ page }) => { await seedVocabulary(page); });
 
-test("pixel font, large 3D flashcard, plural speech and delayed voice loading", async ({ page }) => {
+test("pixel font, large 3D flashcard and plural speech with browser default voice", async ({ page }) => {
   await page.addInitScript(`
     window.__spoken = [];
-    window.__voices = [];
     const synth = new EventTarget();
-    synth.getVoices = () => window.__voices;
     synth.cancel = () => {};
-    synth.speak = u => { window.__spoken.push(u.text); setTimeout(() => u.onend?.(), 50); };
+    synth.speak = u => { window.__spoken.push({ text: u.text, lang: u.lang, voice: u.voice }); setTimeout(() => u.onend?.(), 50); };
     Object.defineProperty(window, 'speechSynthesis', { value: synth });
     Object.defineProperty(window, 'SpeechSynthesisUtterance', { value: class { constructor(text) { this.text = text; } } });
-    window.__loadVoices = () => { window.__voices = [{ lang: 'de-DE' }]; synth.dispatchEvent(new Event('voiceschanged')); };
   `);
   await page.goto("/flashcards/study?topic=fixture-topic-3");
   await expect(page.getByRole("combobox", { name: "Trạng thái", exact: true })).toBeEnabled();
@@ -31,11 +28,7 @@ test("pixel font, large 3D flashcard, plural speech and delayed voice loading", 
   await expect(page.locator(".flip-card-rotor")).toHaveClass(/is-flipped/);
   await expect(page.locator(".flip-card-back")).toContainText("die Häuser");
   await page.getByRole("button", { name: "Nghe số nhiều die Häuser", exact: true }).click();
-  await expect(page.getByRole("button", { name: "Dừng die Häuser", exact: true })).toHaveAttribute("aria-busy", "true");
-  await expect(page.getByRole("button", { name: "Dừng die Häuser", exact: true })).toContainText("Đang tải giọng…");
-  await expect(page.getByText(/Chưa tìm thấy giọng Đức/)).toHaveCount(0);
-  await page.evaluate("window.__loadVoices()");
-  await expect.poll(() => page.evaluate("window.__spoken.join('|')")).toBe("die Häuser");
+  await expect.poll(() => page.evaluate("window.__spoken[0]")).toEqual({ text: "die Häuser", lang: "de-DE" });
   await expect(card).toHaveAttribute("aria-pressed", "true");
   await card.focus(); await page.keyboard.press("Space");
   await expect(card).toHaveAttribute("aria-pressed", "false");
@@ -43,6 +36,10 @@ test("pixel font, large 3D flashcard, plural speech and delayed voice loading", 
   await expect(page.locator(".flip-card-rotor")).toHaveCSS("transform", "none");
   const frontBox = await card.boundingBox(); expect(frontBox!.height).toBe(box!.height);
   await card.blur();
+  await page.getByRole("button", { name: "Thẻ kế tiếp" }).click();
+  await expect(page.getByText("Thẻ 2 / 5", { exact: true })).toBeVisible();
+  await page.keyboard.press("ArrowLeft");
+  await expect(page.getByText("Thẻ 1 / 5", { exact: true })).toBeVisible();
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({ path: "test-results/flashcard-desktop.png", fullPage: true });
   await page.setViewportSize({ width: 390, height: 844 });

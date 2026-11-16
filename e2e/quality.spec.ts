@@ -58,25 +58,21 @@ test("corrupt storage recovers explicitly and progress updates across tabs", asy
   await second.close();
 });
 
-test("voice loading can be cancelled by changing cards and unsupported APIs stay usable", async ({ page }) => {
+test("browser speech stops when changing cards and unsupported APIs stay usable", async ({ page }) => {
   await page.addInitScript(`
     window.__spoken = [];
-    window.__voices = [];
     const synth = new EventTarget();
-    synth.getVoices = () => window.__voices;
-    synth.cancel = () => {};
+    synth.cancel = () => { window.__cancelled = true; };
     synth.speak = u => window.__spoken.push(u.text);
     Object.defineProperty(window, 'speechSynthesis', { configurable: true, value: synth });
     Object.defineProperty(window, 'SpeechSynthesisUtterance', { value: class { constructor(text) { this.text = text; } } });
-    window.__loadVoices = () => { window.__voices = [{ lang: 'de-DE' }]; synth.dispatchEvent(new Event('voiceschanged')); };
   `);
   await page.goto("/flashcards/study?topic=fixture-topic-0");
   await expect(page.getByRole("combobox", { name: "Trạng thái", exact: true })).toBeEnabled();
   await page.getByRole("button", { name: "Nghe từ Hallo", exact: true }).click();
-  await expect(page.getByRole("button", { name: "Dừng Hallo", exact: true })).toHaveAttribute("aria-busy", "true");
+  expect(await page.evaluate("window.__spoken")).toEqual(["Hallo"]);
   await page.getByRole("button", { name: "Thẻ tiếp →", exact: true }).click();
-  await page.evaluate("window.__loadVoices()");
-  expect(await page.evaluate("window.__spoken")).toEqual([]);
+  expect(await page.evaluate("window.__cancelled")).toBe(true);
   await page.evaluate("Object.defineProperty(window, 'speechSynthesis', {value: undefined})");
   await page.getByRole("button", { name: "Nghe từ danke", exact: true }).click();
   await expect(page.getByRole("status").filter({ hasText: "Trình duyệt không hỗ trợ giọng tổng hợp." })).toBeVisible();
