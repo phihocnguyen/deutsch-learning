@@ -24,9 +24,11 @@ Tests dùng khả năng chạy TypeScript trực tiếp của Node.js; dùng Nod
 
 - 25 từ/cụm từ A1, 5 chủ đề, nghĩa Việt, ví dụ và dạng số nhiều cho danh từ.
 - `/vocabulary`: tìm kiếm, lọc chủ đề/trạng thái và nghe phát âm.
-- `/flashcards`: lật thẻ, chuyển thẻ, đánh dấu đã nhớ/cần ôn.
+- `/flashcards`: bấm toàn bộ mặt thẻ để lật 3D (hoặc Enter/Space), chuyển thẻ, đánh dấu đã nhớ/cần ôn; hiển thị cả mạo từ và số nhiều, nghe số nhiều ngay ở mặt trước.
 - `/progress`: thống kê và danh sách từ theo trạng thái thực tế.
-- Game và bài tập hiện là khung giao diện, sẽ triển khai trong phase tiếp theo.
+- `/games`: nối từ, chọn nghĩa, nghe đoán từ, sắp xếp chữ; chọn chủ đề, 5 từ/lượt, chấm điểm lần đầu, xem kết quả, chơi lại và lưu các từ sai vào danh sách cần ôn.
+- Bài tập hiện là khung giao diện, sẽ triển khai trong phase tiếp theo.
+- Font pixel VT323 hỗ trợ tiếng Việt và tiếng Đức, được Next.js tự phục vụ từ ứng dụng.
 
 ## Audio
 
@@ -35,6 +37,8 @@ Danh từ được đọc kèm mạo từ, ví dụ `das Haus`, `der Apfel`, `di
 Ưu tiên giọng `de-DE`, sau đó giọng tiếng Đức khác có trên thiết bị.
 Không có giọng Đức thì ứng dụng báo rõ, không tự chuyển sang giọng ngôn ngữ khác.
 Audio chỉ bắt đầu khi người dùng bấm, có nút dừng, không phát chồng nhau.
+Nếu danh sách giọng chưa sẵn sàng, nút hiển thị trạng thái tải và chờ tối đa 10 giây;
+khi giọng Đức xuất hiện, câu đang chờ được đọc tự động. Đổi thẻ hoặc dừng sẽ hủy lượt chờ.
 Chất lượng và khả năng dùng offline phụ thuộc giọng do trình duyệt/hệ điều hành cung cấp.
 Không sử dụng file bản thu, dịch vụ audio riêng hay API key.
 
@@ -51,7 +55,17 @@ Không có tài khoản hay đồng bộ cloud. Xóa dữ liệu trình duyệt 
 - `lib/progress.ts`: schema và kiểm tra dữ liệu tiến độ.
 - `app/components/`: giao diện học, lưu tiến độ, phát âm và điều hướng.
 - `tests/progress.test.mjs`: kiểm tra dữ liệu lưu, bộ từ và mạo từ trong văn bản phát âm.
+- `tests/games.test.mjs`, `tests/speech.test.mjs`: kiểm tra điểm, bộ câu hỏi, Unicode tiếng Đức và tải giọng bất đồng bộ.
+- `e2e/learning.spec.ts`: kiểm tra giao diện và các lượt chơi bằng Playwright.
 - `PLAN.md`: trạng thái và commit từng phase.
 
-Đã kiểm tra build, lint, tests và HTTP các trang chính. Chưa kiểm tra thao tác UI
-hoặc nghe audio trực tiếp bằng trình duyệt trong môi trường này.
+Chạy kiểm tra trình duyệt:
+
+```sh
+npx playwright install chromium
+npm run test:e2e
+```
+
+Playwright sử dụng dev server tại localhost:3000 hoặc tự mở server nếu chưa có.
+Kiểm tra audio dùng giọng giả lập để kiểm chứng văn bản đọc và trạng thái tải;
+chất lượng giọng thật vẫn phụ thuộc trình duyệt/hệ điều hành.

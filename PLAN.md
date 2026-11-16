@@ -62,7 +62,9 @@ Tác giả commit: kris <ng.phihoc123@gmail.com>.
 - Phase 0: hoàn tất, commit `ea36307` (`intialize`).
 - Phase 1: hoàn tất giao diện pixel, điều hướng 6 khu học, bố cục responsive, focus bàn phím và reduced motion. `npm.cmd run build` (bao gồm TypeScript) và `npm.cmd run lint` đều thành công. Chưa kiểm tra trực quan bằng trình duyệt hoặc thao tác bàn phím thực tế; các khu học là khung giao diện có ghi rõ trạng thái.
 - Phase 2: hoàn tất 25 từ/cụm từ A1, 5 chủ đề, flashcard, thư viện tìm kiếm/lọc, đánh dấu đã nhớ/cần ôn và tiến độ dùng localStorage có schema/kiểm tra lỗi. Theo yêu cầu mới, đã xóa toàn bộ bản thu, metadata, công cụ nhập và ghi nguồn audio; mọi từ/câu chỉ dùng giọng Đức của trình duyệt, danh từ đọc cả mạo từ. Build/TypeScript, lint và 5 tests đều qua. Chưa kiểm tra tương tác UI, lưu dữ liệu và nghe thực tế bằng trình duyệt.
-- Phase 3–5: chưa triển khai.
+- Phase 3: hoàn tất 4 game nối từ/chọn nghĩa/nghe đoán từ/sắp xếp chữ; chọn chủ đề, 5 từ/lượt, xác nhận đáp án, điểm lần đầu, kết quả và chơi lại. Có nút đưa từ sai vào danh sách cần ôn. Đã thêm 5 tests game và Playwright kiểm tra các lượt chơi, font, click khoảng trống/lật 3D, đọc số nhiều, tải giọng chậm và giao diện mobile.
+- Kiểm tra cuối Phase 3: 13 unit tests, 4 tests Playwright, TypeScript/production build đều thành công. Audio trong kiểm tra trình duyệt được giả lập để kiểm tra đúng văn bản và trạng thái tải; chưa đánh giá chất lượng giọng thật của thiết bị.
+- Phase 4–5: chưa triển khai đầy đủ; đã thực hiện một phần kiểm tra giao diện trong Phase 3.
 
 ## Điều chỉnh sau Phase 2
 - Đổi toàn bộ font sang VT323 (latin, latin-ext, vietnamese), bỏ Arial và chú thích giọng đọc.
@@ -71,3 +73,6 @@ Tác giả commit: kris <ng.phihoc123@gmail.com>.
 - Mặt sau có nút nghe số nhiều; danh từ không có số nhiều thông dụng và động từ không tạo số nhiều giả.
 - Thêm hiệu ứng mở/lật thẻ 240ms, vùng mặt thẻ có chiều cao tối thiểu ổn định, tôn trọng reduced motion.
 - Chờ giọng Đức tải bất đồng bộ tối đa 10 giây; hiện trạng thái tải, tự phát khi sẵn sàng, cho phép dừng/hủy khi đổi thẻ. Kiểm tra bằng 3 tests riêng cho tải chậm, chọn ngôn ngữ và hủy chờ; tổng 8 tests cùng build/lint đã qua.
+- Theo phản hồi tiếp theo, mở rộng vùng bấm ra toàn bộ mặt thẻ (bao gồm padding/khoảng trống), dùng hai mặt xếp chồng và rotateY 180 độ trong 420ms; chiều cao giữ theo mặt cao nhất. Nút nghe/đánh dấu nằm ngoài vùng lật. Kiểm tra trình duyệt đã xác nhận font VT323 được tải và sử dụng.
+- Đổi tích hợp Tailwind sang PostCSS theo tài liệu Next.js sau khi quan sát CSS dev giữ Arial cũ dù build đã có VT323. Đã kiểm tra CSS cập nhật ngay mà không phải khởi động lại dev server.
+- Điều chỉnh mới nhất: nút nghe số nhiều hiện ở cả mặt trước; bỏ outline xanh của flashcard và thẻ danh sách, giữ tín hiệu focus bằng màu nền/nhãn.

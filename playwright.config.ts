@@ -1,0 +1,7 @@
+import { defineConfig } from "@playwright/test";
+export default defineConfig({
+  testDir: "./e2e",
+  workers: 1,
+  use: { baseURL: "http://localhost:3000", headless: true, viewport: { width: 1366, height: 900 } },
+  webServer: { command: "npm run dev", url: "http://localhost:3000", reuseExistingServer: true },
+});

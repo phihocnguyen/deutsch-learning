@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 const sections: Record<string, { title: string; intro: string; items: string[] }> = {
-  games: { title: "Khu trò chơi", intro: "Chơi một chút, nhớ thêm một chút.", items: ["Nối từ Đức–Việt", "Chọn nghĩa đúng", "Nghe đoán từ", "Sắp xếp chữ"] },
   exercises: { title: "Bài tập", intro: "Đưa từ vựng vào những tình huống gần gũi.", items: ["Điền từ vào câu", "Chọn der / die / das", "Dịch từ Việt sang Đức"] },
 };
 export function generateStaticParams() { return Object.keys(sections).map(section => ({ section })); }
