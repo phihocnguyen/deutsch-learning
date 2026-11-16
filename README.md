@@ -46,13 +46,11 @@ users/accounts/sessions và dữ liệu `topics`, `flashcards`, `flashcard_progr
 
 ## Audio
 
-Tất cả từ và câu ví dụ dùng giọng tiếng Đức của trình duyệt qua Web Speech API.
+Tất cả từ và câu ví dụ dùng giọng của trình duyệt qua Web Speech API với ngôn ngữ `de-DE`.
 Danh từ được đọc kèm mạo từ, ví dụ `das Haus`, `der Apfel`, `die Tür`.
-Ưu tiên giọng `de-DE`, sau đó giọng tiếng Đức khác có trên thiết bị.
-Không có giọng Đức thì ứng dụng báo rõ, không tự chuyển sang giọng ngôn ngữ khác.
+Chrome tự chọn giọng đọc tiếng Đức; ứng dụng không gán giọng mặc định ngôn ngữ khác khi phát lỗi.
 Audio chỉ bắt đầu khi người dùng bấm, có nút dừng, không phát chồng nhau.
-Nếu danh sách giọng chưa sẵn sàng, nút hiển thị trạng thái tải và chờ tối đa 10 giây;
-khi giọng Đức xuất hiện, câu đang chờ được đọc tự động. Đổi thẻ hoặc dừng sẽ hủy lượt chờ.
+Đổi thẻ hoặc dừng sẽ hủy lượt phát.
 Chất lượng và khả năng dùng offline phụ thuộc giọng do trình duyệt/hệ điều hành cung cấp.
 Không sử dụng file bản thu, dịch vụ audio riêng hay API key.
 
@@ -120,7 +118,7 @@ Giữ cổng 3100 trống trước khi chạy. Dev server cổng 3000 vẫn có 
 - Lint, TypeScript và production build thành công.
 - 34 unit/database tests và 25 kiểm tra trình duyệt production đã qua; gồm luồng chủ đề → flashcard và xác nhận không có chủ đề mẫu.
 - Đã kiểm tra 7 trang ở độ rộng 320, 390, 768 và 1366px; bảng game đang chơi cũng vừa màn hình 320px.
-- Kiểm tra bàn phím, giảm chuyển động, font pixel, số nhiều, tải giọng chậm/hủy chờ, dữ liệu lỗi và đồng bộ giữa hai tab.
+- Kiểm tra bàn phím, giảm chuyển động, font pixel, số nhiều, phát âm và hủy phát, dữ liệu lỗi và đồng bộ giữa hai tab.
 - Có trang 404 tiếng Việt, tiêu đề riêng từng trang và biểu tượng pixel của ứng dụng.
 
 ## Giới hạn hiện tại

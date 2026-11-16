@@ -75,12 +75,12 @@ test("browser speech stops when changing cards and unsupported APIs stay usable"
   expect(await page.evaluate("window.__cancelled")).toBe(true);
   await page.evaluate("Object.defineProperty(window, 'speechSynthesis', {value: undefined})");
   await page.getByRole("button", { name: "Nghe từ danke", exact: true }).click();
-  await expect(page.getByRole("status").filter({ hasText: "Trình duyệt không hỗ trợ giọng tổng hợp." })).toBeVisible();
+  await expect(page.getByRole("status").filter({ hasText: "Trình duyệt không hỗ trợ giọng nói." })).toBeVisible();
   await page.locator("button.flip-card").click();
   await expect(page.locator("button.flip-card")).toHaveAttribute("aria-pressed", "true");
 });
 
-test("speech retries with the browser default voice when German synthesis fails", async ({ page }) => {
+test("speech lets Chrome choose a German voice and does not retry in English", async ({ page }) => {
   await page.addInitScript(`
     window.__attempts = [];
     const defaultVoice = { default: true, lang: 'en-US' };
@@ -89,7 +89,7 @@ test("speech retries with the browser default voice when German synthesis fails"
     synth.cancel = () => {};
     synth.speak = utterance => {
       window.__attempts.push({ lang: utterance.lang, defaultVoice: utterance.voice === defaultVoice });
-      if (window.__attempts.length === 1) utterance.onerror?.({ error: 'language-unavailable' });
+      utterance.onerror?.({ error: 'synthesis-failed' });
     };
     Object.defineProperty(window, 'speechSynthesis', { value: synth });
     Object.defineProperty(window, 'SpeechSynthesisUtterance', { value: class { constructor(text) { this.text = text; } } });
@@ -97,10 +97,8 @@ test("speech retries with the browser default voice when German synthesis fails"
   await page.goto("/flashcards/study?topic=fixture-topic-0");
   await expect(page.getByRole("combobox", { name: "Trạng thái", exact: true })).toBeEnabled();
   await page.getByRole("button", { name: "Nghe từ Hallo", exact: true }).click();
-  await expect.poll(() => page.evaluate("window.__attempts")).toEqual([
-    { lang: "de-DE", defaultVoice: false },
-    { lang: "en-US", defaultVoice: true },
-  ]);
+  await expect.poll(() => page.evaluate("window.__attempts")).toEqual([{ lang: "de-DE", defaultVoice: false }]);
+  await expect(page.getByRole("status").filter({ hasText: "synthesis-failed" })).toBeVisible();
 });
 
 test("unknown route is a real localized 404 with a way home", async ({ page }) => {
