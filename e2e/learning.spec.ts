@@ -15,9 +15,8 @@ test("pixel font, large 3D flashcard, plural speech and delayed voice loading", 
     Object.defineProperty(window, 'SpeechSynthesisUtterance', { value: class { constructor(text) { this.text = text; } } });
     window.__loadVoices = () => { window.__voices = [{ lang: 'de-DE' }]; synth.dispatchEvent(new Event('voiceschanged')); };
   `);
-  await page.goto("/flashcards");
+  await page.goto("/flashcards/study?topic=fixture-topic-3");
   await expect(page.getByRole("combobox", { name: "Trạng thái", exact: true })).toBeEnabled();
-  await page.getByRole("combobox", { name: "Chủ đề", exact: true }).selectOption("Nhà cửa");
   const card = page.locator("button.flip-card");
   await expect(card).toHaveAccessibleName("Lật thẻ xem nghĩa: das Haus");
   const box = await card.boundingBox();
@@ -100,7 +99,7 @@ test("listening supports skipped audio and saves missed vocabulary for review", 
   await expect(page.getByText(/0 điểm · 0\/5/)).toBeVisible();
   await page.getByRole("button", { name: "Đánh dấu 5 từ cần ôn", exact: true }).click();
   expect(await page.evaluate(() => Object.values(JSON.parse(localStorage.getItem("deutsch-quest-progress-v1")!).words))).toEqual(Array(5).fill("review"));
-  await page.goto("/flashcards");
+  await page.goto("/flashcards/study?topic=fixture-topic-3");
   await page.getByRole("combobox", { name: "Trạng thái", exact: true }).selectOption("review");
   await expect(page.getByText("Thẻ 1 / 5", { exact: true })).toBeVisible();
 });

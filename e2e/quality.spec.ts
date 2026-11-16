@@ -8,14 +8,14 @@ test("all pages fit phone, tablet and desktop without client errors", async ({ p
   page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
   for (const width of [320, 390, 768, 1366]) {
     await page.setViewportSize({ width, height: 900 });
-    for (const route of ["/", "/vocabulary", "/flashcards", "/games", "/exercises", "/progress"]) {
+    for (const route of ["/", "/vocabulary", "/flashcards", "/flashcards/study?topic=fixture-topic-0", "/games", "/exercises", "/progress"]) {
       const response = await page.goto(route);
       expect(response?.status()).toBe(200);
       await expect(page.locator("main h1")).toBeVisible();
       await page.evaluate(() => document.fonts.ready);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${route} at ${width}px`).toBe(true);
       const nav = page.getByRole("navigation", { name: "Điều hướng chính" });
-      await expect(nav.locator('a[aria-current="page"]')).toHaveAttribute("href", route);
+      await expect(nav.locator('a[aria-current="page"]')).toHaveAttribute("href", route.startsWith("/flashcards") ? "/flashcards" : route);
     }
   }
   expect(errors).toEqual([]);
@@ -23,7 +23,7 @@ test("all pages fit phone, tablet and desktop without client errors", async ({ p
 
 test("keyboard skip link, Enter/Space and reduced motion work without card outlines", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/flashcards");
+  await page.goto("/flashcards/study?topic=fixture-topic-0");
   await expect(page.getByRole("combobox", { name: "Trạng thái", exact: true })).toBeEnabled();
   await page.keyboard.press("Tab");
   await expect(page.getByRole("link", { name: "Đến nội dung chính", exact: true })).toBeFocused();
@@ -45,13 +45,13 @@ test("corrupt storage recovers explicitly and progress updates across tabs", asy
       sessionStorage.setItem("corrupt-seeded", "yes");
     }
   });
-  await page.goto("/flashcards");
+  await page.goto("/flashcards/study?topic=fixture-topic-0");
   await expect(page.getByRole("alert").filter({ hasText: "Không đọc được tiến độ" })).toBeVisible();
   expect(await page.evaluate(() => localStorage.getItem("deutsch-quest-progress-v1"))).toBe("not-json");
   await page.getByRole("button", { name: "✓ Đã nhớ", exact: true }).click();
   await expect(page.getByRole("alert").filter({ hasText: "Không đọc được tiến độ" })).toHaveCount(0);
   const second = await context.newPage();
-  await second.goto("/flashcards");
+  await second.goto("/flashcards/study?topic=fixture-topic-0");
   await expect(second.getByRole("button", { name: "✓ Đã nhớ", exact: true })).toHaveAttribute("aria-pressed", "true");
   await page.getByRole("button", { name: "↻ Cần ôn", exact: true }).click();
   await expect(second.getByRole("button", { name: "↻ Cần ôn", exact: true })).toHaveAttribute("aria-pressed", "true");
@@ -70,7 +70,7 @@ test("voice loading can be cancelled by changing cards and unsupported APIs stay
     Object.defineProperty(window, 'SpeechSynthesisUtterance', { value: class { constructor(text) { this.text = text; } } });
     window.__loadVoices = () => { window.__voices = [{ lang: 'de-DE' }]; synth.dispatchEvent(new Event('voiceschanged')); };
   `);
-  await page.goto("/flashcards");
+  await page.goto("/flashcards/study?topic=fixture-topic-0");
   await expect(page.getByRole("combobox", { name: "Trạng thái", exact: true })).toBeEnabled();
   await page.getByRole("button", { name: "Nghe từ Hallo", exact: true }).click();
   await expect(page.getByRole("button", { name: "Dừng Hallo", exact: true })).toHaveAttribute("aria-busy", "true");

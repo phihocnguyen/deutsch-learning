@@ -24,8 +24,9 @@ Tests dùng khả năng chạy TypeScript trực tiếp của Node.js; dùng Nod
 
 - Khởi đầu không có chủ đề/từ mẫu. Người học tạo bộ từ của mình, gồm nghĩa Việt, ví dụ và dạng số nhiều.
 - `/vocabulary`: tìm kiếm, lọc chủ đề/trạng thái và nghe phát âm.
-- `/flashcards`: bấm toàn bộ mặt thẻ để lật 3D (hoặc Enter/Space), chuyển thẻ, đánh dấu đã nhớ/cần ôn; hiển thị cả mạo từ và số nhiều, nghe số nhiều ngay ở mặt trước.
-- Popup “Tạo chủ đề / flashcard” trong thư viện và flashcard: tạo chủ đề trước, thêm/sửa/xóa từ, nghĩa, mạo từ, số nhiều, câu ví dụ và bản dịch. Popup dùng đúng chủ đề đã chọn ngoài trang, không có dropdown chọn lại. Bộ từ tự tạo dùng trong flashcard, thư viện, game và bài tập.
+- `/flashcards`: trang danh sách chủ đề riêng, có tìm kiếm, số thẻ, tiến độ và popup tạo chủ đề. Bấm vào một chủ đề mới mở trang học.
+- `/flashcards/study?topic=<id>`: chỉ học thẻ của chủ đề đó; bấm toàn bộ mặt thẻ để lật 3D (hoặc Enter/Space), chuyển thẻ, đánh dấu đã nhớ/cần ôn; hiển thị mạo từ/số nhiều và có nút nghe. Nút “Các chủ đề” quay về danh sách.
+- Popup quản lý thẻ trong chủ đề: chỉ thêm/sửa/xóa từ của đúng chủ đề, không chọn lại chủ đề hay tạo chủ đề ở đây. Có từ, nghĩa, mạo từ, số nhiều, câu ví dụ và bản dịch. Thư viện vẫn cho quản lý bộ từ bằng bộ lọc. Bộ từ tự tạo dùng trong flashcard, thư viện, game và bài tập.
 - `/progress`: thống kê từ, danh sách từ theo trạng thái thực tế và lịch sử 50 lượt bài tập gần nhất.
 - `/games`: nối từ, chọn nghĩa, nghe đoán từ, sắp xếp chữ; chọn chủ đề, 5 từ/lượt, chấm điểm lần đầu, xem kết quả, chơi lại và lưu các từ sai vào danh sách cần ôn.
 - `/exercises`: điền từ vào câu ví dụ, chọn mạo từ và dịch Việt–Đức. Câu điền từ chỉ dùng ví dụ có chứa nguyên từ đã nhập (không tự đoán dạng chia động từ). Có nghe đáp án, thử lại và lượt ôn riêng cho những từ sai; lọc theo chủ đề hoặc từ cần ôn.
@@ -115,8 +116,8 @@ Giữ cổng 3100 trống trước khi chạy. Dev server cổng 3000 vẫn có 
 ## Kết quả bàn giao
 
 - Lint, TypeScript và production build thành công.
-- 34 unit/database tests; kiểm tra trình duyệt gồm luồng tự tạo thẻ và xác nhận không có chủ đề mẫu.
-- Đã kiểm tra 6 trang ở độ rộng 320, 390, 768 và 1366px; bảng game đang chơi cũng vừa màn hình 320px.
+- 34 unit/database tests và 25 kiểm tra trình duyệt production đã qua; gồm luồng chủ đề → flashcard và xác nhận không có chủ đề mẫu.
+- Đã kiểm tra 7 trang ở độ rộng 320, 390, 768 và 1366px; bảng game đang chơi cũng vừa màn hình 320px.
 - Kiểm tra bàn phím, giảm chuyển động, font pixel, số nhiều, tải giọng chậm/hủy chờ, dữ liệu lỗi và đồng bộ giữa hai tab.
 - Có trang 404 tiếng Việt, tiêu đề riêng từng trang và biểu tượng pixel của ứng dụng.
 

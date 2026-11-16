@@ -1,3 +1,3 @@
-import { VocabularyLearning } from "../components/vocabulary-learning";
+import { FlashcardTopics } from "../components/flashcard-topics";
 export const metadata = { title: "Flashcard | Deutsch Quest" };
-export default function Page() { return <VocabularyLearning mode="flashcards" />; }
+export default function Page() { return <FlashcardTopics />; }

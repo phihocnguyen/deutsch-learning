@@ -5,7 +5,7 @@ import { validateTopicName, type CustomWord } from "@/lib/custom-vocabulary";
 import { useCustomVocabulary } from "./custom-vocabulary-store";
 
 const field = "vocabulary-filter mt-2 block w-full min-w-0 border-2 border-[#29392a] bg-[#fffdf5] px-3 py-2";
-export function FlashcardEditor({ selectedTopic, onSelect }: { selectedTopic: string; onSelect: (topic: string) => void }) {
+export function FlashcardEditor({ selectedTopic, onSelect, mode = "all" }: { selectedTopic: string; onSelect: (topic: string) => void; mode?: "topics" | "cards" | "all" }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const { data, ready, error, update } = useCustomVocabulary();
   const [editing, setEditing] = useState<CustomWord | null>(null);
@@ -31,6 +31,7 @@ export function FlashcardEditor({ selectedTopic, onSelect }: { selectedTopic: st
       setEditing(null); setDeleting(false); onSelect(name); form.reset();
       requestAnimationFrame(() => dialog.current?.querySelector<HTMLInputElement>('[name="german"]')?.focus());
       setMessage(saved ? "Đã tạo chủ đề. Thêm flashcard đầu tiên bên dưới nhé!" : "Đã tạo chủ đề trong phiên này.");
+      if (mode === "topics") dialog.current?.close();
     });
   }
   function saveWord(event: FormEvent<HTMLFormElement>) {
@@ -61,25 +62,25 @@ export function FlashcardEditor({ selectedTopic, onSelect }: { selectedTopic: st
     });
   }
   return <>
-    <button type="button" disabled={!ready} className="pixel-button mb-7 bg-[#dbe8cc]" onClick={() => { setEditing(null); setDeleting(false); setFailure(""); setMessage(""); dialog.current?.showModal(); }}>＋ Tạo chủ đề / flashcard</button>
-    <dialog ref={dialog} aria-labelledby="flashcard-editor-title" className="flashcard-dialog pixel-panel bg-[#f5f3e8] p-5 sm:p-7" onClick={event => {
+    <button type="button" disabled={!ready} className="pixel-button mb-7 bg-[#dbe8cc]" onClick={() => { setEditing(null); setDeleting(false); setFailure(""); setMessage(""); dialog.current?.showModal(); }}>{mode === "topics" ? "＋ Tạo chủ đề" : mode === "cards" ? "＋ Thêm / quản lý flashcard" : "＋ Tạo chủ đề / flashcard"}</button>
+    <dialog ref={dialog} aria-labelledby="flashcard-editor-title" className={`flashcard-dialog ${mode === "topics" ? "topic-dialog" : ""} pixel-panel bg-[#f5f3e8] p-5 sm:p-7`} onClick={event => {
       if (event.target !== event.currentTarget) return;
       const rect = event.currentTarget.getBoundingClientRect();
       if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) event.currentTarget.close();
     }}>
-    <div className="sticky top-0 z-10 flex items-start justify-between gap-4 bg-[#f5f3e8] pb-4"><h2 id="flashcard-editor-title" className="text-2xl font-bold">Chủ đề & flashcard của tôi</h2><button type="button" aria-label="Đóng popup" className="flex h-11 w-11 shrink-0 items-center justify-center border-2 border-[#29392a] bg-[#fffdf5] text-2xl shadow-[3px_3px_0_#29392a]" onClick={() => dialog.current?.close()}>×</button></div>
+    <div className="sticky top-0 z-10 flex items-start justify-between gap-4 bg-[#f5f3e8] pb-4"><h2 id="flashcard-editor-title" className="text-2xl font-bold">{mode === "topics" ? "Tạo chủ đề mới" : mode === "cards" ? `Flashcard · ${selectedTopic}` : "Chủ đề & flashcard của tôi"}</h2><button type="button" aria-label="Đóng popup" className="flex h-11 w-11 shrink-0 items-center justify-center border-2 border-[#29392a] bg-[#fffdf5] text-2xl shadow-[3px_3px_0_#29392a]" onClick={() => dialog.current?.close()}>×</button></div>
     <p className="mt-4 text-sm text-[#647059]">Tạo chủ đề → thêm từ → học bằng flashcard. Bộ thẻ của bạn được lưu trên trình duyệt này; xóa dữ liệu trình duyệt sẽ mất bộ thẻ.</p>
     {error && <p role="alert" className="mt-4 border-2 border-[#b56e3e] bg-[#fff0d5] p-3">{error}</p>}
     {failure && <p role="alert" className="mt-4 text-[#9b432c]">{failure}</p>}
     {message && <p role="status" className="mt-4 bg-[#e7efdc] p-3">{message}</p>}
-    <div className="mt-6 grid min-w-0 gap-7 xl:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+    <div className={`mt-6 grid min-w-0 gap-7 ${mode === "all" ? "xl:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]" : ""}`}>
       <section className="min-w-0" aria-label="Chủ đề của tôi">
-        <h2 className="text-xl font-bold">1. Tạo chủ đề</h2>
+        {mode !== "cards" && <><h2 className="text-xl font-bold">Tạo chủ đề</h2>
         <form onSubmit={createTopic} className="mt-4">
           <label className="block text-sm">Tên chủ đề<input className={field} name="name" placeholder="Ví dụ: Du lịch" required maxLength={80} disabled={!ready} /></label>
           <button disabled={!ready} className="pixel-button mt-4 bg-[#f9cd65]">Tạo chủ đề</button>
-        </form>
-        <div className="mt-6 border-2 border-[#d8d9c9] bg-[#e7efdc] p-4"><p className="eyebrow">CHỦ ĐỀ ĐANG CHỌN</p><p className="mt-2 font-bold [overflow-wrap:anywhere]">{selectedTopic || "Chưa chọn chủ đề"}</p><p className="mt-2 text-sm text-[#647059]">{topic ? `${words.length} thẻ của bạn. Thẻ mới sẽ được thêm vào chủ đề này.` : selectedTopic ? "Chủ đề này không còn tồn tại. Hãy chọn lại hoặc tạo chủ đề mới." : "Chọn chủ đề của bạn ở bộ lọc ngoài popup, hoặc tạo chủ đề mới tại đây."}</p></div>
+        </form></>}
+        {mode !== "topics" && <div className="mt-6 border-2 border-[#d8d9c9] bg-[#e7efdc] p-4"><p className="eyebrow">CHỦ ĐỀ ĐANG CHỌN</p><p className="mt-2 font-bold [overflow-wrap:anywhere]">{selectedTopic || "Chưa chọn chủ đề"}</p><p className="mt-2 text-sm text-[#647059]">{topic ? `${words.length} thẻ của bạn. Thẻ mới sẽ được thêm vào chủ đề này.` : selectedTopic ? "Chủ đề này không còn tồn tại. Hãy chọn lại hoặc tạo chủ đề mới." : "Chọn chủ đề của bạn ở bộ lọc ngoài popup, hoặc tạo chủ đề mới tại đây."}</p></div>}
         {topic && <div className="mt-4">
           <button type="button" className="pixel-button bg-[#dbe8cc]" onClick={() => { onSelect(topic.name); dialog.current?.close(); }}>Học chủ đề này →</button>
           {!deleting ? <button type="button" className="ml-4 text-sm text-[#9b432c] underline" onClick={() => setDeleting(true)}>Xóa chủ đề</button> : <div className="mt-4 border-2 border-[#b56e3e] p-3"><p className="text-sm">Xóa “{topic.name}” và tất cả {words.length} thẻ bên trong?</p><div className="mt-3 flex flex-wrap gap-3"><button type="button" className="pixel-button bg-[#f8dda7]" onClick={() => run(() => {
@@ -88,7 +89,7 @@ export function FlashcardEditor({ selectedTopic, onSelect }: { selectedTopic: st
           })}>Xác nhận xóa</button><button type="button" className="underline" onClick={() => setDeleting(false)}>Hủy</button></div></div>}
         </div>}
       </section>
-      <section className="min-w-0" aria-label="Soạn flashcard">
+      {mode !== "topics" && <section className="min-w-0" aria-label="Soạn flashcard">
         <h2 className="text-xl font-bold">2. {editing ? "Sửa flashcard" : "Thêm flashcard"}{topic ? ` · ${topic.name}` : ""}</h2>
         {!topic ? <p className="mt-4 text-[#647059]">Tạo hoặc chọn một chủ đề trước khi thêm thẻ.</p> : <>
           <form key={`${topic.id}-${editing?.id ?? "new"}`} onSubmit={saveWord} className="mt-4">
@@ -109,7 +110,7 @@ export function FlashcardEditor({ selectedTopic, onSelect }: { selectedTopic: st
             setMessage(saved ? "Đã xóa flashcard." : "Đã xóa thẻ trong phiên này.");
           })}>Xóa</button></div></li>)}</ul>}
         </>}
-      </section>
+      </section>}
     </div>
     </dialog>
   </>;
