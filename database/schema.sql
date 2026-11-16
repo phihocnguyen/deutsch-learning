@@ -6,6 +6,20 @@ CREATE TABLE IF NOT EXISTS users (
   "emailVerified" TIMESTAMPTZ,
   image TEXT
 );
+ALTER TABLE users ADD COLUMN IF NOT EXISTS disabled BOOLEAN NOT NULL DEFAULT false;
+CREATE TABLE IF NOT EXISTS admin_accounts (
+  id SERIAL PRIMARY KEY,
+  username VARCHAR(80) NOT NULL UNIQUE,
+  password_hash TEXT NOT NULL,
+  failed_attempts INTEGER NOT NULL DEFAULT 0,
+  locked_until TIMESTAMPTZ
+);
+CREATE TABLE IF NOT EXISTS admin_sessions (
+  token_hash VARCHAR(64) PRIMARY KEY,
+  admin_id INTEGER NOT NULL REFERENCES admin_accounts(id) ON DELETE CASCADE,
+  expires TIMESTAMPTZ NOT NULL
+);
+CREATE INDEX IF NOT EXISTS admin_sessions_expiry_index ON admin_sessions(expires);
 CREATE TABLE IF NOT EXISTS accounts (
   id SERIAL PRIMARY KEY,
   "userId" INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,

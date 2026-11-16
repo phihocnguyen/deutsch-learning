@@ -9,6 +9,7 @@
     "lint": "eslint",
     "test": "node --test tests/*.test.mjs",
     "db:migrate": "node scripts/migrate-neon.mjs",
+    "db:seed-admin": "node scripts/seed-admin.mjs",
     "test:e2e": "playwright test",
     "test:e2e:prod": "npm run build && node scripts/test-production.mjs"
   },

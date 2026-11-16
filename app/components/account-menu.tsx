@@ -1,7 +1,11 @@
 import { auth, signOut } from "@/auth";
 import Image from "next/image";
+import Link from "next/link";
+import { isAdminEmail } from "@/lib/admin-policy";
+import { connection } from "next/server";
 
 export async function AccountMenu() {
+  await connection();
   const session = await auth();
   const user = session?.user;
   if (!user) return null;
@@ -13,6 +17,7 @@ export async function AccountMenu() {
     <div className="absolute right-0 top-14 z-50 w-64 border-2 border-[#29392a] bg-[#fffdf5] p-4 shadow-[4px_4px_0_#29392a]">
       <p className="truncate font-bold">{user.name ?? "Người học"}</p>
       {user.email && <p className="mt-1 truncate text-sm text-[#647059]">{user.email}</p>}
+      {isAdminEmail(user.email) && <Link href="/admin/users" className="pixel-button mt-4 block bg-[#dbe8cc]">Quản lý người dùng</Link>}
       <form className="mt-4 border-t-2 border-[#d8d9c9] pt-4" action={async () => { "use server"; await signOut({ redirectTo: "/login" }); }}>
         <button type="submit" className="pixel-button w-full bg-[#f8dda7]">Đăng xuất</button>
       </form>

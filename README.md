@@ -2,6 +2,8 @@
 
 Website học từ vựng Đức–Việt và ngữ pháp A1–A2 bằng Next.js 16, React 19 và Tailwind CSS 4, giao diện pixel.
 
+Trang quản trị: `/admin/login` → `/admin/users`, quản lý tài khoản người học, khóa/mở khóa và thu hồi phiên. Hướng dẫn tạo tài khoản admin và cấu hình: [docs/admin.md](docs/admin.md).
+
 ## Chạy local
 
 ```sh

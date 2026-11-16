@@ -6,7 +6,9 @@ export function proxy(request: NextRequest) {
   const isLogin = pathname === "/login";
   const isAuthEndpoint = pathname.startsWith("/api/auth/");
 
-  if (isLogin || isAuthEndpoint) return NextResponse.next();
+  // Admin pages and APIs enforce their own admin session on the server.
+  const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/") || pathname.startsWith("/api/admin/");
+  if (isLogin || isAuthEndpoint || isAdminRoute) return NextResponse.next();
   // Fast optimistic gate only. Auth.js and each data API remain the session authority.
   const hasSessionCookie = request.cookies.getAll().some(cookie =>
     cookie.name === "authjs.session-token" || cookie.name.startsWith("authjs.session-token.") ||
