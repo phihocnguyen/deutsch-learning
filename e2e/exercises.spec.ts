@@ -1,9 +1,10 @@
 import { test, expect } from "@playwright/test";
 import { createExerciseQuestions } from "../lib/exercises";
-import { vocabulary } from "../lib/vocabulary";
+import { vocabulary, seedVocabulary } from "./fixtures/vocabulary";
+test.beforeEach(async ({ page }) => { await seedVocabulary(page); });
 
 test("gap retry preserves first score, saves progress once and reviews only the missed word", async ({ page }) => {
-  const questions = createExerciseQuestions("gap", "Sinh hoạt", undefined, 25);
+  const questions = createExerciseQuestions("gap", "Sinh hoạt", undefined, 25, vocabulary);
   await page.goto("/exercises");
   const topic = page.getByRole("combobox", { name: "Chủ đề", exact: true });
   await expect(topic).toBeEnabled(); await topic.selectOption("Sinh hoạt");

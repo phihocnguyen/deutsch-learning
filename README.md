@@ -22,17 +22,24 @@ Tests dùng khả năng chạy TypeScript trực tiếp của Node.js; dùng Nod
 
 ## Chức năng hiện có
 
-- 25 từ/cụm từ A1, 5 chủ đề, nghĩa Việt, ví dụ và dạng số nhiều cho danh từ.
+- Khởi đầu không có chủ đề/từ mẫu. Người học tạo bộ từ của mình, gồm nghĩa Việt, ví dụ và dạng số nhiều.
 - `/vocabulary`: tìm kiếm, lọc chủ đề/trạng thái và nghe phát âm.
 - `/flashcards`: bấm toàn bộ mặt thẻ để lật 3D (hoặc Enter/Space), chuyển thẻ, đánh dấu đã nhớ/cần ôn; hiển thị cả mạo từ và số nhiều, nghe số nhiều ngay ở mặt trước.
-- Popup “Tạo chủ đề / flashcard” trong thư viện và flashcard: tạo chủ đề trước, thêm/sửa/xóa từ, nghĩa, mạo từ, số nhiều, câu ví dụ và bản dịch. Chọn chủ đề để học bộ thẻ riêng, có phát âm và lưu tiến độ. Bộ thẻ tự tạo chưa dùng trong game/bài tập có sẵn.
+- Popup “Tạo chủ đề / flashcard” trong thư viện và flashcard: tạo chủ đề trước, thêm/sửa/xóa từ, nghĩa, mạo từ, số nhiều, câu ví dụ và bản dịch. Popup dùng đúng chủ đề đã chọn ngoài trang, không có dropdown chọn lại. Bộ từ tự tạo dùng trong flashcard, thư viện, game và bài tập.
 - `/progress`: thống kê từ, danh sách từ theo trạng thái thực tế và lịch sử 50 lượt bài tập gần nhất.
 - `/games`: nối từ, chọn nghĩa, nghe đoán từ, sắp xếp chữ; chọn chủ đề, 5 từ/lượt, chấm điểm lần đầu, xem kết quả, chơi lại và lưu các từ sai vào danh sách cần ôn.
-- `/exercises`: điền từ đúng dạng vào câu, chọn mạo từ và dịch Việt–Đức. Có giải thích, nghe đáp án, thử lại và lượt ôn riêng cho những từ sai; lọc theo chủ đề hoặc từ cần ôn.
+- `/exercises`: điền từ vào câu ví dụ, chọn mạo từ và dịch Việt–Đức. Câu điền từ chỉ dùng ví dụ có chứa nguyên từ đã nhập (không tự đoán dạng chia động từ). Có nghe đáp án, thử lại và lượt ôn riêng cho những từ sai; lọc theo chủ đề hoặc từ cần ôn.
 - `/grammar`: hai mục ngữ pháp A1 và A2, mỗi mục 14 bài; tổng 28 bài và 89 câu luyện. Bài đã đánh dấu đọc có nền xanh nhẹ. Mỗi bài có mục tiêu, quy tắc, bảng mẫu, ví dụ có audio, lỗi thường gặp và phạm vi áp dụng.
 - `/grammar/a1?lesson=a1-time`: bài đọc giờ chi tiết với vor/nach/halb/Viertel, đồng hồ tương tác, hai cách đọc 12/24 giờ và 8 câu luyện.
 - Ngữ pháp có nguồn đối chiếu trong `lib/grammar/` và `docs/grammar/`; theo yêu cầu người dùng, reference không hiển thị trên giao diện học.
 - Font pixel VT323 hỗ trợ tiếng Việt và tiếng Đức, được Next.js tự phục vụ từ ứng dụng.
+
+## Schema database
+
+`npm run db:init` tạo SQLite local từ `database/schema.sql`, gồm `users`, `topics`,
+`flashcards` và `flashcard_progress`. Có khóa ngoại theo chủ sở hữu, index và xóa liên đới.
+Chi tiết quan hệ và cách nối API: [docs/database.md](docs/database.md).
+Giao diện hiện vẫn lưu localStorage; database chưa được nối vào luồng học hoặc đăng nhập.
 
 ## Audio
 
@@ -108,7 +115,7 @@ Giữ cổng 3100 trống trước khi chạy. Dev server cổng 3000 vẫn có 
 ## Kết quả bàn giao
 
 - Lint, TypeScript và production build thành công.
-- 31 unit tests và 24 kiểm tra trình duyệt Chromium trên bản production đều qua.
+- 34 unit/database tests; kiểm tra trình duyệt gồm luồng tự tạo thẻ và xác nhận không có chủ đề mẫu.
 - Đã kiểm tra 6 trang ở độ rộng 320, 390, 768 và 1366px; bảng game đang chơi cũng vừa màn hình 320px.
 - Kiểm tra bàn phím, giảm chuyển động, font pixel, số nhiều, tải giọng chậm/hủy chờ, dữ liệu lỗi và đồng bộ giữa hai tab.
 - Có trang 404 tiếng Việt, tiêu đề riêng từng trang và biểu tượng pixel của ứng dụng.

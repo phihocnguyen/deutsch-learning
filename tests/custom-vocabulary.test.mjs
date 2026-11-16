@@ -21,6 +21,7 @@ test("duplicate topics, orphan cards, malformed fields and built-in ID collision
     { ...data, words: [...data.words, ...data.words] },
     { version: 2, topics: [], words: [] },
   ]) assert.throws(() => parseCustomVocabulary(JSON.stringify(invalid)));
-  assert.throws(() => validateTopicName("Nhà cửa", data));
+  assert.throws(() => validateTopicName("Du lịch", data));
+  assert.doesNotThrow(() => validateTopicName("Nhà cửa", data));
   assert.deepEqual(parseCustomVocabulary(null), { version: 1, topics: [], words: [] });
 });

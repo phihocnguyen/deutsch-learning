@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { parseProgress } from "../lib/progress.ts";
-import { vocabulary, topics, fullWord, fullPlural } from "../lib/vocabulary.ts";
+import { vocabulary, topics, fullWord, fullPlural } from "./fixtures/vocabulary.ts";
 
 test("fresh progress and persisted known/review status round-trip", () => {
   assert.deepEqual(parseProgress(null), { version: 1, words: {} });

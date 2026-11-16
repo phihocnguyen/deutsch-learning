@@ -27,7 +27,8 @@ test("create topic first, author a card, study, edit and delete with persistent 
   await page.getByRole("combobox", { name: "Chủ đề", exact: true }).selectOption("Du lịch");
   await expect(card).toContainText("Đã nhớ");
   await page.getByRole("button", { name: "＋ Tạo chủ đề / flashcard", exact: true }).click();
-  await page.getByRole("combobox", { name: "Chủ đề của tôi", exact: true }).selectOption({ label: "Du lịch (1 thẻ)" });
+  await expect(editor.getByRole("combobox")).toHaveCount(1);
+  await expect(editor.getByRole("textbox", { name: "Từ tiếng Đức *", exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Sửa der Bahnhof", exact: true }).click();
   await page.getByRole("textbox", { name: "Nghĩa tiếng Việt *", exact: true }).fill("Ga tàu");
   await page.getByRole("button", { name: "Lưu thay đổi", exact: true }).click();
@@ -39,7 +40,17 @@ test("create topic first, author a card, study, edit and delete with persistent 
   await page.getByRole("button", { name: "Xác nhận xóa", exact: true }).click();
   await page.reload();
   await expect(page.getByRole("combobox", { name: "Chủ đề", exact: true })).toBeEnabled();
-  await expect(page.getByRole("combobox", { name: "Chủ đề", exact: true }).locator("option")).toHaveCount(6);
+  await expect(page.getByRole("combobox", { name: "Chủ đề", exact: true }).locator("option")).toHaveCount(1);
+});
+
+test("fresh browsers have no sample topics or cards on any vocabulary learning page", async ({ page }) => {
+  for (const route of ["/vocabulary", "/flashcards", "/games", "/exercises"]) {
+    await page.goto(route);
+    const select = page.getByRole("combobox", { name: "Chủ đề", exact: true });
+    await expect(select).toBeEnabled();
+    await expect(select.locator("option")).toHaveCount(1);
+    await expect(page.getByText("Nhà cửa", { exact: true })).toHaveCount(0);
+  }
 });
 
 test("custom authoring fits a small phone and reports blocked storage honestly", async ({ page }) => {

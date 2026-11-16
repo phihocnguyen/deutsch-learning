@@ -1,4 +1,6 @@
 import { test, expect } from "@playwright/test";
+import { seedVocabulary } from "./fixtures/vocabulary";
+test.beforeEach(async ({ page }) => { await seedVocabulary(page); });
 
 test("wide layouts fill the screen and filters align without a search outline", async ({ page }) => {
   for (const width of [1366, 1920, 2560]) {

@@ -1,4 +1,4 @@
-import { vocabulary, type Word } from "./vocabulary.ts";
+import { type Word } from "./vocabulary.ts";
 export type GameMode = "match" | "meaning" | "listen" | "letters";
 export type Answers = Record<string, boolean>;
 export function shuffle<T>(items: readonly T[], random = Math.random): T[] {
@@ -6,7 +6,7 @@ export function shuffle<T>(items: readonly T[], random = Math.random): T[] {
   for (let i = result.length - 1; i > 0; i--) { const j = Math.floor(random() * (i + 1)); [result[i], result[j]] = [result[j], result[i]]; }
   return result;
 }
-export function createDeck(topic: string, limit = 5) { return shuffle(vocabulary.filter(w => !topic || w.topic === topic)).slice(0, Math.max(0, limit)); }
+export function createDeck(topic: string, limit = 5, vocabulary: Word[] = []) { return shuffle(vocabulary.filter(w => !topic || w.topic === topic)).slice(0, Math.max(0, limit)); }
 export function makeChoices(word: Word, pool: Word[]) { return shuffle([word, ...shuffle(pool.filter(w => w.id !== word.id)).slice(0, 3)]); }
 export function recordAnswer(answers: Answers, id: string, correct: boolean): Answers { return Object.hasOwn(answers, id) ? answers : { ...answers, [id]: correct }; }
 export function normalizeAnswer(value: string) { return value.normalize("NFC").trim().replace(/\s+/g, " ").toLocaleLowerCase("de"); }

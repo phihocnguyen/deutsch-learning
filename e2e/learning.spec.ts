@@ -1,5 +1,7 @@
 ﻿import { test, expect } from "@playwright/test";
-import { fullWord, vocabulary } from "../lib/vocabulary";
+import { fullWord } from "../lib/vocabulary";
+import { vocabulary, seedVocabulary } from "./fixtures/vocabulary";
+test.beforeEach(async ({ page }) => { await seedVocabulary(page); });
 
 test("pixel font, large 3D flashcard, plural speech and delayed voice loading", async ({ page }) => {
   await page.addInitScript(`

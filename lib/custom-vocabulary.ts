@@ -1,4 +1,4 @@
-import { topics, type Word } from "./vocabulary.ts";
+import { type Word } from "./vocabulary.ts";
 
 export const CUSTOM_STORAGE_KEY = "deutsch-quest-custom-v1";
 export type CustomTopic = { id: string; name: string };
@@ -12,7 +12,7 @@ const text = (value: unknown, limit: number, required = false): value is string 
 export function validateTopicName(name: string, current: CustomVocabulary, exceptId?: string) {
   const normalized = name.trim().toLocaleLowerCase("vi");
   if (!normalized || name.trim().length > 80) throw new Error("Tên chủ đề cần từ 1 đến 80 ký tự.");
-  if ([...topics, ...current.topics.filter(t => t.id !== exceptId).map(t => t.name)].some(t => t.toLocaleLowerCase("vi") === normalized))
+  if (current.topics.filter(t => t.id !== exceptId).some(t => t.name.toLocaleLowerCase("vi") === normalized))
     throw new Error("Chủ đề này đã có. Hãy chọn tên khác.");
 }
 

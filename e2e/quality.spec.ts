@@ -1,4 +1,6 @@
 import { test, expect } from "@playwright/test";
+import { seedVocabulary } from "./fixtures/vocabulary";
+test.beforeEach(async ({ page }) => { await seedVocabulary(page); });
 
 test("all pages fit phone, tablet and desktop without client errors", async ({ page }) => {
   const errors: string[] = [];

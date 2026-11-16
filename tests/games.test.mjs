@@ -1,7 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { vocabulary, topics } from "../lib/vocabulary.ts";
-import { createDeck, makeChoices, recordAnswer, shuffle, isSpellingCorrect, letterTiles } from "../lib/games.ts";
+import { vocabulary, topics } from "./fixtures/vocabulary.ts";
+import { createDeck as buildDeck, makeChoices, recordAnswer, shuffle, isSpellingCorrect, letterTiles } from "../lib/games.ts";
+const createDeck = (topic, limit) => buildDeck(topic, limit, vocabulary);
 test("deck respects topic, caps round size and supports an empty pool", () => {
   for (const topic of topics) { const deck = createDeck(topic); assert.equal(deck.length, 5); assert.ok(deck.every(w => w.topic === topic)); assert.equal(new Set(deck.map(w => w.id)).size, 5); }
   assert.deepEqual(createDeck("missing"), []);

@@ -1,7 +1,9 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
-import { fullWord, topics, type Word } from "@/lib/vocabulary";
+import { fullWord, type Word } from "@/lib/vocabulary";
+import { useCustomVocabulary } from "./custom-vocabulary-store";
+import { EmptyVocabulary } from "./empty-vocabulary";
 import { createDeck, isSpellingCorrect, letterTiles, makeChoices, recordAnswer, shuffle, type Answers, type GameMode } from "@/lib/games";
 import { Pronunciation } from "./pronunciation";
 import { useProgress } from "./progress-store";
@@ -79,17 +81,20 @@ function QuizGame({ session, replay, leave }: { session: Session; replay: () => 
 }
 
 export function GameHub() {
+  const custom = useCustomVocabulary();
+  const topics = custom.data.topics.map(t => t.name);
   const [topic, setTopic] = useState("");
   const [session, setSession] = useState<Session | null>(null);
   const [message, setMessage] = useState("");
   function start(mode: GameMode) {
-    const words = createDeck(topic);
+    const words = createDeck(topic, 5, custom.data.words);
     if (!words.length) { setMessage("Chủ đề chưa có từ. Hãy chọn chủ đề khác."); return; }
     setMessage(""); setSession(previous => ({ mode, words, key: (previous?.key ?? 0) + 1 }));
   }
   const current = games.find(g => g.mode === session?.mode);
+  const notice = <>{custom.error && <p role="alert" className="my-5 bg-[#fff0d5] p-4">{custom.error}</p>}{custom.ready && !custom.data.words.length && <EmptyVocabulary />}</>;
   return <><p className="eyebrow">CHƠI MỘT CHÚT · NHỚ THÊM MỘT CHÚT</p><div className="mt-4 flex flex-wrap items-center justify-between gap-4"><h1 className="text-4xl">{current?.title ?? "Khu trò chơi"}</h1>{session && <button className="pixel-button bg-[#fffdf5]" onClick={() => setSession(null)}>← Đổi trò chơi</button>}</div><p className="mt-4 mb-7 text-[#647059]">Mỗi lượt 5 từ. Đúng ngay lần đầu được 10 điểm. Chọn cách chơi theo nhịp của bạn.</p>
-    {session ? <div key={session.key}>{session.mode === "match" ? <MatchingGame words={session.words} replay={() => start(session.mode)} leave={() => setSession(null)} /> : <QuizGame session={session} replay={() => start(session.mode)} leave={() => setSession(null)} />}</div>
-      : <><label className="mb-7 block max-w-sm">Chủ đề<select className="mt-2 block w-full border-2 border-[#29392a] bg-[#fffdf5] p-3" value={topic} onChange={e => setTopic(e.target.value)}><option value="">Tất cả chủ đề</option>{topics.map(t => <option key={t}>{t}</option>)}</select></label><p role="status">{message}</p><div className="grid gap-6 md:grid-cols-2">{games.map(game => <article key={game.mode} className={`pixel-panel p-6 ${game.color}`}><span className="pixel-icon bg-[#fffdf5]" aria-hidden="true">{game.icon}</span><h2 className="mt-5 text-3xl">{game.title}</h2><p className="mt-3 min-h-20 text-[#52604a]">{game.detail}</p><button className="pixel-button mt-6 bg-[#fffdf5]" onClick={() => start(game.mode)}>Chơi {game.title.toLocaleLowerCase("vi")} →</button></article>)}</div></>}
+    {notice}{session ? <div key={session.key}>{session.mode === "match" ? <MatchingGame words={session.words} replay={() => start(session.mode)} leave={() => setSession(null)} /> : <QuizGame session={session} replay={() => start(session.mode)} leave={() => setSession(null)} />}</div>
+      : <><label className="mb-7 block max-w-sm">Chủ đề<select disabled={!custom.ready} className="mt-2 block w-full border-2 border-[#29392a] bg-[#fffdf5] p-3" value={topic} onChange={e => setTopic(e.target.value)}><option value="">Tất cả chủ đề</option>{topics.map(t => <option key={t}>{t}</option>)}</select></label><p role="status">{message}</p><div className="grid gap-6 md:grid-cols-2">{games.map(game => <article key={game.mode} className={`pixel-panel p-6 ${game.color}`}><span className="pixel-icon bg-[#fffdf5]" aria-hidden="true">{game.icon}</span><h2 className="mt-5 text-3xl">{game.title}</h2><p className="mt-3 min-h-20 text-[#52604a]">{game.detail}</p><button className="pixel-button mt-6 bg-[#fffdf5]" disabled={!custom.ready} onClick={() => start(game.mode)}>Chơi {game.title.toLocaleLowerCase("vi")} →</button></article>)}</div></>}
   </>;
 }

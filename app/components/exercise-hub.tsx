@@ -2,7 +2,9 @@
 import Link from "next/link";
 import { useState } from "react";
 import { createExerciseQuestions, checkExerciseAnswer, exerciseNames, type ExerciseMode, type ExerciseQuestion } from "@/lib/exercises";
-import { fullWord, topics } from "@/lib/vocabulary";
+import { fullWord } from "@/lib/vocabulary";
+import { useCustomVocabulary } from "./custom-vocabulary-store";
+import { EmptyVocabulary } from "./empty-vocabulary";
 import { recordAnswer, type Answers } from "@/lib/games";
 import type { ExerciseResult } from "@/lib/progress";
 import { useProgress } from "./progress-store";
@@ -61,18 +63,23 @@ function ExerciseRound({ session, leave, replay, review }: { session: Session; l
 }
 
 export function ExerciseHub() {
-  const { progress, ready } = useProgress();
+  const { progress, ready: progressReady } = useProgress();
+  const custom = useCustomVocabulary();
+  const ready = progressReady && custom.ready;
+  const topics = custom.data.topics.map(t => t.name);
   const [topic, setTopic] = useState("");
   const [reviewOnly, setReviewOnly] = useState(false);
   const [session, setSession] = useState<Session | null>(null);
   const [message, setMessage] = useState("");
   function start(mode: ExerciseMode, retryIds?: string[]) {
     const ids = retryIds ?? (reviewOnly ? Object.keys(progress.words).filter(id => progress.words[id] === "review") : undefined);
-    const questions = createExerciseQuestions(mode, topic, ids);
-    if (!questions.length) { setMessage(mode === "article" ? "Bộ lọc này chưa có danh từ để luyện mạo từ. Hãy đổi chủ đề hoặc bỏ lọc từ cần ôn." : "Chưa có từ phù hợp. Hãy đổi chủ đề hoặc bỏ lọc từ cần ôn."); return; }
+    const questions = createExerciseQuestions(mode, topic, ids, 5, custom.data.words);
+    if (!questions.length) { setMessage(mode === "article" ? "Bộ lọc này chưa có danh từ để luyện mạo từ. Hãy đổi chủ đề hoặc bỏ lọc từ cần ôn." : mode === "gap" ? "Chưa có câu ví dụ chứa nguyên từ đã nhập. Thêm câu ví dụ phù hợp hoặc đổi bộ lọc để luyện điền từ." : "Chưa có từ phù hợp. Hãy đổi chủ đề hoặc bỏ lọc từ cần ôn."); return; }
     setMessage(""); setSession({ id: crypto.randomUUID(), mode, kind: retryIds || reviewOnly ? "review" : "practice", questions });
   }
   return <><p className="eyebrow">LUYỆN TỪ TRONG NGỮ CẢNH</p><div className="mt-4 flex flex-wrap justify-between gap-4"><h1 className="text-4xl">{session ? exerciseNames[session.mode] : "Bài tập"}</h1>{session && <button className="pixel-button bg-[#fffdf5]" onClick={() => setSession(null)}>← Chọn bài khác</button>}</div><p className="my-5 text-[#647059]">Tối đa 5 câu mỗi lượt. Điểm tính theo lần trả lời đầu; từ sai được tự đánh dấu cần ôn khi hoàn thành.</p>
+    {custom.error && <p role="alert" className="my-5 bg-[#fff0d5] p-4">{custom.error}</p>}
+    {custom.ready && !custom.data.words.length && <EmptyVocabulary />}
     {session ? <ExerciseRound key={session.id} session={session} leave={() => setSession(null)} replay={() => start(session.mode)} review={ids => start(session.mode, ids)} /> : <><div className="my-7 flex flex-wrap items-end gap-6"><label className="block min-w-60">Chủ đề<select disabled={!ready} className="mt-2 block w-full border-2 border-[#29392a] bg-[#fffdf5] p-3" value={topic} onChange={e => { setTopic(e.target.value); setMessage(""); }}><option value="">Tất cả chủ đề</option>{topics.map(t => <option key={t}>{t}</option>)}</select></label><label className="flex min-h-12 cursor-pointer items-center gap-3"><input type="checkbox" className="h-5 w-5 accent-[#63814a]" checked={reviewOnly} disabled={!ready} onChange={e => { setReviewOnly(e.target.checked); setMessage(""); }} />Chỉ luyện từ cần ôn</label></div><p role="status" className="mb-5 text-[#80421e]">{message}</p><div className="grid gap-6 xl:grid-cols-3">{modes.map(item => <article key={item.mode} className={`pixel-panel p-6 ${item.color}`}><span className="pixel-icon bg-[#fffdf5]" aria-hidden="true">{item.icon}</span><h2 className="mt-6 text-3xl">{exerciseNames[item.mode]}</h2><p className="mt-3 min-h-28 text-[#52604a]">{item.detail}</p><button className="pixel-button mt-5 bg-[#fffdf5]" disabled={!ready} onClick={() => start(item.mode)}>Luyện {exerciseNames[item.mode].toLocaleLowerCase("vi")} →</button></article>)}</div><p className="mt-7 text-sm text-[#647059]">Bài đang làm chưa được lưu giữa chừng. Hãy hoàn thành lượt để ghi nhận kết quả trên thiết bị.</p></>}
   </>;
 }

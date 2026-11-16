@@ -1,15 +1,17 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createExerciseQuestions, checkExerciseAnswer } from "../lib/exercises.ts";
+import { createExerciseQuestions as buildQuestions, checkExerciseAnswer } from "../lib/exercises.ts";
+import { vocabulary } from "./fixtures/vocabulary.ts";
+const createExerciseQuestions = (mode, topic, ids, limit) => buildQuestions(mode, topic, ids, limit, vocabulary);
 import { appendExerciseResult, parseProgress } from "../lib/progress.ts";
 
 const result = { id: "attempt-1", mode: "gap", kind: "practice", completedAt: "2026-11-16T10:00:00.000Z", total: 5, correct: 4, wrongIds: ["haus"] };
-test("gap questions reconstruct the original sentence and handle conjugated verbs", () => {
+test("gap questions reconstruct sentences and skip absent or inflected lemmas", () => {
   const questions = createExerciseQuestions("gap", "", undefined, 25);
-  assert.equal(questions.length, 25);
+  assert.equal(questions.length, 22);
   for (const question of questions) { assert.ok(question.prompt.includes("____")); assert.equal(question.prompt.replace("____", question.answer), question.word.example); }
-  assert.equal(questions.find(q => q.word.id === "schlafen").answer, "schläft");
-  assert.equal(questions.find(q => q.word.id === "lesen").answer, "lese");
+  assert.equal(questions.find(q => q.word.id === "schlafen"), undefined);
+  assert.equal(questions.find(q => q.word.id === "lesen"), undefined);
 });
 test("article questions exclude verbs/greetings and respect an empty review pool", () => {
   assert.deepEqual(createExerciseQuestions("article", "Chào hỏi"), []);
