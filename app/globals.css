@@ -7,6 +7,9 @@ body { background: var(--background); color: var(--foreground); font-family: var
 button, a, input, select { -webkit-tap-highlight-color: transparent; }
 button, select { cursor: pointer; }
 :focus-visible { outline: 3px solid #5766b1; outline-offset: 5px; }
+.flip-card:focus-visible, .pixel-panel:focus-visible { outline: none; }
+.flip-card:focus-visible .pixel-label { background: #f9cd65; }
+a.pixel-panel:focus-visible { background: #edf2e4; }
 .pixel-panel { border: 2px solid #29392a; box-shadow: 4px 4px 0 #29392a; }
 .pixel-button { display: inline-flex; align-items: center; justify-content: center; gap: 16px; min-height: 44px; border: 2px solid #29392a; padding: 12px 20px; font-size: 20px; font-weight: 400; box-shadow: 4px 4px 0 #29392a; transition: transform .12s, box-shadow .12s, background .12s; }
 .pixel-button:hover { filter: brightness(.97); transform: translate(-1px,-1px); box-shadow: 5px 5px 0 #29392a; }
