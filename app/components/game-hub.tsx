@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { fullWord, type Word } from "@/lib/vocabulary";
 import { createDeck, isSpellingCorrect, letterTiles, makeChoices, recordAnswer, shuffle, type Answers, type GameMode } from "@/lib/games";
 import { Pronunciation } from "./pronunciation";
@@ -85,6 +85,14 @@ export function GameHub() {
   const [chooseGame, setChooseGame] = useState<GameMode | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [message, setMessage] = useState("");
+  const [creatingGame, setCreatingGame] = useState(false);
+  const topicDialog = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    const dialog = topicDialog.current;
+    if (!dialog) return;
+    if (chooseGame && !dialog.open) dialog.showModal();
+    if (!chooseGame && dialog.open) dialog.close();
+  }, [chooseGame]);
   useEffect(() => {
     fetch("/api/topics", { cache: "no-store" }).then(async response => {
       if (!response.ok) throw new Error(response.status === 401 ? "Hãy đăng nhập lại để tải bộ từ." : "Không tải được bộ từ từ cơ sở dữ liệu.");
@@ -94,21 +102,23 @@ export function GameHub() {
   }, []);
   async function start(mode: GameMode, topicId: string) {
     setTopicError("");
+    setCreatingGame(true);
     try {
       const response = await fetch(`/api/topics/${topicId}/flashcards`, { cache: "no-store" });
       if (!response.ok) throw new Error("Không tải được flashcard từ cơ sở dữ liệu.");
       const data = await response.json();
       const words = createDeck("", 5, data.flashcards);
-      if (!words.length) { setTopicError("Bộ này chưa có từ để chơi."); return; }
+      if (!words.length) { setTopicError("Chủ đề chưa có từ. Hãy chọn chủ đề khác."); return; }
       setChooseGame(null);
     setMessage(""); setSession(previous => ({ mode, words, key: (previous?.key ?? 0) + 1 }));
     } catch (error) { setTopicError(error instanceof Error ? error.message : "Không tải được flashcard."); }
+    finally { setCreatingGame(false); }
   }
   const current = games.find(g => g.mode === session?.mode);
   return <><p className="eyebrow">CHƠI MỘT CHÚT · NHỚ THÊM MỘT CHÚT</p><div className="mt-4 flex flex-wrap items-center justify-between gap-4"><h1 className="text-4xl">{current?.title ?? "Khu trò chơi"}</h1>{session && <button className="pixel-button bg-[#fffdf5]" onClick={() => setSession(null)}>← Đổi trò chơi</button>}</div><p className="mt-4 mb-7 text-[#647059]">Mỗi lượt 5 từ. Đúng ngay lần đầu được 10 điểm. Chọn cách chơi theo nhịp của bạn.</p>
-    {topicError && <p role="alert" className="my-5 bg-[#fff0d5] p-4">{topicError}</p>}
+    {topicError && !chooseGame && <p role="alert" className="my-5 bg-[#fff0d5] p-4 text-[#b42318]">{topicError}</p>}
     {session ? <div key={session.key}>{session.mode === "match" ? <MatchingGame words={session.words} replay={() => setChooseGame(session.mode)} leave={() => setSession(null)} /> : <QuizGame session={session} replay={() => setChooseGame(session.mode)} leave={() => setSession(null)} />}</div>
       : <><p role="status">{message}</p><div className="grid gap-6 md:grid-cols-2">{games.map(game => <article key={game.mode} className={`pixel-panel p-6 ${game.color}`}><span className="pixel-icon bg-[#fffdf5]" aria-hidden="true">{game.icon}</span><h2 className="mt-5 text-3xl">{game.title}</h2><p className="mt-3 min-h-20 text-[#52604a]">{game.detail}</p><button className="pixel-button mt-6 bg-[#fffdf5]" onClick={() => { setChooseGame(game.mode); setTopicError(""); }}>Chơi {game.title.toLocaleLowerCase("vi")} →</button></article>)}</div></>}
-    {chooseGame && <dialog open className="flashcard-dialog pixel-panel bg-[#f5f3e8] p-6 sm:p-8"><div className="flex items-center justify-between gap-4"><h2 className="text-2xl font-bold">Chọn bộ từ</h2><button className="pixel-button bg-[#fffdf5]" onClick={() => setChooseGame(null)}>Đóng</button></div><p className="mt-3 text-sm text-[#647059]">Chọn một bộ để chơi {games.find(g => g.mode === chooseGame)?.title.toLocaleLowerCase("vi")}.</p>{topicLoading ? <p className="mt-5">Đang tải…</p> : topicList.length ? <div className="mt-5 grid gap-3">{topicList.map(topic => <button key={topic.id} disabled={topic.cardCount === 0} className="pixel-button justify-between bg-[#fffdf5]" onClick={() => start(chooseGame, topic.id)}><span>{topic.name}</span><span className="pixel-label">{topic.cardCount} thẻ</span></button>)}</div> : <p className="mt-5">Bạn chưa tạo bộ từ nào.</p>}</dialog>}
+    {chooseGame && <dialog ref={topicDialog} aria-labelledby="game-topic-title" className="flashcard-dialog topic-dialog pixel-panel bg-[#f5f3e8] p-6 sm:p-8" onCancel={event => { event.preventDefault(); if (!creatingGame) setChooseGame(null); }}><div className="flex items-center justify-between gap-4"><h2 id="game-topic-title" className="text-2xl font-bold">Chọn chủ đề</h2><button className="pixel-button bg-[#fffdf5]" disabled={creatingGame} onClick={() => setChooseGame(null)}>Đóng</button></div><p className="mt-3 text-sm text-[#647059]">Chọn chủ đề để chơi {games.find(g => g.mode === chooseGame)?.title.toLocaleLowerCase("vi")}.</p>{creatingGame ? <p className="mt-6 flex items-center gap-3" role="status"><span className="inline-block h-5 w-5 animate-spin border-2 border-[#29392a] border-t-transparent" aria-hidden="true" />Đang tạo trò chơi…</p> : topicLoading ? <p className="mt-5" role="status">Đang tải chủ đề…</p> : topicError ? <p className="mt-5 text-[#b42318]" role="alert">{topicError}</p> : topicList.length ? <div className="mt-5 grid gap-3">{topicList.map(topic => <button key={topic.id} disabled={topic.cardCount === 0 || creatingGame} className="pixel-button justify-between bg-[#fffdf5] disabled:cursor-not-allowed disabled:opacity-60" onClick={() => start(chooseGame, topic.id)}><span>{topic.name}</span><span className={topic.cardCount ? "pixel-label" : "text-sm text-[#b42318]"}>{topic.cardCount ? `${topic.cardCount} thẻ` : "Chủ đề chưa có từ"}</span></button>)}</div> : <p className="mt-5 text-[#647059]">Bạn chưa tạo chủ đề nào.</p>}</dialog>}
   </>;
 }
