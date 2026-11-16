@@ -6,6 +6,7 @@ import { fullWord, fullPlural, type Word } from "@/lib/vocabulary";
 import { useProgress } from "./progress-store";
 import { Pronunciation } from "./pronunciation";
 import { FlashcardFace } from "./flashcard-face";
+import { AIExample } from "./ai-example";
 import { ProgressInsights } from "./progress-insights";
 import { useCustomVocabulary } from "./custom-vocabulary-store";
 import { FlashcardEditor } from "./flashcard-editor";
@@ -58,6 +59,7 @@ export function VocabularyLearning({ mode, topicId }: { mode: "library" | "flash
       <div className="pixel-panel bg-[#fffdf5]">
       <FlashcardFace key={word.id} word={word} flipped={revealed === word.id} status={ready && progress.words[word.id] ? statusNames[progress.words[word.id]] : "Chưa học"} onFlip={() => setRevealed(revealed === word.id ? "" : word.id)} />
       <div className="border-t-2 border-[#d8d9c9] p-6 sm:p-8">
+      <AIExample key={word.id} word={word} />
       <div className="flex flex-wrap gap-4"><Pronunciation key={`word-${word.id}`} id={word.id} text={fullWord(word)} />{fullPlural(word) && <Pronunciation key={`plural-${word.id}`} id={`${word.id}-plural`} text={fullPlural(word)!} label="Nghe số nhiều" />}</div>{revealed === word.id && word.example && <div className="mt-5"><Pronunciation key={`sentence-${word.id}`} id={word.id} text={word.example} sentence /></div>}
       <div className="mt-6 flex flex-wrap gap-3 border-t-2 border-[#d8d9c9] pt-6"><button disabled={!ready} aria-pressed={progress.words[word.id] === "review"} className="pixel-button bg-[#f8dda7]" onClick={() => mark(word, "review")}>↻ Cần ôn</button><button disabled={!ready} aria-pressed={progress.words[word.id] === "known"} className="pixel-button bg-[#dbe8cc]" onClick={() => mark(word, "known")}>✓ Đã nhớ</button>{progress.words[word.id] && <button className="text-sm underline" onClick={() => setStatus(word.id, undefined)}>Bỏ đánh dấu</button>}</div></div></div>
       <div className="mt-7 flex justify-between gap-3"><button className="pixel-button bg-[#fffdf5]" disabled={position === 0} onClick={() => { setIndex(position - 1); setRevealed(""); }}>← Thẻ trước</button><button className="pixel-button bg-[#fffdf5]" disabled={position === words.length - 1} onClick={() => { setIndex(position + 1); setRevealed(""); }}>Thẻ tiếp →</button></div>
