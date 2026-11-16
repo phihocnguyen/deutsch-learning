@@ -2,6 +2,8 @@
 
 Đăng nhập tại `/admin/login`, quản lý người học tại `/admin/users`.
 
+`/admin/login` là màn hình riêng, không có sidebar học tập. Các trang quản trị dùng sidebar admin với mục Quản lý người dùng, menu đóng/mở trên điện thoại và liên kết về trang học tập. Các trang người học dùng layout riêng trong route group `(learning)`; đường dẫn URL của chúng không đổi.
+
 ## Cài đặt
 
 1. Đặt `DATABASE_URL` trong `.env.local` hoặc môi trường máy chủ.

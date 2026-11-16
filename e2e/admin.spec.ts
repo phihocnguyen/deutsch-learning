@@ -22,10 +22,15 @@ test("admin login protects user management and supports account lifecycle", asyn
 
     await page.goto("/admin/users");
     await expect(page).toHaveURL(/\/admin\/login/);
+    await expect(page.locator("aside")).toHaveCount(0);
+    await expect(page.locator("header")).toHaveCount(0);
     await page.getByLabel("Tên đăng nhập", { exact: true }).fill(process.env.ADMIN_TEST_USERNAME ?? "admin");
     await page.getByLabel("Mật khẩu", { exact: true }).fill(process.env.ADMIN_TEST_PASSWORD!);
     await page.getByRole("button", { name: "Đăng nhập admin", exact: true }).click();
     await expect(page.getByRole("heading", { name: "Quản lý người dùng", exact: true })).toBeVisible();
+    await expect(page.getByRole("navigation", { name: "Điều hướng quản trị" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Quản lý người dùng", exact: true })).toHaveAttribute("aria-current", "page");
+    await expect(page.getByRole("navigation", { name: "Điều hướng chính" })).toHaveCount(0);
     await page.getByRole("searchbox").fill(email);
     await page.getByRole("button", { name: "Tìm kiếm", exact: true }).click();
     const card = page.locator("article").filter({ hasText: email });
@@ -49,6 +54,9 @@ test("admin login protects user management and supports account lifecycle", asyn
     expect((await contextRequest.patch(`/api/admin/users/${userId}`, { headers: { Origin: "https://untrusted.example" }, data: { action: "block" } })).status()).toBe(403);
     expect((await contextRequest.patch(`/api/admin/users/${userId}`, { headers: { Origin: baseURL! }, data: { action: "revoke-sessions" } })).ok()).toBe(true);
     await page.setViewportSize({ width: 390, height: 844 });
+    await page.getByRole("button", { name: "Mở menu quản trị", exact: true }).click();
+    await expect(page.getByRole("navigation", { name: "Điều hướng quản trị" })).toBeVisible();
+    await page.getByRole("button", { name: "Đóng menu quản trị", exact: true }).click();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await card.getByRole("button", { name: "Xóa tài khoản", exact: true }).click();
     await expect(page.getByRole("button", { name: "Xác nhận", exact: true })).toBeDisabled();
