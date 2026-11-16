@@ -69,3 +69,5 @@ Tác giả commit: kris <ng.phihoc123@gmail.com>.
 - Bấm trực tiếp vào mặt thẻ hoặc dùng Enter/Space để lật; nút nghe/đánh dấu độc lập.
 - Danh từ hiển thị mạo từ số ít và dạng số nhiều đầy đủ với `die` ở cả hai mặt.
 - Mặt sau có nút nghe số nhiều; danh từ không có số nhiều thông dụng và động từ không tạo số nhiều giả.
+- Thêm hiệu ứng mở/lật thẻ 240ms, vùng mặt thẻ có chiều cao tối thiểu ổn định, tôn trọng reduced motion.
+- Chờ giọng Đức tải bất đồng bộ tối đa 10 giây; hiện trạng thái tải, tự phát khi sẵn sàng, cho phép dừng/hủy khi đổi thẻ. Kiểm tra bằng 3 tests riêng cho tải chậm, chọn ngôn ngữ và hủy chờ; tổng 8 tests cùng build/lint đã qua.
