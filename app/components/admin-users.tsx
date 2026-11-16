@@ -71,7 +71,7 @@ export function AdminUsers({ adminName, localAdmin }: { adminName: string; local
     try {
       const response = await fetch("/api/admin/logout", { method: "POST" });
       if (!response.ok) throw new Error("Không đăng xuất được. Hãy thử lại.");
-      router.replace("/admin/login"); router.refresh();
+      window.location.replace("/admin/login");
     } catch (error) { setError(error instanceof Error ? error.message : "Không đăng xuất được."); }
     finally { setBusy(false); }
   }

@@ -24,6 +24,10 @@ test("admin login protects user management and supports account lifecycle", asyn
     await expect(page).toHaveURL(/\/admin\/login/);
     await expect(page.locator("aside")).toHaveCount(0);
     await expect(page.locator("header")).toHaveCount(0);
+    const loginBox = await page.locator("main > section").boundingBox();
+    expect(loginBox).not.toBeNull();
+    expect(Math.abs(loginBox!.y + loginBox!.height / 2 - page.viewportSize()!.height / 2)).toBeLessThan(3);
+    expect(loginBox!.width).toBe(448);
     await page.getByLabel("Tên đăng nhập", { exact: true }).fill(process.env.ADMIN_TEST_USERNAME ?? "admin");
     await page.getByLabel("Mật khẩu", { exact: true }).fill(process.env.ADMIN_TEST_PASSWORD!);
     await page.getByRole("button", { name: "Đăng nhập admin", exact: true }).click();
@@ -31,6 +35,11 @@ test("admin login protects user management and supports account lifecycle", asyn
     await expect(page.getByRole("navigation", { name: "Điều hướng quản trị" })).toBeVisible();
     await expect(page.getByRole("link", { name: "Quản lý người dùng", exact: true })).toHaveAttribute("aria-current", "page");
     await expect(page.getByRole("navigation", { name: "Điều hướng chính" })).toHaveCount(0);
+    // A hidden login page retained during navigation must not hide the active admin shell.
+    await page.evaluate(() => { const cached = document.createElement("div"); cached.className = "login-page"; cached.hidden = true; cached.dataset.testid = "retained-login"; document.body.append(cached); });
+    await expect(page.locator("aside")).toBeVisible();
+    await expect(page.locator("header")).toBeVisible();
+    await page.getByTestId("retained-login").evaluate(element => element.remove());
     await page.getByRole("searchbox").fill(email);
     await page.getByRole("button", { name: "Tìm kiếm", exact: true }).click();
     const card = page.locator("article").filter({ hasText: email });
@@ -68,6 +77,12 @@ test("admin login protects user management and supports account lifecycle", asyn
     expect((await pool.query('SELECT id FROM accounts WHERE "userId"=$1', [userId])).rowCount).toBe(0);
     await page.getByRole("button", { name: "Đăng xuất admin", exact: true }).click();
     await expect(page).toHaveURL(/\/admin\/login/);
+    await expect(page.locator("aside")).toHaveCount(0);
+    await expect(page.locator("header")).toHaveCount(0);
+    await expect(page.getByRole("navigation")).toHaveCount(0);
+    const loggedOutBox = await page.locator("main > section").boundingBox();
+    expect(loggedOutBox).not.toBeNull();
+    expect(Math.abs(loggedOutBox!.y + loggedOutBox!.height / 2 - page.viewportSize()!.height / 2)).toBeLessThan(3);
     expect((await contextRequest.get("/api/admin/users")).status()).toBe(403);
   } finally {
     if (userId) {
