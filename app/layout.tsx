@@ -13,7 +13,7 @@ const pixelFont = VT323({
 
 export const metadata: Metadata = {
   title: "Deutsch Quest — Học từ vựng tiếng Đức",
-  description: "Học từ vựng Đức–Việt qua flashcard, trò chơi và bài tập.",
+  description: "Học từ vựng Đức–Việt và ngữ pháp A1–A2 qua flashcard, trò chơi và bài tập có giải thích.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -29,9 +29,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <Link href="/" className="mb-7 flex items-center gap-3 font-mono text-lg font-black"><span className="flex h-10 w-10 items-center justify-center border-2 border-[#29392a] bg-[#f9cd65] shadow-[3px_3px_0_#29392a]" aria-hidden="true">D.</span><span>DEUTSCH<span className="block text-xs tracking-[.3em] text-[#63814a]">QUEST</span></span></Link>
             <p className="eyebrow mb-4 hidden lg:block">BẢN ĐỒ HỌC TẬP</p><Navigation />
             <div className="mt-auto hidden border-2 border-[#d8d9c9] p-4 lg:block"><span aria-hidden="true" className="text-2xl">✦</span><p className="mt-2 text-sm font-bold">Schritt für Schritt.</p><p className="mt-2 text-xs leading-5 text-[#6c7163]">Từng bước một.<br />Bạn đang làm rất tốt!</p></div>
-            <p className="mt-5 hidden font-mono text-[10px] tracking-widest text-[#737866] lg:block">DEUTSCH QUEST · A1</p>
+            <p className="mt-5 hidden font-mono text-[10px] tracking-widest text-[#737866] lg:block">DEUTSCH QUEST · A1–A2</p>
           </aside>
-          <div className="min-w-0"><header className="flex items-center justify-between gap-4 border-b-2 border-[#d8d9c9] px-6 py-5 sm:px-10"><span className="text-sm font-bold">Guten Tag! ✳</span><span className="flex items-center gap-3 text-xs font-bold text-[#59644f]"><span className="border border-[#b3bea4] bg-[#e1e9d4] px-2 py-1">A1</span> Hành trình của bạn</span></header>
+          <div className="min-w-0"><header className="flex items-center justify-between gap-4 border-b-2 border-[#d8d9c9] px-6 py-5 sm:px-10"><span className="text-sm font-bold">Guten Tag! ✳</span><span className="flex items-center gap-3 text-xs font-bold text-[#59644f]"><span className="border border-[#b3bea4] bg-[#e1e9d4] px-2 py-1">DE</span> Hành trình của bạn</span></header>
           <main id="main" tabIndex={-1} className="mx-auto max-w-6xl px-6 py-8 sm:px-10 sm:py-10">{children}</main>
           <footer className="mx-6 flex flex-wrap justify-between gap-3 border-t-2 border-[#d8d9c9] py-6 text-xs text-[#6c7163] sm:mx-10"><span>Được tạo cho những bước tiến nhỏ mỗi ngày.</span><span className="font-mono">VIEL ERFOLG! ✦</span></footer></div>
         </div>
