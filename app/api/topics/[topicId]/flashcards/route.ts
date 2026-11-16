@@ -39,3 +39,23 @@ export async function POST(request: Request, { params }: Context) {
   if (!result.rowCount) return NextResponse.json({ error: "Không tìm thấy chủ đề." }, { status: 404 });
   return NextResponse.json({ flashcard: result.rows[0] }, { status: 201, headers: { "Cache-Control": "private, no-store" } });
 }
+
+export async function PATCH(request: Request, { params }: Context) {
+  const session = await auth();
+  if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const { topicId } = await params;
+  if (!topicIdPattern.test(topicId)) return NextResponse.json({ error: "Chủ đề không hợp lệ." }, { status: 400 });
+  const body = await request.json().catch(() => null);
+  const fields = [body?.id, body?.german, body?.vietnamese];
+  if (!fields.every(value => typeof value === "string" && value.trim()) || body.german.length > 160 || body.vietnamese.length > 300)
+    return NextResponse.json({ error: "Từ tiếng Đức và nghĩa tiếng Việt là bắt buộc." }, { status: 400 });
+  if (body.article != null && !["der", "die", "das"].includes(body.article)) return NextResponse.json({ error: "Mạo từ không hợp lệ." }, { status: 400 });
+  for (const field of ["plural", "example", "translation"]) if (body[field] != null && (typeof body[field] !== "string" || body[field].length > (field === "example" || field === "translation" ? 1000 : 160))) return NextResponse.json({ error: `Trường ${field} không hợp lệ.` }, { status: 400 });
+  const result = await neonPool().query(
+    `UPDATE flashcards SET german=$4,vietnamese=$5,article=$6,plural=$7,example=$8,translation=$9,updated_at=now()
+     WHERE owner_id=$1 AND id=$2 AND topic_id=$3
+     RETURNING id,topic_id AS "topicId",german,vietnamese,article,plural,example,translation`,
+    [Number(session.user.id), body.id, topicId, body.german.trim().normalize("NFC"), body.vietnamese.trim(), body.article ?? null, body.plural?.trim() || null, body.example?.trim() ?? "", body.translation?.trim() ?? ""]);
+  if (!result.rowCount) return NextResponse.json({ error: "Không tìm thấy flashcard trong chủ đề này." }, { status: 404 });
+  return NextResponse.json({ flashcard: result.rows[0] }, { headers: { "Cache-Control": "private, no-store" } });
+}

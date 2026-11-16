@@ -5,7 +5,7 @@ export type CustomTopic = { id: string; name: string };
 export type CustomWord = Word & { topicId: string };
 export type CustomVocabulary = { version: 1; topics: CustomTopic[]; words: CustomWord[] };
 export const emptyCustomVocabulary: CustomVocabulary = { version: 1, topics: [], words: [] };
-export const customWordId = /^custom-[0-9a-f-]{36}$/;
+export const customWordId = /^(?:custom-[0-9a-f-]{36}|[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})$/i;
 const text = (value: unknown, limit: number, required = false): value is string =>
   typeof value === "string" && value.length <= limit && (!required || !!value.trim());
 

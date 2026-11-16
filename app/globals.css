@@ -28,6 +28,8 @@ a.pixel-panel:focus-visible { background: #edf2e4; }
 .pixel-button:hover { filter: brightness(.97); transform: translate(-1px,-1px); box-shadow: 5px 5px 0 #29392a; }
 .pixel-button:active { transform: translate(4px,4px); box-shadow: none; }
 .pixel-button:disabled { cursor: not-allowed; opacity: .5; transform: none; box-shadow: none; }
+.mobile-menu-toggle { display: inline-flex; }
+@media (min-width: 1024px) { .mobile-menu-toggle { display: none; } }
 .pixel-label { display: inline-block; border: 1px solid #8a9a76; background: #f5f3e8; padding: 6px 10px; font-size: 16px; letter-spacing: 1px; }
 .eyebrow { font-size: 15px; letter-spacing: 1.5px; color: #59644f; }
 .pixel-icon { display: flex; width: 52px; height: 52px; align-items: center; justify-content: center; border: 2px solid #29392a; box-shadow: 3px 3px 0 #29392a; font-size: 28px; }

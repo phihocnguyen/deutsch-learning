@@ -27,6 +27,6 @@ export function FlashcardTopics() {
         <span className="mt-6 border-t-2 border-[#d8d9c9] pt-4 text-sm font-bold">Mở bộ flashcard →</span>
       </Link>;
     })}</div>}
-    <p className="mt-7 text-sm text-[#647059]">Bộ thẻ và tiến độ được lưu trên trình duyệt này.</p>
+    <p className="mt-7 text-sm text-[#647059]">Bộ thẻ được lưu trong tài khoản và đồng bộ khi bạn đăng nhập trên thiết bị khác.</p>
   </>;
 }

@@ -6,29 +6,40 @@ const initial = { data: emptyCustomVocabulary, ready: false, error: "" };
 let snapshot = initial;
 let initialized = false;
 const listeners = new Set<() => void>();
-function load() {
-  try { snapshot = { data: parseCustomVocabulary(localStorage.getItem(CUSTOM_STORAGE_KEY)), ready: true, error: "" }; }
-  catch { snapshot = { ...snapshot, ready: true, error: "Không đọc được bộ thẻ đã lưu. Dữ liệu cũ vẫn được giữ; thay đổi mới chỉ lưu trong phiên này." }; }
+async function loadDatabase() {
+  try {
+    const response = await fetch("/api/topics", { cache: "no-store" });
+    if (!response.ok) throw new Error(response.status === 401 ? "Hãy đăng nhập lại để tải chủ đề." : "Không tải được chủ đề từ cơ sở dữ liệu.");
+    const { topics } = await response.json() as { topics: { id: string; name: string }[] };
+    const words = (await Promise.all(topics.map(async topic => {
+      const result = await fetch(`/api/topics/${topic.id}/flashcards`, { cache: "no-store" });
+      if (!result.ok) throw new Error("Không tải được flashcard từ cơ sở dữ liệu.");
+      const data = await result.json() as { flashcards: import("@/lib/custom-vocabulary").CustomWord[] };
+      return data.flashcards.map(card => ({ ...card, article: card.article ?? undefined, plural: card.plural ?? undefined }));
+    }))).flat();
+    const data = parseCustomVocabulary(JSON.stringify({ version: 1, topics, words }));
+    snapshot = { data, ready: true, error: "" };
+    emit();
+  } catch (error) {
+    snapshot = { data: emptyCustomVocabulary, ready: true, error: error instanceof Error ? error.message : "Không tải được dữ liệu từ cơ sở dữ liệu." };
+    emit();
+  }
 }
 function getSnapshot() {
-  if (!initialized && typeof window !== "undefined") { initialized = true; load(); }
+  if (!initialized && typeof window !== "undefined") { initialized = true; void loadDatabase(); }
   return snapshot;
 }
 function emit() { listeners.forEach(listener => listener()); }
 function subscribe(listener: () => void) {
   listeners.add(listener);
-  const sync = (event: StorageEvent) => { if (event.key === CUSTOM_STORAGE_KEY || event.key === null) { load(); emit(); } };
+  const sync = (event: StorageEvent) => { if (event.key === CUSTOM_STORAGE_KEY || event.key === null) { void loadDatabase(); } };
   window.addEventListener("storage", sync);
   return () => { listeners.delete(listener); window.removeEventListener("storage", sync); };
 }
 export function useCustomVocabulary() {
   const state = useSyncExternalStore(subscribe, getSnapshot, () => initial);
   function update(change: (data: CustomVocabulary) => CustomVocabulary) {
-    let current = snapshot.data;
-    if (!snapshot.error) {
-      try { current = parseCustomVocabulary(localStorage.getItem(CUSTOM_STORAGE_KEY)); }
-      catch { throw new Error("Bộ thẻ trên thiết bị đã thay đổi hoặc không đọc được. Hãy tải lại trang trước khi sửa."); }
-    }
+    const current = snapshot.data;
     const data = parseCustomVocabulary(JSON.stringify(change(current)));
     let error = snapshot.error;
     if (!error) {

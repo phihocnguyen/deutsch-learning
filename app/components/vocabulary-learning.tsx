@@ -6,8 +6,7 @@ import { fullWord, fullPlural, type Word } from "@/lib/vocabulary";
 import { useProgress } from "./progress-store";
 import { Pronunciation } from "./pronunciation";
 import { FlashcardFace } from "./flashcard-face";
-import { ExerciseHistory } from "./exercise-history";
-import { GrammarSummary } from "./grammar-summary";
+import { ProgressInsights } from "./progress-insights";
 import { useCustomVocabulary } from "./custom-vocabulary-store";
 import { FlashcardEditor } from "./flashcard-editor";
 
@@ -39,18 +38,16 @@ export function VocabularyLearning({ mode, topicId }: { mode: "library" | "flash
   function mark(word: Word, value: "known" | "review") { setStatus(word.id, value); }
   if (topicId && !custom.ready) return <p role="status">Đang tải bộ flashcard…</p>;
   if (topicId && !selectedTopic) return <><h1 className="text-3xl">Không tìm thấy chủ đề</h1><p className="mt-4 text-[#647059]">Chủ đề có thể đã bị xóa hoặc được tạo trên một trình duyệt khác.</p>{custom.error && <p role="alert" className="mt-4">{custom.error}</p>}<Link href="/flashcards" className="pixel-button mt-6 bg-[#dbe8cc]">← Danh sách chủ đề</Link></>;
+  if (mode === "progress") return <ProgressInsights />;
 
   return <>
     <p className="eyebrow [overflow-wrap:anywhere]">HÀNH TRÌNH A1 / {title.toLocaleUpperCase("vi")}</p>
     <div className="mt-4 flex flex-wrap items-center justify-between gap-4"><h1 className="min-w-0 text-4xl font-extrabold [overflow-wrap:anywhere]">{title}</h1><Link className="pixel-button bg-[#f9cd65]" href={topicId ? "/flashcards" : mode === "flashcards" ? "/vocabulary" : "/flashcards"}>{topicId ? "← Các chủ đề" : mode === "flashcards" ? "Xem thư viện →" : "Học flashcard →"}</Link></div>
-    <p className="mt-4 leading-7 text-[#647059]">{mode === "flashcards" ? "Thử nhớ nghĩa trước khi lật thẻ. Mỗi lần ôn là một bước tiến." : mode === "progress" ? "Những dấu mốc thật, từ chính các từ bạn đã đánh dấu." : "Tạo chủ đề và thêm từ của bạn để bắt đầu học."}</p>
+    <p className="mt-4 leading-7 text-[#647059]">{mode === "flashcards" ? "Thử nhớ nghĩa trước khi lật thẻ. Mỗi lần ôn là một bước tiến." : "Tạo chủ đề và thêm từ của bạn để bắt đầu học."}</p>
     <div className="my-7 grid grid-cols-3 gap-3" aria-label="Tiến độ từ vựng">{[["Đã nhớ", known, "bg-[#dbe8cc]"], ["Cần ôn", review, "bg-[#f8dda7]"], ["Chưa học", allWords.length - known - review, "bg-[#e0dff2]"]].map(([label, count, color]) => <div key={label} className={`border-2 border-[#29392a] p-3 sm:p-5 ${color}`}><p className="font-mono text-2xl font-bold">{ready ? count : "—"}</p><p className="mt-2 text-xs sm:text-sm">{label}</p></div>)}</div>
     <p className="mb-5 text-xs leading-6 text-[#647059]">Tiến độ được lưu trên trình duyệt này, không đồng bộ giữa thiết bị.</p>
     {error && <p role="alert" className="mb-5 border-2 border-[#b56e3e] bg-[#fff0d5] p-4 text-sm leading-6">{error}</p>}
-    {mode === "progress" && <ExerciseHistory />}
-    {mode === "progress" && <GrammarSummary />}
-    {mode !== "progress" && <FlashcardEditor mode={topicId ? "cards" : "all"} selectedTopic={topic} onSelect={name => { if (topicId && !name) router.push("/flashcards"); setTopic(name); setFilterStatus(""); setSearch(""); reset(); }} />}
-    {mode === "progress" && custom.error && <p role="alert" className="mb-5 bg-[#fff0d5] p-4">{custom.error}</p>}
+    <FlashcardEditor mode={topicId ? "cards" : "all"} selectedTopic={topic} onSelect={name => { if (topicId && !name) router.push("/flashcards"); setTopic(name); setFilterStatus(""); setSearch(""); reset(); }} />
     <div className={`learning-filters mb-7 grid gap-4 ${topicId ? "sm:grid-cols-2" : "sm:grid-cols-3"}`}>
       {!topicId && <label className="text-sm font-bold">Chủ đề<select disabled={!ready} value={topic} onChange={e => { setTopic(e.target.value); reset(); }} className="vocabulary-filter mt-2 block h-12 w-full border-2 border-[#29392a] bg-[#fffdf5] px-3 py-2"><option value="">Tất cả chủ đề</option>{allTopics.map(t => <option key={t}>{t}</option>)}</select></label>}
       <label className="text-sm font-bold">Trạng thái<select disabled={!ready} value={status} onChange={e => { setFilterStatus(e.target.value); reset(); }} className="vocabulary-filter mt-2 block h-12 w-full border-2 border-[#29392a] bg-[#fffdf5] px-3 py-2"><option value="">Tất cả từ</option><option value="new">Chưa học</option><option value="known">Đã nhớ</option><option value="review">Cần ôn</option></select></label>
