@@ -32,7 +32,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <p className="mt-5 hidden font-mono text-[10px] tracking-widest text-[#737866] lg:block">DEUTSCH QUEST · A1</p>
           </aside>
           <div className="min-w-0"><header className="flex items-center justify-between gap-4 border-b-2 border-[#d8d9c9] px-6 py-5 sm:px-10"><span className="text-sm font-bold">Guten Tag! ✳</span><span className="flex items-center gap-3 text-xs font-bold text-[#59644f]"><span className="border border-[#b3bea4] bg-[#e1e9d4] px-2 py-1">A1</span> Hành trình của bạn</span></header>
-          <main id="main" className="mx-auto max-w-6xl px-6 py-8 sm:px-10 sm:py-10">{children}</main>
+          <main id="main" tabIndex={-1} className="mx-auto max-w-6xl px-6 py-8 sm:px-10 sm:py-10">{children}</main>
           <footer className="mx-6 flex flex-wrap justify-between gap-3 border-t-2 border-[#d8d9c9] py-6 text-xs text-[#6c7163] sm:mx-10"><span>Được tạo cho những bước tiến nhỏ mỗi ngày.</span><span className="font-mono">VIEL ERFOLG! ✦</span></footer></div>
         </div>
       </body>

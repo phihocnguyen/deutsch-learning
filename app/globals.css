@@ -8,6 +8,7 @@ button, a, input, select { -webkit-tap-highlight-color: transparent; }
 button, select { cursor: pointer; }
 :focus-visible { outline: 3px solid #5766b1; outline-offset: 5px; }
 .flip-card:focus-visible, .pixel-panel:focus-visible { outline: none; }
+main:focus { outline: none; }
 .flip-card:focus-visible .pixel-label { background: #f9cd65; }
 a.pixel-panel:focus-visible { background: #edf2e4; }
 .pixel-panel { border: 2px solid #29392a; box-shadow: 4px 4px 0 #29392a; }
@@ -16,7 +17,7 @@ a.pixel-panel:focus-visible { background: #edf2e4; }
 .pixel-button:active { transform: translate(4px,4px); box-shadow: none; }
 .pixel-button:disabled { cursor: not-allowed; opacity: .5; transform: none; box-shadow: none; }
 .pixel-label { display: inline-block; border: 1px solid #8a9a76; background: #f5f3e8; padding: 6px 10px; font-size: 16px; letter-spacing: 1px; }
-.eyebrow { font-size: 15px; letter-spacing: 1.5px; color: #647059; }
+.eyebrow { font-size: 15px; letter-spacing: 1.5px; color: #59644f; }
 .pixel-icon { display: flex; width: 52px; height: 52px; align-items: center; justify-content: center; border: 2px solid #29392a; box-shadow: 3px 3px 0 #29392a; font-size: 28px; }
 .nav-link { display: flex; flex-shrink: 0; align-items: center; gap: 12px; min-height: 48px; border: 2px solid transparent; padding: 10px 12px; font-size: 21px; color: #616b59; }
 .nav-link:hover { background: #e9ebdb; }

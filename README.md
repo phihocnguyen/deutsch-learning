@@ -64,6 +64,8 @@ Không có tài khoản hay đồng bộ cloud. Xóa dữ liệu trình duyệt 
 - `tests/games.test.mjs`, `tests/speech.test.mjs`: kiểm tra điểm, bộ câu hỏi, Unicode tiếng Đức và tải giọng bất đồng bộ.
 - `tests/exercises.test.mjs`: câu hỏi/đáp án, dữ liệu cũ, giới hạn lịch sử và tránh lưu trùng kết quả.
 - `e2e/learning.spec.ts`, `e2e/exercises.spec.ts`: kiểm tra giao diện, lượt chơi và bài tập bằng Playwright.
+- `e2e/quality.spec.ts`: kiểm tra màn hình nhỏ, điều hướng, bàn phím, giảm chuyển động, lỗi dữ liệu, đồng bộ hai tab, audio và 404.
+- `scripts/test-production.mjs`: mở và dừng production server cho kiểm tra tự động, kể cả trên Windows.
 - `PLAN.md`: trạng thái và commit từng phase.
 
 Chạy kiểm tra trình duyệt:
@@ -74,5 +76,28 @@ npm run test:e2e
 ```
 
 Playwright sử dụng dev server tại localhost:3000 hoặc tự mở server nếu chưa có.
+Để kiểm tra trên bản production:
+
+```sh
+npm run test:e2e:prod
+```
+
+Lệnh này build, mở server riêng tại localhost:3100, chạy kiểm tra và dừng server sau khi xong.
+Giữ cổng 3100 trống trước khi chạy. Dev server cổng 3000 vẫn có thể chạy song song.
+
+## Kết quả bàn giao
+
+- Lint, TypeScript và production build thành công.
+- 18 unit tests và 14 kiểm tra trình duyệt Chromium trên bản production đều qua.
+- Đã kiểm tra 6 trang ở độ rộng 320, 390, 768 và 1366px; bảng game đang chơi cũng vừa màn hình 320px.
+- Kiểm tra bàn phím, giảm chuyển động, font pixel, số nhiều, tải giọng chậm/hủy chờ, dữ liệu lỗi và đồng bộ giữa hai tab.
+- Có trang 404 tiếng Việt, tiêu đề riêng từng trang và biểu tượng pixel của ứng dụng.
+
+## Giới hạn hiện tại
+
 Kiểm tra audio dùng giọng giả lập để kiểm chứng văn bản đọc và trạng thái tải;
 chất lượng giọng thật vẫn phụ thuộc trình duyệt/hệ điều hành.
+Chưa kiểm tra trực tiếp Safari/Firefox hoặc nghe giọng thật trên từng thiết bị.
+Nội dung hiện có 25 từ/cụm từ A1; bài dịch chấm theo từ trong bộ đã học, chưa có chấm câu tự do.
+Tiến độ và lịch sử chỉ nằm trên trình duyệt hiện tại, không có tài khoản hay đồng bộ cloud.
+Mã nguồn đã sẵn sàng chạy local; chưa triển khai hosting.

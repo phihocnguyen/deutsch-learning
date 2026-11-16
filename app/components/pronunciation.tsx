@@ -29,7 +29,7 @@ export function Pronunciation({ id, text, sentence = false, label }: { id: strin
     };
     stopRef.current = stop;
     stopCurrent = stop;
-    if (!("speechSynthesis" in window)) { stop(); setMessage("Trình duyệt không hỗ trợ giọng tổng hợp."); return; }
+    if (!window.speechSynthesis || typeof window.SpeechSynthesisUtterance !== "function") { stop(); setMessage("Trình duyệt không hỗ trợ giọng tổng hợp."); return; }
     let voice: SpeechSynthesisVoice | null;
     try { voice = await waitForGermanVoice(window.speechSynthesis, controller.signal); }
     catch { if (active) { stop(); setMessage("Không tải được giọng đọc. Hãy thử lại."); } return; }
@@ -38,12 +38,14 @@ export function Pronunciation({ id, text, sentence = false, label }: { id: strin
       stop(); setMessage("Chưa tìm thấy giọng Đức sau khi chờ tải. Bạn có thể thử lại hoặc cài giọng tiếng Đức trên thiết bị."); return;
     }
     setLoading(false);
-    const utterance = new SpeechSynthesisUtterance(text);
-    speech.utterance = utterance;
-    utterance.lang = "de-DE"; utterance.voice = voice; utterance.rate = .85;
-    utterance.onend = stop;
-    utterance.onerror = () => { if (active) { stop(); setMessage("Không phát được giọng tổng hợp. Hãy thử lại."); } };
-    try { window.speechSynthesis.speak(utterance); } catch { stop(); setMessage("Không phát được giọng tổng hợp."); }
+    try {
+      const utterance = new SpeechSynthesisUtterance(text);
+      speech.utterance = utterance;
+      utterance.lang = voice.lang; utterance.voice = voice; utterance.rate = .85;
+      utterance.onend = stop;
+      utterance.onerror = () => { if (active) { stop(); setMessage("Không phát được giọng tổng hợp. Hãy thử lại."); } };
+      window.speechSynthesis.speak(utterance);
+    } catch { stop(); setMessage("Không phát được giọng tổng hợp. Hãy thử lại."); }
   }
   return <div className="space-y-3">
     <button type="button" className="pixel-button bg-[#e1e9d4]" onClick={() => playing ? stopRef.current?.() : void play()} aria-busy={loading} aria-label={`${playing ? "Dừng" : label ?? (sentence ? "Nghe câu ví dụ" : "Nghe từ")} ${text}`}><span aria-hidden="true">{loading ? "◌" : playing ? "■" : "♪"}</span>{loading ? "Đang tải giọng…" : playing ? "Dừng phát" : label ?? (sentence ? "Nghe câu ví dụ" : "Nghe từ")}</button>

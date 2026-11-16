@@ -66,7 +66,7 @@ Tác giả commit: kris <ng.phihoc123@gmail.com>.
 - Kiểm tra cuối Phase 3: 13 unit tests, 4 tests Playwright, TypeScript/production build đều thành công. Audio trong kiểm tra trình duyệt được giả lập để kiểm tra đúng văn bản và trạng thái tải; chưa đánh giá chất lượng giọng thật của thiết bị.
 - Phase 4: hoàn tất 3 dạng bài điền từ/chọn mạo từ/dịch Việt–Đức. Có giải thích, nghe đáp án, thử lại không tăng điểm lần đầu, lượt ôn chỉ gồm từ sai, bộ lọc chủ đề/từ cần ôn. Lưu tối đa 50 kết quả, tránh lưu trùng ID, giữ dữ liệu từ đã học trước đây và tự đánh dấu từ sai cần ôn. Trang tiến độ hiển thị lịch sử và thống kê câu đúng thực tế. 18 unit tests và kiểm tra trình duyệt các lượt bài tập/game đều qua; bao gồm tải lại trang, sửa từ không mất lịch sử và mobile.
 - Kiểm tra cuối Phase 4: build/TypeScript, lint, 18 unit tests và 8 tests trình duyệt đã qua (4 luồng học/game, 4 luồng bài tập). Khi storage từ chối ghi, có cảnh báo và kết quả vẫn được giữ trong phiên, không thông báo đã lưu thành công.
-- Phase 5: chưa triển khai đầy đủ; đã thực hiện một phần kiểm tra giao diện và tài liệu trong các phase trước.
+- Phase 5: hoàn tất. Lint, TypeScript/production build, 18 unit tests và 14 tests Chromium trên bản production đều qua. Kiểm tra 6 trang ở 320/390/768/1366px, các bảng game ở 320px, keyboard/skip link/reduced motion, dữ liệu lỗi/phục hồi và đồng bộ hai tab. Có 404 tiếng Việt, tiêu đề từng trang, icon pixel riêng và cấu hình kiểm tra production tự mở/dừng server trên Windows. Đã cập nhật README và giới hạn: chưa nghe giọng thật trên từng thiết bị, chưa kiểm tra Safari/Firefox, lưu browser-local, chưa hosting.
 
 ## Điều chỉnh sau Phase 2
 - Đổi toàn bộ font sang VT323 (latin, latin-ext, vietnamese), bỏ Arial và chú thích giọng đọc.
