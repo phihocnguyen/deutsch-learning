@@ -12,7 +12,7 @@ export async function GET(_request: Request, { params }: Context) {
   if (!topicIdPattern.test(topicId)) return NextResponse.json({ error: "Chủ đề không hợp lệ." }, { status: 400 });
   const result = await neonPool().query(
     `SELECT f.id, f.topic_id AS "topicId", t.name AS topic, f.german, f.vietnamese,
-            f.article, f.plural, f.example, f.translation, p.status
+            f.article, f.plural, f.example, f.translation, f.ipa, p.status
      FROM flashcards f JOIN topics t ON t.id=f.topic_id AND t.owner_id=f.owner_id
      LEFT JOIN flashcard_progress p ON p.flashcard_id=f.id AND p.owner_id=f.owner_id
      WHERE f.owner_id=$1 AND f.topic_id=$2 ORDER BY f.created_at,f.id`,
@@ -30,12 +30,12 @@ export async function POST(request: Request, { params }: Context) {
   if (!fields.every(value => typeof value === "string" && value.trim()) || body.german.length > 160 || body.vietnamese.length > 300)
     return NextResponse.json({ error: "Từ tiếng Đức và nghĩa tiếng Việt là bắt buộc." }, { status: 400 });
   if (body.article != null && !["der", "die", "das"].includes(body.article)) return NextResponse.json({ error: "Mạo từ không hợp lệ." }, { status: 400 });
-  for (const field of ["plural", "example", "translation"]) if (body[field] != null && (typeof body[field] !== "string" || body[field].length > (field === "example" || field === "translation" ? 1000 : 160))) return NextResponse.json({ error: `Trường ${field} quá dài hoặc không hợp lệ.` }, { status: 400 });
+  for (const field of ["plural", "example", "translation", "ipa"]) if (body[field] != null && (typeof body[field] !== "string" || body[field].length > (field === "example" || field === "translation" ? 1000 : field === "ipa" ? 300 : 160))) return NextResponse.json({ error: `Trường ${field} quá dài hoặc không hợp lệ.` }, { status: 400 });
   const result = await neonPool().query(
-    `INSERT INTO flashcards(owner_id,topic_id,german,vietnamese,article,plural,example,translation)
-     SELECT $1,t.id,$3,$4,$5,$6,$7,$8 FROM topics t WHERE t.id=$2 AND t.owner_id=$1
-     RETURNING id,topic_id AS "topicId",german,vietnamese,article,plural,example,translation`,
-    [Number(session.user.id), topicId, body.german.trim().normalize("NFC"), body.vietnamese.trim(), body.article ?? null, body.plural?.trim() || null, body.example?.trim() ?? "", body.translation?.trim() ?? ""]);
+    `INSERT INTO flashcards(owner_id,topic_id,german,vietnamese,article,plural,example,translation,ipa)
+     SELECT $1,t.id,$3,$4,$5,$6,$7,$8,$9 FROM topics t WHERE t.id=$2 AND t.owner_id=$1
+     RETURNING id,topic_id AS "topicId",german,vietnamese,article,plural,example,translation,ipa`,
+    [Number(session.user.id), topicId, body.german.trim().normalize("NFC"), body.vietnamese.trim(), body.article ?? null, body.plural?.trim() || null, body.example?.trim() ?? "", body.translation?.trim() ?? "", body.ipa?.trim() || null]);
   if (!result.rowCount) return NextResponse.json({ error: "Không tìm thấy chủ đề." }, { status: 404 });
   return NextResponse.json({ flashcard: result.rows[0] }, { status: 201, headers: { "Cache-Control": "private, no-store" } });
 }
@@ -50,12 +50,12 @@ export async function PATCH(request: Request, { params }: Context) {
   if (!fields.every(value => typeof value === "string" && value.trim()) || body.german.length > 160 || body.vietnamese.length > 300)
     return NextResponse.json({ error: "Từ tiếng Đức và nghĩa tiếng Việt là bắt buộc." }, { status: 400 });
   if (body.article != null && !["der", "die", "das"].includes(body.article)) return NextResponse.json({ error: "Mạo từ không hợp lệ." }, { status: 400 });
-  for (const field of ["plural", "example", "translation"]) if (body[field] != null && (typeof body[field] !== "string" || body[field].length > (field === "example" || field === "translation" ? 1000 : 160))) return NextResponse.json({ error: `Trường ${field} không hợp lệ.` }, { status: 400 });
+  for (const field of ["plural", "example", "translation", "ipa"]) if (body[field] != null && (typeof body[field] !== "string" || body[field].length > (field === "example" || field === "translation" ? 1000 : field === "ipa" ? 300 : 160))) return NextResponse.json({ error: `Trường ${field} không hợp lệ.` }, { status: 400 });
   const result = await neonPool().query(
-    `UPDATE flashcards SET german=$4,vietnamese=$5,article=$6,plural=$7,example=$8,translation=$9,updated_at=now()
+    `UPDATE flashcards SET german=$4,vietnamese=$5,article=$6,plural=$7,example=$8,translation=$9,ipa=CASE WHEN $11 THEN $10 ELSE ipa END,updated_at=now()
      WHERE owner_id=$1 AND id=$2 AND topic_id=$3
-     RETURNING id,topic_id AS "topicId",german,vietnamese,article,plural,example,translation`,
-    [Number(session.user.id), body.id, topicId, body.german.trim().normalize("NFC"), body.vietnamese.trim(), body.article ?? null, body.plural?.trim() || null, body.example?.trim() ?? "", body.translation?.trim() ?? ""]);
+     RETURNING id,topic_id AS "topicId",german,vietnamese,article,plural,example,translation,ipa`,
+    [Number(session.user.id), body.id, topicId, body.german.trim().normalize("NFC"), body.vietnamese.trim(), body.article ?? null, body.plural?.trim() || null, body.example?.trim() ?? "", body.translation?.trim() ?? "", body.ipa?.trim() || null, Object.hasOwn(body, "ipa")]);
   if (!result.rowCount) return NextResponse.json({ error: "Không tìm thấy flashcard trong chủ đề này." }, { status: 404 });
   return NextResponse.json({ flashcard: result.rows[0] }, { headers: { "Cache-Control": "private, no-store" } });
 }

@@ -1,3 +1,9 @@
+export function parseScore(value: unknown): number {
+  const score = value && typeof value === "object" ? (value as Record<string, unknown>).score : undefined;
+  if (typeof score !== "number" || !Number.isFinite(score) || score < 0 || score > 100) throw new Error("AI trả về điểm không hợp lệ.");
+  return Math.round(score * 10) / 10;
+}
+
 export function parseExample(value: unknown): { example: string; translation: string } {
   if (!value || typeof value !== "object") throw new Error("AI trả về câu ví dụ không hợp lệ.");
   const data = value as Record<string, unknown>;

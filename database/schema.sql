@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS flashcards (
   UNIQUE(id, owner_id),
   FOREIGN KEY(topic_id, owner_id) REFERENCES topics(id, owner_id) ON DELETE CASCADE
 );
+ALTER TABLE flashcards ADD COLUMN IF NOT EXISTS ipa VARCHAR(300);
 CREATE INDEX IF NOT EXISTS flashcards_topic_index ON flashcards(owner_id, topic_id, created_at, id);
 CREATE TABLE IF NOT EXISTS flashcard_progress (
   owner_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,

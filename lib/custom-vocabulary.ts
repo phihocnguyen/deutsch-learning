@@ -31,9 +31,10 @@ export function parseCustomVocabulary(raw: string | null): CustomVocabulary {
     if (!topic || typeof word.id !== "string" || !customWordId.test(word.id) || result.words.some(w => w.id === word.id)
       || !text(word.german, 160, true) || !text(word.vietnamese, 300, true)
       || !text(word.example, 1000) || !text(word.translation, 1000)
+      || (word.ipa != null && !text(word.ipa, 300))
       || (word.article !== undefined && !["der", "die", "das"].includes(word.article))
       || (word.plural !== undefined && !text(word.plural, 160))) throw new Error("Flashcard không hợp lệ.");
-    result.words.push({ id: word.id, topicId: topic.id, topic: topic.name, german: word.german.trim(), vietnamese: word.vietnamese.trim(), example: word.example.trim(), translation: word.translation.trim(), ...(word.article ? { article: word.article } : {}), ...(word.plural ? { plural: word.plural.trim() } : {}) });
+    result.words.push({ id: word.id, topicId: topic.id, topic: topic.name, german: word.german.trim(), vietnamese: word.vietnamese.trim(), example: word.example.trim(), translation: word.translation.trim(), ...(word.ipa ? { ipa: word.ipa.trim() } : {}), ...(word.article ? { article: word.article } : {}), ...(word.plural ? { plural: word.plural.trim() } : {}) });
   }
   return result;
 }
