@@ -28,7 +28,7 @@ chứng nhận hoặc bản sao toàn bộ giáo trình của tổ chức nào. 
 | 08 | Modalverben; khung câu + nguyên mẫu | 02–03 | tr. 26, 62 |
 | 09 | Động từ tách; khác với cụm giới từ | 03, 08 | tr. 32 |
 | 10 | Dativ; giới từ cố định, đại từ cơ bản | 04, 06 | tr. 47–48, 52 |
-| 11 | am/um cho thời gian | 03 | tr. 16 |
+| 11 | Đọc giờ 12/24h, vor/nach, halb, Viertel; am/um | 03 | tr. 16; DW Deutschtrainer 17 và Mission Berlin tr. 21 |
 | 12 | Perfekt; haben/sein, Partizip II, trường hợp riêng | 02–03, 09 | tr. 67, 73–74 |
 | 13 | Imperativ du/ihr/Sie; các dạng đặc biệt cơ bản | 02 | tr. 72, 74 |
 | 14 | Präteritum của sein/haben | 01–03 | tr. 42 |
@@ -55,8 +55,9 @@ chứng nhận hoặc bản sao toàn bộ giáo trình của tổ chức nào. 
 ## Quy tắc biên tập và chấm
 
 - Tất cả ví dụ và bài tập do dự án tự viết. Không nhập bài tập của nguồn.
-- Mỗi bài có mục tiêu, quy tắc ngắn, bảng mẫu, hai ví dụ kèm nghĩa Việt, lỗi thường
-  gặp, phạm vi/ngoại lệ, ba câu luyện có giải thích và nguồn đến đúng mục/trang.
+- Mỗi bài có mục tiêu, quy tắc, bảng mẫu, ít nhất hai ví dụ kèm nghĩa Việt, lỗi thường
+  gặp, phạm vi/ngoại lệ và 3–8 câu luyện có giải thích. Nguồn đến đúng mục/trang được
+  giữ trong dữ liệu để đối chiếu; theo yêu cầu mới, phần tham chiếu không hiện trên giao diện học.
 - Các bảng là phạm vi nêu rõ, không gọi bảng minh họa một vài mẫu là toàn bộ bảng chia.
 - Không dạy “có chuyển động = Akkusativ”; địa điểm diễn ra chuyển động vẫn có thể Dativ.
 - Bài văn viết dùng vị trí động từ chuẩn; không gọi mọi biến thể khẩu ngữ với weil là
@@ -69,7 +70,8 @@ chứng nhận hoặc bản sao toàn bộ giáo trình của tổ chức nào. 
 
 ## Trạng thái nghiên cứu
 
-Đã xác minh nguồn xuất phát và các mục liên quan. Nguồn Goethe A2 khác tìm thấy qua
-tìm kiếm nhưng không truy cập được ổn định; không dùng làm nguồn đã đọc.
-Chưa có giáo viên độc lập duyệt. Bước tiếp theo là biên soạn dữ liệu bài học và
-đối chiếu từng đáp án trước khi đưa vào giao diện.
+Đã biên soạn 28 bài, 89 câu luyện và đối chiếu các mẫu trong phạm vi nguồn đã ghi.
+Nguồn Goethe A2 khác tìm thấy qua tìm kiếm nhưng không truy cập được ổn định;
+không dùng làm nguồn đã đọc. Chưa có giáo viên độc lập duyệt.
+Các lưu ý rà soát nội dung được ghi trong `review.md`; kiểm tra phần mềm là một
+lớp riêng với rà soát ngôn ngữ.

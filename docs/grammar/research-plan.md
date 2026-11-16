@@ -41,7 +41,7 @@ Không bắt buộc người dùng cung cấp giáo trình. Nếu có giáo trì
 
 ## Tiêu chí nghiệm thu
 
-- Mỗi bài có mục tiêu, phạm vi trình độ và nguồn đến đúng mục/trang.
+- Mỗi bài có mục tiêu, phạm vi trình độ và nguồn đến đúng mục/trang trong dữ liệu/hồ sơ dự án. Theo yêu cầu cập nhật, không hiển thị phần reference trên giao diện học.
 - Bài học được viết lại bằng tiếng Việt; ví dụ và bài tập do dự án biên soạn.
 - Không phát hành quy tắc đang mâu thuẫn giữa các nguồn mà chưa giải quyết hoặc
   ghi rõ phạm vi; không đặt nhãn đã được chuyên gia duyệt khi chưa có người duyệt.
@@ -52,5 +52,8 @@ Không bắt buộc người dùng cung cấp giáo trình. Nếu có giáo trì
 
 ## Trạng thái
 
-Đây là kế hoạch và danh sách nguồn ban đầu. Chưa có đề cương đầy đủ được đối chiếu,
-bài học hoàn chỉnh hay kết luận kiểm định học thuật.
+Đã hoàn thành đề cương và bản biên soạn 28 bài (14 A1, 14 A2), cùng 89 câu luyện.
+Phạm vi và nguồn nằm trong `lib/grammar/` và `curriculum.md`; nguồn được đối chiếu
+ở các mục đã ghi, không suy ra từ tên tổ chức đơn thuần. Bài giờ được mở rộng theo
+phản hồi người dùng, có đồng hồ tương tác và hai cách đọc. Chưa có giáo viên độc lập
+duyệt toàn bộ; không coi bộ test phần mềm là chứng nhận chính xác học thuật.
