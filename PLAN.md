@@ -14,7 +14,7 @@ Tác giả commit: kris <ng.phihoc123@gmail.com>.
 - Màu kem, xanh lá, vàng; viền vuông, bóng cứng lệch xuống như nút game.
 - Nút có trạng thái nhấn, hover, focus, disabled; giảm chuyển động khi người dùng yêu cầu.
 - Trang tổng quan, thư viện từ, flashcard, khu trò chơi, bài tập và tiến độ.
-- Responsive trên điện thoại và desktop; tiếng Việt dễ đọc, không dùng font pixel cho đoạn dài.
+- Responsive trên điện thoại và desktop; font pixel VT323 hỗ trợ tiếng Việt và tiếng Đức theo yêu cầu mới.
 - Kiểm tra: TypeScript, build và điều hướng, kích thước màn hình, bàn phím.
 - Commit: `feat: add pixel interface and learning navigation`.
 
@@ -63,3 +63,9 @@ Tác giả commit: kris <ng.phihoc123@gmail.com>.
 - Phase 1: hoàn tất giao diện pixel, điều hướng 6 khu học, bố cục responsive, focus bàn phím và reduced motion. `npm.cmd run build` (bao gồm TypeScript) và `npm.cmd run lint` đều thành công. Chưa kiểm tra trực quan bằng trình duyệt hoặc thao tác bàn phím thực tế; các khu học là khung giao diện có ghi rõ trạng thái.
 - Phase 2: hoàn tất 25 từ/cụm từ A1, 5 chủ đề, flashcard, thư viện tìm kiếm/lọc, đánh dấu đã nhớ/cần ôn và tiến độ dùng localStorage có schema/kiểm tra lỗi. Theo yêu cầu mới, đã xóa toàn bộ bản thu, metadata, công cụ nhập và ghi nguồn audio; mọi từ/câu chỉ dùng giọng Đức của trình duyệt, danh từ đọc cả mạo từ. Build/TypeScript, lint và 5 tests đều qua. Chưa kiểm tra tương tác UI, lưu dữ liệu và nghe thực tế bằng trình duyệt.
 - Phase 3–5: chưa triển khai.
+
+## Điều chỉnh sau Phase 2
+- Đổi toàn bộ font sang VT323 (latin, latin-ext, vietnamese), bỏ Arial và chú thích giọng đọc.
+- Bấm trực tiếp vào mặt thẻ hoặc dùng Enter/Space để lật; nút nghe/đánh dấu độc lập.
+- Danh từ hiển thị mạo từ số ít và dạng số nhiều đầy đủ với `die` ở cả hai mặt.
+- Mặt sau có nút nghe số nhiều; danh từ không có số nhiều thông dụng và động từ không tạo số nhiều giả.

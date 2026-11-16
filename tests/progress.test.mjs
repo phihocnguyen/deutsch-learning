@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { parseProgress } from "../lib/progress.ts";
-import { vocabulary, topics, fullWord } from "../lib/vocabulary.ts";
+import { vocabulary, topics, fullWord, fullPlural } from "../lib/vocabulary.ts";
 
 test("fresh progress and persisted known/review status round-trip", () => {
   assert.deepEqual(parseProgress(null), { version: 1, words: {} });
@@ -23,4 +23,8 @@ test("pronunciation text includes noun articles and preserves German characters"
   assert.equal(fullWord(vocabulary.find(w => w.id === "haus")), "das Haus");
   assert.equal(fullWord(vocabulary.find(w => w.id === "tur")), "die Tür");
   assert.equal(fullWord(vocabulary.find(w => w.id === "tschuss")), "tschüss");
+  assert.equal(fullPlural(vocabulary.find(w => w.id === "haus")), "die Häuser");
+  assert.equal(fullPlural(vocabulary.find(w => w.id === "fenster")), "die Fenster");
+  assert.equal(fullPlural(vocabulary.find(w => w.id === "wasser")), undefined);
+  assert.equal(fullPlural(vocabulary.find(w => w.id === "lernen")), undefined);
 });

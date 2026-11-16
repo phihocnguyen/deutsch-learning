@@ -31,3 +31,4 @@ export const vocabulary: Word[] = [
   { id: "schlafen", topic: "Sinh hoạt", german: "schlafen", vietnamese: "Ngủ", example: "Das Baby schläft.", translation: "Em bé đang ngủ." },
 ];
 export function fullWord(word: Word) { return [word.article, word.german].filter(Boolean).join(" "); }
+export function fullPlural(word: Word) { return word.article && word.plural && !word.plural.startsWith("—") ? `die ${word.plural}` : undefined; }

@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 let stopCurrent: (() => void) | undefined;
 
-export function Pronunciation({ id, text, sentence = false }: { id: string; text: string; sentence?: boolean }) {
+export function Pronunciation({ id, text, sentence = false, label }: { id: string; text: string; sentence?: boolean; label?: string }) {
   const [message, setMessage] = useState("");
   const [playing, setPlaying] = useState(false);
   const stopRef = useRef<(() => void) | undefined>(undefined);
@@ -39,8 +39,7 @@ export function Pronunciation({ id, text, sentence = false }: { id: string; text
     try { window.speechSynthesis.speak(utterance); } catch { stop(); setMessage("Không phát được giọng tổng hợp."); }
   }
   return <div className="space-y-3">
-    <button type="button" className="pixel-button bg-[#e1e9d4]" onClick={() => playing ? stopRef.current?.() : play()} aria-label={`${playing ? "Dừng" : "Nghe"} ${sentence ? "câu ví dụ" : "từ"} ${text}`}><span aria-hidden="true">{playing ? "■" : "♪"}</span>{playing ? "Dừng phát" : sentence ? "Nghe câu ví dụ" : "Nghe từ"}</button>
-    <p className="text-xs leading-5 text-[#59644f]">Giọng tiếng Đức của trình duyệt · {sentence ? "đọc câu ví dụ" : "đọc cả mạo từ nếu có"}</p>
+    <button type="button" className="pixel-button bg-[#e1e9d4]" onClick={() => playing ? stopRef.current?.() : play()} aria-label={`${playing ? "Dừng" : label ?? (sentence ? "Nghe câu ví dụ" : "Nghe từ")} ${text}`}><span aria-hidden="true">{playing ? "■" : "♪"}</span>{playing ? "Dừng phát" : label ?? (sentence ? "Nghe câu ví dụ" : "Nghe từ")}</button>
     <p role="status" className="max-w-lg text-sm text-[#80421e]">{message}</p>
   </div>;
 }
