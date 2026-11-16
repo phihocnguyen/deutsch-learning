@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+﻿# Deutsch Quest
 
-## Getting Started
+Website học từ vựng Đức–Việt bằng Next.js 16, React 19 và Tailwind CSS 4, giao diện pixel.
 
-First, run the development server:
+## Chạy local
 
-```bash
+```sh
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Mở http://localhost:3000. Trên PowerShell chặn npm.ps1, dùng `npm.cmd` thay cho `npm`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```sh
+npm run build
+npm start
+npm run lint
+npm test
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Tests dùng khả năng chạy TypeScript trực tiếp của Node.js; dùng Node >=22.18 (đã kiểm tra bằng Node 26).
 
-## Learn More
+## Chức năng hiện có
 
-To learn more about Next.js, take a look at the following resources:
+- 25 từ/cụm từ A1, 5 chủ đề, nghĩa Việt, ví dụ và dạng số nhiều cho danh từ.
+- `/vocabulary`: tìm kiếm, lọc chủ đề/trạng thái và nghe phát âm.
+- `/flashcards`: lật thẻ, chuyển thẻ, đánh dấu đã nhớ/cần ôn.
+- `/progress`: thống kê và danh sách từ theo trạng thái thực tế.
+- Game và bài tập hiện là khung giao diện, sẽ triển khai trong phase tiếp theo.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Audio
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+10 từ có bản thu gốc của Jeuwre, được trang nguồn mô tả là người Đức bản xứ từ Berlin.
+File Ogg được lưu trong `public/audio/`; nguồn và giấy phép CC BY-SA 4.0 có trong
+`lib/audio-manifest.json`, `public/audio/README.md` và cạnh nút nghe.
+Bản thu đọc từ đơn, không đọc kèm mạo từ; mạo từ vẫn được hiển thị để học.
 
-## Deploy on Vercel
+15 từ còn lại và mọi câu ví dụ dùng giọng tổng hợp Đức của thiết bị, có nhãn riêng.
+Không có giọng Đức thì ứng dụng báo rõ, không tự chuyển sang giọng ngôn ngữ khác.
+Audio chỉ bắt đầu khi người dùng bấm, có nút dừng, không phát chồng nhau.
+Có thể cập nhật nguồn đã kiểm tra bằng `node scripts/import-audio.mjs`; không cần chạy khi cài dự án.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Lưu tiến độ
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`localStorage`, key `deutsch-quest-progress-v1`, schema `{ version: 1, words: { [id]: "known" | "review" } }`.
+Dữ liệu được lọc theo các ID hợp lệ; dữ liệu lỗi hoặc phiên bản không hỗ trợ được báo cho người dùng.
+Khi lưu thất bại, trạng thái tiếp tục được giữ trong bộ nhớ của phiên. Các tab nhận thay đổi qua storage event.
+Không có tài khoản hay đồng bộ cloud. Xóa dữ liệu trình duyệt sẽ mất tiến độ.
+
+## Cấu trúc
+
+- `lib/vocabulary.ts`: bộ từ dùng chung.
+- `lib/progress.ts`: schema và kiểm tra dữ liệu tiến độ.
+- `app/components/`: giao diện học, lưu tiến độ, phát âm và điều hướng.
+- `tests/progress.test.mjs`: kiểm tra dữ liệu lưu và tính toàn vẹn bộ từ/audio.
+- `PLAN.md`: trạng thái và commit từng phase.
+
+Đã kiểm tra build, lint, tests và HTTP các trang chính. Chưa kiểm tra thao tác UI
+hoặc nghe audio trực tiếp bằng trình duyệt trong môi trường này.

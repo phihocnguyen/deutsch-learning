@@ -62,4 +62,5 @@ Tác giả commit: kris <ng.phihoc123@gmail.com>.
 ## Trạng thái
 - Phase 0: hoàn tất, commit `ea36307` (`intialize`).
 - Phase 1: hoàn tất giao diện pixel, điều hướng 6 khu học, bố cục responsive, focus bàn phím và reduced motion. `npm.cmd run build` (bao gồm TypeScript) và `npm.cmd run lint` đều thành công. Chưa kiểm tra trực quan bằng trình duyệt hoặc thao tác bàn phím thực tế; các khu học là khung giao diện có ghi rõ trạng thái.
-- Phase 2–5: chưa triển khai.
+- Phase 2: hoàn tất 25 từ/cụm từ A1, 5 chủ đề, flashcard, thư viện tìm kiếm/lọc, đánh dấu đã nhớ/cần ôn và tiến độ dùng localStorage có schema/kiểm tra lỗi. Có 10 bản thu người Đức bản xứ theo mô tả nguồn Wikimedia Commons (Jeuwre, CC BY-SA 4.0), lưu local và ghi nguồn; 15 từ còn lại/câu ví dụ dùng giọng tổng hợp có nhãn. Build/TypeScript, lint, 5 tests dữ liệu và HTTP các trang học/audio đều qua. Chưa kiểm tra tương tác UI, lưu dữ liệu và nghe thực tế bằng trình duyệt. Nguồn trả HTTP 429 khi nhập thêm bản thu `trinken`, từ này dùng dự phòng và không được tính là có bản thu.
+- Phase 3–5: chưa triển khai.

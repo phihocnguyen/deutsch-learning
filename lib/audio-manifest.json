@@ -1,0 +1,112 @@
+{
+  "hallo": {
+    "src": "/audio/hallo.ogg",
+    "author": "Jeuwre",
+    "source": "https://commons.wikimedia.org/wiki/File:De-Hallo.ogg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "speaker": "Người Đức bản xứ (theo mô tả nguồn)",
+    "description": "Pronunciation recording of German noun \"Hallo\", IPA: /haˈloː/. Male voice, recorded by native German speaker from Berlin, Germany.",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6c/De-Hallo.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "modified": false
+  },
+  "tschuss": {
+    "src": "/audio/tschuss.ogg",
+    "author": "Jeuwre",
+    "source": "https://commons.wikimedia.org/wiki/File:De-tsch%C3%BCss.ogg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "speaker": "Người Đức bản xứ (theo mô tả nguồn)",
+    "description": "Pronunciation recording of German interjection \"tschüss\", IPA: /t͡ʃʏs/. Male voice, recorded by native German speaker from Berlin, Germany.",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f3/De-tsch%C3%BCss.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "modified": false
+  },
+  "vater": {
+    "src": "/audio/vater.ogg",
+    "author": "Jeuwre",
+    "source": "https://commons.wikimedia.org/wiki/File:De-Vater.ogg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "speaker": "Người Đức bản xứ (theo mô tả nguồn)",
+    "description": "Pronunciation recording of German noun \"Vater\", IPA: /ˈfaːtɐ/. Male voice, recorded by native German speaker from Berlin, Germany.",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/f/fe/De-Vater.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "modified": false
+  },
+  "kind": {
+    "src": "/audio/kind.ogg",
+    "author": "Jeuwre",
+    "source": "https://commons.wikimedia.org/wiki/File:De-Kind2.ogg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "speaker": "Người Đức bản xứ (theo mô tả nguồn)",
+    "description": "Pronunciation recording of German noun \"Kind2\". Male voice, recorded by native German speaker from Berlin, Germany.",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/2/23/De-Kind2.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "modified": false
+  },
+  "apfel": {
+    "src": "/audio/apfel.ogg",
+    "author": "Jeuwre",
+    "source": "https://commons.wikimedia.org/wiki/File:De-Apfel2.ogg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "speaker": "Người Đức bản xứ (theo mô tả nguồn)",
+    "description": "Pronunciation recording of German noun \"Apfel\", IPA: /ˈap͡fl̩/. Male voice, recorded by native German speaker from Berlin, Germany.",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/8/89/De-Apfel2.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "modified": false
+  },
+  "haus": {
+    "src": "/audio/haus.ogg",
+    "author": "Jeuwre",
+    "source": "https://commons.wikimedia.org/wiki/File:De-Haus2.ogg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "speaker": "Người Đức bản xứ (theo mô tả nguồn)",
+    "description": "Pronunciation recording of German noun \"Haus\", IPA: /haʊ̯s/. Male voice, recorded by native German speaker from Berlin, Germany.",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/5/54/De-Haus2.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "modified": false
+  },
+  "tisch": {
+    "src": "/audio/tisch.ogg",
+    "author": "Jeuwre",
+    "source": "https://commons.wikimedia.org/wiki/File:De-Tisch2.ogg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "speaker": "Người Đức bản xứ (theo mô tả nguồn)",
+    "description": "Pronunciation recording of German noun \"<a href=\"https://en.wikipedia.org/wiki/de:Tisch\" class=\"extiw\" title=\"w:de:Tisch\">Tisch</a>\", IPA: /tɪʃ/. Male voice, recorded by native German speaker from Berlin, Germany.",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/d/de/De-Tisch2.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "modified": false
+  },
+  "stuhl": {
+    "src": "/audio/stuhl.ogg",
+    "author": "Jeuwre",
+    "source": "https://commons.wikimedia.org/wiki/File:De-Stuhl2.ogg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "speaker": "Người Đức bản xứ (theo mô tả nguồn)",
+    "description": "Pronunciation recording of German noun \"Stuhl\", IPA: /ʃtuːl/. Male voice, recorded by native German speaker from Berlin, Germany.",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8c/De-Stuhl2.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "modified": false
+  },
+  "tur": {
+    "src": "/audio/tur.ogg",
+    "author": "Jeuwre",
+    "source": "https://commons.wikimedia.org/wiki/File:De-T%C3%BCr.ogg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "speaker": "Người Đức bản xứ (theo mô tả nguồn)",
+    "description": "Pronunciation recording of German noun \"Tür\", IPA: /tyːɐ̯/. Male voice, recorded by native German speaker from Berlin, Germany.",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/2/24/De-T%C3%BCr.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "modified": false
+  },
+  "fenster": {
+    "src": "/audio/fenster.ogg",
+    "author": "Jeuwre",
+    "source": "https://commons.wikimedia.org/wiki/File:De-Fenster2.ogg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "speaker": "Người Đức bản xứ (theo mô tả nguồn)",
+    "description": "Pronunciation recording of German noun \"Fenster\", IPA: /ˈfɛnstɐ/. Male voice, recorded by native German speaker from Berlin, Germany.",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/f/fa/De-Fenster2.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "modified": false
+  }
+}
