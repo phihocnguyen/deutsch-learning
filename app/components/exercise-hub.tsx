@@ -10,7 +10,7 @@ import type { ExerciseResult } from "@/lib/progress";
 import { useProgress } from "./progress-store";
 import { Pronunciation } from "./pronunciation";
 
-type Session = { id: string; mode: ExerciseMode; kind: "practice" | "review"; questions: ExerciseQuestion[] };
+type Session = { id: string; mode: ExerciseMode; kind: "practice" | "review"; questions: ExerciseQuestion[]; notice?: string };
 const modes: { mode: ExerciseMode; icon: string; detail: string; color: string }[] = [
   { mode: "gap", icon: "_", detail: "Chọn đúng từ và dạng chia để hoàn thành một câu tiếng Đức.", color: "bg-[#dbe8cc]" },
   { mode: "article", icon: "D", detail: "Nhớ giống danh từ qua ba mạo từ der, die, das.", color: "bg-[#f8dda7]" },
@@ -47,7 +47,7 @@ function ExerciseRound({ session, leave, replay, review }: { session: Session; l
     <ul className="my-6 space-y-4">{session.questions.map(q => <li key={q.word.id} className="border-b border-[#d8d9c9] pb-3"><span>{answers[q.word.id] ? "✓" : "↻"}</span> <span lang="de">{fullWord(q.word)}</span> — {q.word.vietnamese}<p className="mt-2 text-sm text-[#647059]">Đáp án: <span lang="de">{q.answer}</span></p></li>)}</ul>
     <div className="flex flex-wrap gap-4">{wrong.length > 0 && <button className="pixel-button bg-[#f8dda7]" onClick={() => review(wrong.map(q => q.word.id))}>Ôn {wrong.length} từ sai</button>}<button className="pixel-button bg-[#dbe8cc]" onClick={replay}>Làm lượt mới</button><button className="pixel-button bg-[#fffdf5]" onClick={leave}>Chọn bài tập khác</button><Link className="pixel-button bg-[#f9cd65]" href="/progress">Xem tiến độ →</Link></div></section>;
 
-  return <section className="pixel-panel bg-[#fffdf5] p-6 sm:p-9"><div className="flex flex-wrap justify-between gap-3"><span className="pixel-label">{question.word.topic}</span><span>Câu {index + 1} / {session.questions.length}</span></div>
+  return <section className="pixel-panel bg-[#fffdf5] p-6 sm:p-9">{session.notice && <p role="status" className="mb-5 border-2 border-[#d8d9c9] bg-[#edf2e4] p-3 text-sm">{session.notice}</p>}<div className="flex flex-wrap justify-between gap-3"><span className="pixel-label">{question.word.topic}</span><span>Câu {index + 1} / {session.questions.length}</span></div>
     <div className="my-6 h-3 border-2 border-[#29392a] bg-[#faf8ef]" role="progressbar" aria-label="Tiến độ bài tập" aria-valuemin={0} aria-valuemax={session.questions.length} aria-valuenow={index + Number(feedback !== null)}><div className="h-full bg-[#7e9863] transition-all" style={{ width: `${(index + Number(feedback !== null)) / session.questions.length * 100}%` }} /></div>
     <h2 className="text-3xl">{session.mode === "gap" ? "Điền từ còn thiếu" : session.mode === "article" ? "Mạo từ nào đi cùng danh từ này?" : "Viết từ tiếng Đức đã học"}</h2><p lang={session.mode === "translate" ? "vi" : "de"} className="my-6 break-words text-3xl">{session.mode === "article" ? `____ ${question.prompt}` : question.prompt}</p>
     {session.mode === "gap" && <p className="mb-5 text-[#647059]">{question.word.translation}</p>}
@@ -93,17 +93,17 @@ export function ExerciseHub() {
     const controller = new AbortController();
     pending.current = controller;
     setGenerating(true); setError("");
-    const timeout = setTimeout(() => controller.abort(), 110000);
+    const timeout = setTimeout(() => controller.abort(), 15000);
     try {
       const response = await fetch("/api/deutsch-ai/exercises", {
         method: "POST", headers: { "Content-Type": "application/json" }, signal: controller.signal,
-        body: JSON.stringify({ wordIds: shuffle(pool).slice(0, 5).map(word => word.id), mode, level: "A1" }),
+        body: JSON.stringify({ wordIds: shuffle(pool).slice(0, 5).map(word => word.id), mode }),
       });
       const data = await response.json().catch(() => null);
       if (!response.ok || !Array.isArray(data?.questions) || !data.questions.length)
         throw new Error(data?.error || "Không tạo được bài tập. Hãy thử lại.");
       if (controller.signal.aborted) return;
-      setSession({ id: crypto.randomUUID(), mode, kind: "practice", questions: data.questions });
+      setSession({ id: crypto.randomUUID(), mode, kind: "practice", questions: data.questions, notice: data.notice });
       setChoosingMode(null);
     } catch (cause) {
       if (pending.current === controller) setError(controller.signal.aborted ? "Tạo bài tập quá lâu. Hãy thử lại." : cause instanceof Error ? cause.message : "Không tạo được bài tập. Hãy thử lại.");

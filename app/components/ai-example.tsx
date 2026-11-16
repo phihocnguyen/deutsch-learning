@@ -2,7 +2,6 @@
 import { useEffect, useRef, useState } from "react";
 
 export function AIExample() {
-  const [level, setLevel] = useState("A1");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const button = useRef<HTMLButtonElement>(null);
@@ -24,7 +23,7 @@ export function AIExample() {
     try {
       const response = await fetch("/api/deutsch-ai/generate", {
         method: "POST", headers: { "Content-Type": "application/json" }, signal: controller.signal,
-        body: JSON.stringify({ word, meaning_vi: meaning, level }),
+        body: JSON.stringify({ word, meaning_vi: meaning }),
       });
       const data = await response.json().catch(() => null);
       if (!response.ok || typeof data?.example !== "string" || typeof data?.translation !== "string")
@@ -39,5 +38,5 @@ export function AIExample() {
     } finally { if (pending.current === controller) setBusy(false); }
   }
 
-  return <div className="mt-4 space-y-3"><div className="flex flex-wrap items-center gap-3"><label className="text-sm">Trình độ <select className="border-2 border-[#29392a] bg-[#fffdf5] p-2" value={level} disabled={busy} onChange={event => setLevel(event.target.value)}>{["A1", "A2", "B1", "B2", "C1", "C2"].map(item => <option key={item}>{item}</option>)}</select></label><button ref={button} type="button" disabled={busy} aria-busy={busy} className="pixel-button bg-[#f8dda7]" onClick={() => void generate()}>{busy ? "Đang tạo ví dụ…" : "Tạo câu ví dụ AI"}</button></div><p className="text-sm text-[#647059]">Ví dụ AI sẽ điền vào hai ô trên; bạn có thể sửa trước khi lưu.</p>{error && <p role="alert" className="text-sm text-[#80421e]">{error}</p>}</div>;
+  return <div className="mt-4 space-y-3"><button ref={button} type="button" disabled={busy} aria-busy={busy} className="pixel-button bg-[#f8dda7]" onClick={() => void generate()}>{busy ? "Đang tạo ví dụ…" : "Tạo câu ví dụ AI"}</button><p className="text-sm text-[#647059]">Ví dụ AI sẽ điền vào hai ô trên; bạn có thể sửa trước khi lưu.</p>{error && <p role="alert" className="text-sm text-[#80421e]">{error}</p>}</div>;
 }

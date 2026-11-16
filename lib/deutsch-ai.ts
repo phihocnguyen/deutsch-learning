@@ -8,7 +8,7 @@ export async function requestAI(endpoint: "generate" | "tts" | "score" | "qwen",
   headers.Authorization = `Bearer ${token}`;
   const response = await fetch(`${baseUrl}/${endpoint}`, {
     method: "POST", headers, body: body instanceof FormData ? body : JSON.stringify(body),
-    cache: "no-store", signal: AbortSignal.timeout(endpoint === "qwen" ? 100000 : 60000),
+    cache: "no-store", signal: AbortSignal.timeout(endpoint === "qwen" ? 5000 : 60000),
   });
   if (!response.ok) throw new Error(response.status === 401 || response.status === 403
     ? "Dịch vụ AI từ chối AI_SERVICE_TOKEN. Hãy kiểm tra token trên máy chủ."

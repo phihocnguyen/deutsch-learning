@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { exercisePrompt, parseQwenExercises } from "../lib/ai-exercises.ts";
+import { exercisePrompt, fallbackExerciseQuestions, parseQwenExercises } from "../lib/ai-exercises.ts";
 import { checkExerciseAnswer } from "../lib/exercises.ts";
 
 const word = { id: "door", topic: "Nhà", german: "Tür", article: "die", vietnamese: "cửa", example: "", translation: "" };
@@ -8,7 +8,7 @@ const item = { wordId: "door", example: "Die Tür ist offen.", translation: "C�
 const payload = { exercises: [item] };
 
 test("Qwen accepts direct JSON, text, fenced JSON and common response envelopes", () => {
-  for (const data of [payload, JSON.stringify(payload), { response: JSON.stringify(payload) }, { text: "```json\n" + JSON.stringify(payload) + "\n```" }, { choices: [{ message: { content: JSON.stringify(payload) } }] }]) {
+  for (const data of [payload, { exercises: [{ wordId: "door", example: item.example, translation: item.translation }] }, JSON.stringify(payload), { response: JSON.stringify(payload) }, { text: "```json\n" + JSON.stringify(payload) + "\n```" }, { choices: [{ message: { content: JSON.stringify(payload) } }] }]) {
     const [question] = parseQwenExercises(data, [word], "gap");
     assert.equal(question.prompt, "Die ____ ist offen.");
     assert.equal(question.answer, "Tür");
@@ -34,9 +34,18 @@ test("Qwen rejects incomplete data, invalid sentences and words hidden in compou
   assert.throws(() => parseQwenExercises(payload, [{ ...word, article: undefined }], "article"));
 });
 
-test("Qwen prompt sends selected level and structured vocabulary context", () => {
-  const request = exercisePrompt([word], "gap", "A2");
-  assert.match(request.prompt, /A2/);
+test("AI prompt requests concise output and sends structured vocabulary context", () => {
+  const request = exercisePrompt([word]);
+  assert.match(request.prompt, /No explanation/);
   assert.equal(JSON.parse(request.context).words[0].wordId, word.id);
   assert.equal(JSON.parse(request.context).words[0].meaning_vi, word.vietnamese);
+});
+
+test("fallback creates usable gap questions from stored examples or a generic sentence", () => {
+  const saved = { ...word, example: item.example, translation: item.translation };
+  const questions = fallbackExerciseQuestions([saved, { ...word, id: "other", german: "gehen", vietnamese: "đi" }], "gap");
+  assert.equal(questions.length, 2);
+  assert.ok(questions.some(question => question.prompt === "Die ____ ist offen."));
+  assert.ok(questions.some(question => question.prompt.includes("____") && question.answer === "gehen"));
+  assert.equal(fallbackExerciseQuestions([word], "article")[0].answer, "die");
 });
