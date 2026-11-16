@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useCustomVocabulary } from "./custom-vocabulary-store";
 import { useProgress } from "./progress-store";
 import { FlashcardEditor } from "./flashcard-editor";
+import { LoadingIndicator } from "./loading-indicator";
 
 export function FlashcardTopics() {
   const custom = useCustomVocabulary();
@@ -16,7 +17,7 @@ export function FlashcardTopics() {
     <p className="mt-3 text-[#647059]">Chọn một chủ đề để mở bộ flashcard. Mỗi bộ là một góc nhỏ trong hành trình học tiếng Đức của bạn.</p>
     <label className="my-7 block max-w-lg text-sm">Tìm chủ đề<input disabled={!custom.ready} className="vocabulary-filter mt-2 block h-12 w-full border-2 border-[#29392a] bg-[#fffdf5] px-3" placeholder="Nhập tên chủ đề…" value={search} onChange={event => setSearch(event.target.value)} /></label>
     {custom.error && <p role="alert" className="mb-5 bg-[#fff0d5] p-4">{custom.error}</p>}
-    {!custom.ready ? <p role="status">Đang tải chủ đề…</p> : !topics.length ? <section className="pixel-panel bg-[#fffdf5] p-7"><span className="pixel-icon bg-[#f9cd65]" aria-hidden="true">▤</span><h2 className="mt-5 text-2xl">{custom.data.topics.length ? "Không tìm thấy chủ đề" : "Bộ từ đầu tiên bắt đầu từ đây"}</h2><p className="mt-3 text-[#647059]">{custom.data.topics.length ? "Thử tìm bằng một tên khác." : "Bấm “Tạo chủ đề”, đặt tên rồi mở chủ đề để thêm flashcard."}</p></section> : <div aria-label="Danh sách chủ đề" className="grid gap-6 md:grid-cols-2 2xl:grid-cols-3">{topics.map((topic, index) => {
+    {!custom.ready ? <LoadingIndicator variant="overlay" label="Đang tải chủ đề…" /> : !topics.length ? <section className="pixel-panel bg-[#fffdf5] p-7"><span className="pixel-icon bg-[#f9cd65]" aria-hidden="true">▤</span><h2 className="mt-5 text-2xl">{custom.data.topics.length ? "Không tìm thấy chủ đề" : "Bộ từ đầu tiên bắt đầu từ đây"}</h2><p className="mt-3 text-[#647059]">{custom.data.topics.length ? "Thử tìm bằng một tên khác." : "Bấm “Tạo chủ đề”, đặt tên rồi mở chủ đề để thêm flashcard."}</p></section> : <div aria-label="Danh sách chủ đề" className="grid gap-6 md:grid-cols-2 2xl:grid-cols-3">{topics.map((topic, index) => {
       const words = custom.data.words.filter(word => word.topicId === topic.id);
       const known = words.filter(word => progress.words[word.id] === "known").length;
       return <Link href={`/flashcards/study?topic=${encodeURIComponent(topic.id)}`} key={topic.id} className="pixel-panel flex min-w-0 flex-col bg-[#fffdf5] p-6 transition-transform hover:-translate-y-1">

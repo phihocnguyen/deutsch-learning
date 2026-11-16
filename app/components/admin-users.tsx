@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import type { AdminUser, UserAction } from "@/lib/admin-policy";
+import { LoadingIndicator } from "./loading-indicator";
 
 type Listing = { users: AdminUser[]; total: number; pageSize: number; currentUserId: string; stats: { total: number; active: number; blocked: number } };
 type Selection = { user: AdminUser; action: UserAction["action"] };
@@ -17,6 +18,7 @@ export function AdminUsers({ adminName, localAdmin }: { adminName: string; local
   const [refresh, setRefresh] = useState(0);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [selection, setSelection] = useState<Selection | null>(null);
@@ -67,17 +69,18 @@ export function AdminUsers({ adminName, localAdmin }: { adminName: string; local
     finally { setBusy(false); }
   }
   async function logout() {
-    setBusy(true); setError("");
+    setBusy(true); setLoggingOut(true); setError("");
     try {
       const response = await fetch("/api/admin/logout", { method: "POST" });
       if (!response.ok) throw new Error("Không đăng xuất được. Hãy thử lại.");
       window.location.replace("/admin/login");
-    } catch (error) { setError(error instanceof Error ? error.message : "Không đăng xuất được."); }
+    } catch (error) { setLoggingOut(false); setError(error instanceof Error ? error.message : "Không đăng xuất được."); }
     finally { setBusy(false); }
   }
   const pages = Math.max(1, Math.ceil((data?.total ?? 0) / 25));
   const targetLabel = selection?.user.email ?? selection?.user.id ?? "";
   return <>
+    {loggingOut && <LoadingIndicator variant="overlay" label="Đang đăng xuất…" />}
     <p className="eyebrow">QUẢN TRỊ HỆ THỐNG</p><div className="mt-4 flex flex-wrap items-center justify-between gap-4"><h1 className="text-4xl">Quản lý người dùng</h1>{localAdmin && <button disabled={busy} className="pixel-button bg-[#fffdf5]" onClick={() => void logout()}>Đăng xuất admin</button>}</div><p className="my-5 text-[#647059]">Xin chào, {adminName}. Quản lý tài khoản và quyền truy cập của người học.</p>
     <div className="my-7 grid grid-cols-3 gap-3">{([["Tổng người dùng", "total", "bg-[#e0dff2]"], ["Đang hoạt động", "active", "bg-[#dbe8cc]"], ["Đã khóa", "blocked", "bg-[#f8dda7]"]] as const).map(([label, key, color]) => <div key={key} className={`border-2 border-[#29392a] p-3 sm:p-5 ${color}`}><p className="text-3xl">{data?.stats[key] ?? "—"}</p><p className="mt-2 text-xs sm:text-sm">{label}</p></div>)}</div>
     <form onSubmit={event => { event.preventDefault(); setPage(1); setQuery(search.trim()); }} className="my-6 flex flex-wrap items-end gap-4"><label className="min-w-0 flex-1">Tìm theo tên hoặc email<input type="search" maxLength={255} value={search} onChange={event => setSearch(event.target.value)} className="mt-2 block w-full border-2 border-[#29392a] bg-[#fffdf5] p-3" placeholder="Tên hoặc email…" /></label><label>Trạng thái<select value={status} onChange={event => { setStatus(event.target.value); setPage(1); }} className="mt-2 block border-2 border-[#29392a] bg-[#fffdf5] p-3"><option value="all">Tất cả</option><option value="active">Đang hoạt động</option><option value="blocked">Đã khóa</option></select></label><button className="pixel-button bg-[#f9cd65]">Tìm kiếm</button><button type="button" className="pixel-button bg-[#fffdf5]" onClick={() => setRefresh(value => value + 1)}>Tải lại</button></form>

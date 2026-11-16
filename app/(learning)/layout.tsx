@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { Navigation } from "@/app/components/navigation";
 import { AccountMenu } from "@/app/components/account-menu";
+import { LoadingIndicator } from "@/app/components/loading-indicator";
 
 export default function LearningLayout({ children }: { children: React.ReactNode }) {
   return <>
@@ -13,7 +14,7 @@ export default function LearningLayout({ children }: { children: React.ReactNode
             <div className="mt-auto hidden border-2 border-[#d8d9c9] p-4 lg:block"><span aria-hidden="true" className="text-2xl">✦</span><p className="mt-2 text-sm font-bold">Schritt für Schritt.</p><p className="mt-2 text-xs leading-5 text-[#6c7163]">Từng bước một.<br />Bạn đang làm rất tốt!</p></div>
             <p className="mt-5 hidden font-mono text-[10px] tracking-widest text-[#737866] lg:block">DEUTSCH LEARNING · A1–A2</p>
           </aside>
-          <div className="min-h-dvh min-w-0"><header className="flex items-center justify-between gap-4 border-b-2 border-[#d8d9c9] px-6 py-4 sm:px-10"><span className="hidden text-sm font-bold sm:block">Guten Tag! ✳</span><Suspense fallback={<span className="ml-auto h-9 w-24 animate-pulse bg-[#e1e9d4]" />}><div className="ml-auto"><AccountMenu /></div></Suspense></header>
+          <div className="min-h-dvh min-w-0"><header className="flex items-center justify-between gap-4 border-b-2 border-[#d8d9c9] px-6 py-4 sm:px-10"><span className="hidden text-sm font-bold sm:block">Guten Tag! ✳</span><Suspense fallback={<LoadingIndicator label="Đang tải tài khoản…" />}><div className="ml-auto"><AccountMenu /></div></Suspense></header>
           <main id="main" tabIndex={-1} className="w-full px-6 py-8 sm:px-10 sm:py-10">{children}</main>
           <footer className="mx-6 flex flex-wrap justify-between gap-3 border-t-2 border-[#d8d9c9] py-6 text-xs text-[#6c7163] sm:mx-10"><span>Được tạo cho những bước tiến nhỏ mỗi ngày.</span><span className="font-mono">VIEL ERFOLG! ✦</span></footer></div>
         </div>

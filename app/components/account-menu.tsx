@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { isAdminEmail } from "@/lib/admin-policy";
 import { connection } from "next/server";
+import { SignOutButton } from "./sign-out-button";
 
 export async function AccountMenu() {
   await connection();
@@ -19,7 +20,7 @@ export async function AccountMenu() {
       {user.email && <p className="mt-1 truncate text-sm text-[#647059]">{user.email}</p>}
       {isAdminEmail(user.email) && <Link href="/admin/users" className="pixel-button mt-4 block bg-[#dbe8cc]">Quản lý người dùng</Link>}
       <form className="mt-4 border-t-2 border-[#d8d9c9] pt-4" action={async () => { "use server"; await signOut({ redirectTo: "/login" }); }}>
-        <button type="submit" className="pixel-button w-full bg-[#f8dda7]">Đăng xuất</button>
+        <SignOutButton />
       </form>
     </div>
   </details>;

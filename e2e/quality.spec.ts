@@ -80,6 +80,29 @@ test("browser speech stops when changing cards and unsupported APIs stay usable"
   await expect(page.locator("button.flip-card")).toHaveAttribute("aria-pressed", "true");
 });
 
+test("speech retries with the browser default voice when German synthesis fails", async ({ page }) => {
+  await page.addInitScript(`
+    window.__attempts = [];
+    const defaultVoice = { default: true, lang: 'en-US' };
+    const synth = new EventTarget();
+    synth.getVoices = () => [defaultVoice];
+    synth.cancel = () => {};
+    synth.speak = utterance => {
+      window.__attempts.push({ lang: utterance.lang, defaultVoice: utterance.voice === defaultVoice });
+      if (window.__attempts.length === 1) utterance.onerror?.({ error: 'language-unavailable' });
+    };
+    Object.defineProperty(window, 'speechSynthesis', { value: synth });
+    Object.defineProperty(window, 'SpeechSynthesisUtterance', { value: class { constructor(text) { this.text = text; } } });
+  `);
+  await page.goto("/flashcards/study?topic=fixture-topic-0");
+  await expect(page.getByRole("combobox", { name: "Trạng thái", exact: true })).toBeEnabled();
+  await page.getByRole("button", { name: "Nghe từ Hallo", exact: true }).click();
+  await expect.poll(() => page.evaluate("window.__attempts")).toEqual([
+    { lang: "de-DE", defaultVoice: false },
+    { lang: "en-US", defaultVoice: true },
+  ]);
+});
+
 test("unknown route is a real localized 404 with a way home", async ({ page }) => {
   const response = await page.goto("/missing-learning-page");
   expect(response?.status()).toBe(404);

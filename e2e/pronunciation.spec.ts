@@ -43,14 +43,15 @@ test("records a learner's voice, sends the card ID and audio, then shows the sco
   });
 
   await page.goto(`/flashcards/study?topic=${topicId}`);
-  await expect(page.getByRole("button", { name: "Mở kiểm tra phát âm" })).toBeVisible();
-  await page.getByRole("button", { name: "Mở kiểm tra phát âm" }).click();
+  await expect(page.getByRole("button", { name: "Kiểm tra phát âm" })).toBeVisible();
+  await page.getByRole("button", { name: "Kiểm tra phát âm" }).click();
   await expect(page.getByRole("dialog", { name: "Kiểm tra phát âm" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Ghi âm phát âm" })).toBeEnabled();
   await page.getByRole("button", { name: "Ghi âm phát âm" }).click();
   await expect(page.getByRole("button", { name: "Dừng và chấm điểm" })).toBeVisible();
   await page.getByRole("button", { name: "Dừng và chấm điểm" }).click();
-  await expect(page.getByText("Điểm phát âm: 87.5/100")).toBeVisible();
+  await expect(page.getByRole("progressbar", { name: "Điểm phát âm" })).toHaveAttribute("aria-valuenow", "87.5");
+  await expect(page.getByRole("progressbar", { name: "Điểm phát âm" })).toHaveCSS("background-image", /conic-gradient.*87\.5%/);
   await page.getByRole("button", { name: "Nghe lại bản ghi âm" }).click();
   await expect(page.locator("body")).toHaveAttribute("data-recording-played", /^blob:/);
   expect(upload).toContain(wordId);

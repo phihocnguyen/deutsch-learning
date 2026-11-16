@@ -41,7 +41,6 @@ a.pixel-panel:focus-visible { background: #edf2e4; }
 .flip-card-side { display: flex; flex-direction: column; grid-area: 1 / 1; min-width: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 .flip-card-front { transform: rotateY(0deg); }
 .flip-card-back { transform: rotateY(180deg); }
-.flip-card:hover .pixel-label { background: #f9cd65; }
 .grammar-course { min-width: 0; overflow-wrap: anywhere; }
 .grammar-course table { overflow-wrap: normal; }
 .pixel-scene { position: absolute; right: 5%; top: 12%; width: 240px; height: 260px; }

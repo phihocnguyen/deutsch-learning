@@ -83,5 +83,26 @@ export function PronunciationPractice({ word }: { word: Word }) {
     try { await audio.play(); if (player.current === audio) setReplaying(true); }
     catch { player.current = null; setReplaying(false); setError("Trình duyệt chưa phát được bản ghi âm."); }
   }
-  return <div className="mt-5 space-y-3 border-t-2 border-[#d8d9c9] pt-5">{word.ipa ? <p>IPA: <span lang="de">{word.ipa}</span></p> : <p className="text-sm text-[#647059]">Bổ sung phiên âm IPA trong phần sửa flashcard để chấm điểm.</p>}<p className="text-sm text-[#647059]">Nghe từ mẫu, rồi đọc từ tiếng Đức. Ghi âm tối đa 15 giây và gửi để chấm điểm.</p><button type="button" className="pixel-button bg-[#f8dda7]" disabled={!word.ipa || state === "starting" || state === "scoring"} onClick={() => state === "recording" ? recorder.current?.stop() : void start()}>{state === "recording" ? "Dừng và chấm điểm" : state === "scoring" ? "Đang chấm điểm…" : state === "starting" ? "Đang mở micro…" : "Ghi âm phát âm"}</button><div role="status">{state === "recording" && <p>Đang ghi âm…</p>}{score !== null && <div className="flex items-center gap-3"><p className="text-2xl">Điểm phát âm: <strong>{score}/100</strong></p><button type="button" className="pixel-button bg-[#e1e9d4]" onClick={() => void replay()} aria-label={replaying ? "Dừng phát bản ghi âm" : "Nghe lại bản ghi âm"} title={replaying ? "Dừng phát" : "Nghe lại bản ghi âm"}>{replaying ? "■" : "🔊"}</button></div>}</div>{error && <p role="alert" className="text-sm text-[#80421e]">{error}</p>}</div>;
+  const scoreColor = score === null ? "" : score < 50 ? "#b8473d" : score < 80 ? "#d5a52d" : "#4c8a50";
+  return <div className="mt-5 space-y-3 border-t-2 border-[#d8d9c9] pt-5">
+    {word.ipa ? <p>IPA: <span lang="de">{word.ipa}</span></p> : <p className="text-sm text-[#647059]">Bổ sung phiên âm IPA trong phần sửa flashcard để chấm điểm.</p>}
+    <p className="text-sm text-[#647059]">Nghe từ mẫu, rồi đọc từ tiếng Đức. Ghi âm tối đa 15 giây và gửi để chấm điểm.</p>
+    <button type="button" className="pixel-button bg-[#f8dda7]" disabled={!word.ipa || state === "starting" || state === "scoring"} onClick={() => state === "recording" ? recorder.current?.stop() : void start()}>{state === "recording" ? "Dừng và chấm điểm" : state === "scoring" ? "Đang chấm điểm…" : state === "starting" ? "Đang mở micro…" : "Ghi âm phát âm"}</button>
+    <div role="status">
+      {state === "recording" && <p>Đang ghi âm…</p>}
+      {score !== null && <div className="space-y-4">
+        <div className="flex items-center gap-4">
+          <div role="progressbar" aria-label="Điểm phát âm" aria-valuemin={0} aria-valuemax={100} aria-valuenow={score} className="flex h-24 w-24 shrink-0 items-center justify-center rounded-full p-2" style={{ background: `conic-gradient(${scoreColor} ${score}%, #d8d9c9 ${score}% 100%)` }}>
+            <div className="flex h-full w-full flex-col items-center justify-center rounded-full bg-[#fffdf5] leading-none"><strong className="font-mono text-2xl">{score}</strong><span className="mt-1 text-xs text-[#647059]">/100</span></div>
+          </div>
+          <div><p className="font-bold">Điểm phát âm</p><p className="text-sm text-[#647059]">{score < 50 ? "Cần luyện thêm" : score < 80 ? "Đang tiến bộ" : "Rất tốt"}</p></div>
+        </div>
+        <button type="button" className="inline-flex min-h-10 items-center gap-2 border-2 border-[#29392a] bg-[#e1e9d4] px-3 text-sm shadow-[2px_2px_0_#29392a]" onClick={() => void replay()} aria-label={replaying ? "Dừng phát bản ghi âm" : "Nghe lại bản ghi âm"}>
+          <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current stroke-2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9" />{replaying ? <rect x="9" y="9" width="6" height="6" fill="currentColor" stroke="none" /> : <path d="m10 8 6 4-6 4z" fill="currentColor" stroke="none" />}</svg>
+          {replaying ? "Dừng phát" : "Nghe lại giọng của bạn"}
+        </button>
+      </div>}
+    </div>
+    {error && <p role="alert" className="text-sm text-[#80421e]">{error}</p>}
+  </div>;
 }
