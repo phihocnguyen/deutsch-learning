@@ -1,8 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { parseProgress } from "../lib/progress.ts";
-import { vocabulary, topics } from "../lib/vocabulary.ts";
-import { readFile } from "node:fs/promises";
+import { vocabulary, topics, fullWord } from "../lib/vocabulary.ts";
 
 test("fresh progress and persisted known/review status round-trip", () => {
   assert.deepEqual(parseProgress(null), { version: 1, words: {} });
@@ -20,15 +19,8 @@ test("vocabulary has unique identifiers, complete noun forms and five populated 
   for (const topic of topics) assert.ok(vocabulary.filter(w => w.topic === topic).length >= 5);
   for (const word of vocabulary) { assert.ok(word.example && word.translation && word.vietnamese); if (word.article) assert.ok(word.plural); }
 });
-test("every native recording has source, license and valid local Ogg bytes", async () => {
-  const manifest = JSON.parse(await readFile(new URL("../lib/audio-manifest.json", import.meta.url)));
-  assert.ok(Object.keys(manifest).length >= 10);
-  for (const [id, recording] of Object.entries(manifest)) {
-    assert.ok(vocabulary.some(w => w.id === id));
-    assert.match(recording.source, /^https:\/\/commons.wikimedia.org\//);
-    assert.match(recording.licenseUrl, /^https:\/\/creativecommons.org\//);
-    assert.ok(recording.author && recording.description && recording.modified === false);
-    const bytes = await readFile(new URL(`../public${recording.src}`, import.meta.url));
-    assert.equal(bytes.subarray(0, 4).toString(), "OggS");
-  }
+test("pronunciation text includes noun articles and preserves German characters", () => {
+  assert.equal(fullWord(vocabulary.find(w => w.id === "haus")), "das Haus");
+  assert.equal(fullWord(vocabulary.find(w => w.id === "tur")), "die Tür");
+  assert.equal(fullWord(vocabulary.find(w => w.id === "tschuss")), "tschüss");
 });

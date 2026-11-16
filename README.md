@@ -30,15 +30,13 @@ Tests dùng khả năng chạy TypeScript trực tiếp của Node.js; dùng Nod
 
 ## Audio
 
-10 từ có bản thu gốc của Jeuwre, được trang nguồn mô tả là người Đức bản xứ từ Berlin.
-File Ogg được lưu trong `public/audio/`; nguồn và giấy phép CC BY-SA 4.0 có trong
-`lib/audio-manifest.json`, `public/audio/README.md` và cạnh nút nghe.
-Bản thu đọc từ đơn, không đọc kèm mạo từ; mạo từ vẫn được hiển thị để học.
-
-15 từ còn lại và mọi câu ví dụ dùng giọng tổng hợp Đức của thiết bị, có nhãn riêng.
+Tất cả từ và câu ví dụ dùng giọng tiếng Đức của trình duyệt qua Web Speech API.
+Danh từ được đọc kèm mạo từ, ví dụ `das Haus`, `der Apfel`, `die Tür`.
+Ưu tiên giọng `de-DE`, sau đó giọng tiếng Đức khác có trên thiết bị.
 Không có giọng Đức thì ứng dụng báo rõ, không tự chuyển sang giọng ngôn ngữ khác.
 Audio chỉ bắt đầu khi người dùng bấm, có nút dừng, không phát chồng nhau.
-Có thể cập nhật nguồn đã kiểm tra bằng `node scripts/import-audio.mjs`; không cần chạy khi cài dự án.
+Chất lượng và khả năng dùng offline phụ thuộc giọng do trình duyệt/hệ điều hành cung cấp.
+Không sử dụng file bản thu, dịch vụ audio riêng hay API key.
 
 ## Lưu tiến độ
 
@@ -52,7 +50,7 @@ Không có tài khoản hay đồng bộ cloud. Xóa dữ liệu trình duyệt 
 - `lib/vocabulary.ts`: bộ từ dùng chung.
 - `lib/progress.ts`: schema và kiểm tra dữ liệu tiến độ.
 - `app/components/`: giao diện học, lưu tiến độ, phát âm và điều hướng.
-- `tests/progress.test.mjs`: kiểm tra dữ liệu lưu và tính toàn vẹn bộ từ/audio.
+- `tests/progress.test.mjs`: kiểm tra dữ liệu lưu, bộ từ và mạo từ trong văn bản phát âm.
 - `PLAN.md`: trạng thái và commit từng phase.
 
 Đã kiểm tra build, lint, tests và HTTP các trang chính. Chưa kiểm tra thao tác UI

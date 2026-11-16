@@ -23,9 +23,8 @@ Tác giả commit: kris <ng.phihoc123@gmail.com>.
 - Mỗi từ có nghĩa Việt, giống danh từ khi áp dụng, số nhiều, câu ví dụ và nghĩa câu.
 - Flashcard lật mặt, nghe từ/câu, đánh dấu đã nhớ hoặc cần ôn, lọc chủ đề.
 - Lưu tiến độ trên thiết bị bằng localStorage với xử lý dữ liệu lỗi và phiên bản schema.
-- Audio ưu tiên bản thu người Đức có nguồn và quyền sử dụng rõ ràng; lưu thông tin nguồn.
-- Giọng tổng hợp de-DE chỉ là phương án dự phòng, có nhãn phân biệt; báo khi không có giọng Đức.
-- Không gọi giọng tổng hợp là bản thu người bản xứ và không tự nhận đã xác minh người thu khi chưa có bằng chứng.
+- Theo yêu cầu cập nhật: chỉ dùng giọng Đức của trình duyệt, ưu tiên de-DE và đọc cả mạo từ.
+- Báo khi không có giọng Đức. Không dùng file bản thu hay dịch vụ audio riêng.
 - Kiểm tra: chuyển thẻ, lọc, lưu/khôi phục tiến độ, phát âm và lỗi audio.
 - Commit: `feat: add vocabulary flashcards and German pronunciation`.
 
@@ -62,5 +61,5 @@ Tác giả commit: kris <ng.phihoc123@gmail.com>.
 ## Trạng thái
 - Phase 0: hoàn tất, commit `ea36307` (`intialize`).
 - Phase 1: hoàn tất giao diện pixel, điều hướng 6 khu học, bố cục responsive, focus bàn phím và reduced motion. `npm.cmd run build` (bao gồm TypeScript) và `npm.cmd run lint` đều thành công. Chưa kiểm tra trực quan bằng trình duyệt hoặc thao tác bàn phím thực tế; các khu học là khung giao diện có ghi rõ trạng thái.
-- Phase 2: hoàn tất 25 từ/cụm từ A1, 5 chủ đề, flashcard, thư viện tìm kiếm/lọc, đánh dấu đã nhớ/cần ôn và tiến độ dùng localStorage có schema/kiểm tra lỗi. Có 10 bản thu người Đức bản xứ theo mô tả nguồn Wikimedia Commons (Jeuwre, CC BY-SA 4.0), lưu local và ghi nguồn; 15 từ còn lại/câu ví dụ dùng giọng tổng hợp có nhãn. Build/TypeScript, lint, 5 tests dữ liệu và HTTP các trang học/audio đều qua. Chưa kiểm tra tương tác UI, lưu dữ liệu và nghe thực tế bằng trình duyệt. Nguồn trả HTTP 429 khi nhập thêm bản thu `trinken`, từ này dùng dự phòng và không được tính là có bản thu.
+- Phase 2: hoàn tất 25 từ/cụm từ A1, 5 chủ đề, flashcard, thư viện tìm kiếm/lọc, đánh dấu đã nhớ/cần ôn và tiến độ dùng localStorage có schema/kiểm tra lỗi. Theo yêu cầu mới, đã xóa toàn bộ bản thu, metadata, công cụ nhập và ghi nguồn audio; mọi từ/câu chỉ dùng giọng Đức của trình duyệt, danh từ đọc cả mạo từ. Build/TypeScript, lint và 5 tests đều qua. Chưa kiểm tra tương tác UI, lưu dữ liệu và nghe thực tế bằng trình duyệt.
 - Phase 3–5: chưa triển khai.
