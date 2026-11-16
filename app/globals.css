@@ -8,7 +8,7 @@ body { background: var(--background); color: var(--foreground); font-family: var
 button, a, input, select { -webkit-tap-highlight-color: transparent; }
 button, select { cursor: pointer; }
 :focus-visible { outline: 3px solid #5766b1; outline-offset: 5px; }
-input.vocabulary-filter:focus { outline: none; background: #edf2e4; }
+input.vocabulary-filter:focus, select:focus { outline: none; background: #edf2e4; }
 .flip-card:focus-visible, .pixel-panel:focus-visible { outline: none; }
 main:focus { outline: none; }
 .flip-card:focus-visible .pixel-label { background: #f9cd65; }

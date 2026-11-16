@@ -16,6 +16,10 @@ test("wide layouts fill the screen and filters align without a search outline", 
     expect(boxes[2]).toEqual(boxes[0]);
     await input.focus();
     await expect(input).toHaveCSS("outline-style", "none");
+    for (const select of await page.locator("main select").all()) {
+      await select.focus();
+      await expect(select).toHaveCSS("outline-style", "none");
+    }
     expect(await page.evaluate(() => {
       const main = document.querySelector("main")!.getBoundingClientRect();
       return Math.abs(main.right - document.body.getBoundingClientRect().right) < 1;
