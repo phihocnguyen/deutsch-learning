@@ -1,8 +1,8 @@
 # Database v1
 
-Schema thực thi: `database/schema.sql` (SQLite). Đây là nền tảng cho backend bộ thẻ cá nhân;
-UI hiện vẫn dùng localStorage, chưa có API, đăng nhập hoặc đồng bộ database.
-Schema không tạo tài khoản, chủ đề hay flashcard mẫu. Ngữ pháp vẫn là nội dung tĩnh riêng.
+Schema thực thi: `database/schema.sql` (PostgreSQL trên Neon). Auth.js dùng Neon adapter và
+Google OAuth; schema gồm bảng Auth.js và bảng chủ đề/thẻ/tiến độ theo chủ tài khoản.
+Schema không tạo chủ đề hay flashcard mẫu. Ngữ pháp vẫn là nội dung tĩnh riêng.
 
 ```mermaid
 erDiagram
@@ -28,14 +28,13 @@ lọc mọi thao tác bằng owner_id lấy từ phiên, không tin owner_id do 
 ## Khởi tạo và kiểm tra
 
 ```sh
-npm run db:init
+npm run db:migrate
 npm test
 ```
 
-Trên PowerShell có thể dùng `npm.cmd`. Lệnh khởi tạo tạo `data/deutsch-quest.sqlite`,
-đánh dấu `PRAGMA user_version = 1`, không ghi đè dữ liệu khi chạy lại.
-Thư mục `data/` được gitignore. Chỉ schema/script/test được commit.
-Các test database chạy SQLite thật trong bộ nhớ, gồm dữ liệu hợp lệ, chủ đề trùng,
+Trên PowerShell có thể dùng `npm.cmd`. Lệnh dùng `DATABASE_URL` từ `.env.local`,
+tạo bảng nếu chưa có và không xóa dữ liệu hiện hữu khi chạy lại. Schema đã áp dụng lên Neon.
+Các test database chạy PostgreSQL thật trong môi trường Neon, gồm dữ liệu hợp lệ, chủ đề trùng,
 thẻ mồ côi, liên kết khác chủ sở hữu, mạo từ sai và xóa liên đới.
 Phiên bản schema tiếp theo cần migration có transaction và tăng user_version;
 chỉnh schema.sql không tự nâng cấp một file database v1 đã tồn tại.
@@ -54,5 +53,5 @@ chỉnh schema.sql không tự nâng cấp một file database v1 đã tồn t�
 - Không lưu file SQLite cục bộ trên hosting có filesystem tạm thời nếu cần giữ dữ liệu lâu dài;
   bước triển khai phải chọn storage bền vững và cơ chế backup phù hợp.
 
-Tài liệu đối chiếu: [Node.js SQLite](https://nodejs.org/api/sqlite.html),
-[SQLite foreign keys](https://www.sqlite.org/foreignkeys.html).
+Tài liệu đối chiếu: [Auth.js Neon adapter](https://authjs.dev/getting-started/adapters/neon),
+[Auth.js adapters](https://authjs.dev/reference/nextjs/adapters).

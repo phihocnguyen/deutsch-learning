@@ -37,10 +37,10 @@ Tests dùng khả năng chạy TypeScript trực tiếp của Node.js; dùng Nod
 
 ## Schema database
 
-`npm run db:init` tạo SQLite local từ `database/schema.sql`, gồm `users`, `topics`,
-`flashcards` và `flashcard_progress`. Có khóa ngoại theo chủ sở hữu, index và xóa liên đới.
-Chi tiết quan hệ và cách nối API: [docs/database.md](docs/database.md).
-Giao diện hiện vẫn lưu localStorage; database chưa được nối vào luồng học hoặc đăng nhập.
+`npm run db:migrate` áp dụng schema PostgreSQL vào Neon từ `database/schema.sql`, gồm Auth.js
+users/accounts/sessions và dữ liệu `topics`, `flashcards`, `flashcard_progress` có owner.
+Đăng nhập tại `/login` bằng Google; đặt `DATABASE_URL`, `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`,
+`AUTH_SECRET`, `AUTH_URL` trong `.env.local` hoặc hosting. Chi tiết: [docs/database.md](docs/database.md).
 
 ## Audio
 
