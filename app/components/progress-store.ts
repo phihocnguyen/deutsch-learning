@@ -1,6 +1,6 @@
 "use client";
 import { useSyncExternalStore } from "react";
-import { parseProgress, STORAGE_KEY, type Progress, type WordStatus } from "@/lib/progress";
+import { appendExerciseResult, parseProgress, STORAGE_KEY, type Progress, type WordStatus, type ExerciseResult } from "@/lib/progress";
 
 const initial = { progress: { version: 1, words: {} } as Progress, error: "", ready: false };
 let snapshot = initial;
@@ -20,18 +20,26 @@ function subscribe(listener: () => void) {
 }
 export function useProgress() {
   const state = useSyncExternalStore(subscribe, getSnapshot, () => initial);
-  function setStatus(id: string, status: WordStatus | undefined) {
+  function update(change: (current: Progress) => Progress) {
     // Merge the latest disk state to preserve edits from another tab.
     let current = snapshot.progress;
     try { if (!snapshot.error) current = parseProgress(localStorage.getItem(STORAGE_KEY)); } catch { /* Keep usable session state. */ }
-    const words = { ...current.words };
-    if (status) words[id] = status; else delete words[id];
-    const progress: Progress = { version: 1, words };
+    const progress = change(current);
     let error = "";
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); }
     catch { error = "Không lưu được vào thiết bị. Thay đổi chỉ được giữ trong phiên hiện tại."; }
     snapshot = { progress, error, ready: true };
     emit();
   }
-  return { ...state, setStatus };
+  function setStatus(id: string, status: WordStatus | undefined) {
+    update(current => {
+      const words = { ...current.words };
+      if (status) words[id] = status; else delete words[id];
+      return { ...current, words };
+    });
+  }
+  function saveExerciseResult(result: ExerciseResult) {
+    update(current => appendExerciseResult(current, result));
+  }
+  return { ...state, setStatus, saveExerciseResult };
 }

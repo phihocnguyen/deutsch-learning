@@ -64,7 +64,9 @@ Tác giả commit: kris <ng.phihoc123@gmail.com>.
 - Phase 2: hoàn tất 25 từ/cụm từ A1, 5 chủ đề, flashcard, thư viện tìm kiếm/lọc, đánh dấu đã nhớ/cần ôn và tiến độ dùng localStorage có schema/kiểm tra lỗi. Theo yêu cầu mới, đã xóa toàn bộ bản thu, metadata, công cụ nhập và ghi nguồn audio; mọi từ/câu chỉ dùng giọng Đức của trình duyệt, danh từ đọc cả mạo từ. Build/TypeScript, lint và 5 tests đều qua. Chưa kiểm tra tương tác UI, lưu dữ liệu và nghe thực tế bằng trình duyệt.
 - Phase 3: hoàn tất 4 game nối từ/chọn nghĩa/nghe đoán từ/sắp xếp chữ; chọn chủ đề, 5 từ/lượt, xác nhận đáp án, điểm lần đầu, kết quả và chơi lại. Có nút đưa từ sai vào danh sách cần ôn. Đã thêm 5 tests game và Playwright kiểm tra các lượt chơi, font, click khoảng trống/lật 3D, đọc số nhiều, tải giọng chậm và giao diện mobile.
 - Kiểm tra cuối Phase 3: 13 unit tests, 4 tests Playwright, TypeScript/production build đều thành công. Audio trong kiểm tra trình duyệt được giả lập để kiểm tra đúng văn bản và trạng thái tải; chưa đánh giá chất lượng giọng thật của thiết bị.
-- Phase 4–5: chưa triển khai đầy đủ; đã thực hiện một phần kiểm tra giao diện trong Phase 3.
+- Phase 4: hoàn tất 3 dạng bài điền từ/chọn mạo từ/dịch Việt–Đức. Có giải thích, nghe đáp án, thử lại không tăng điểm lần đầu, lượt ôn chỉ gồm từ sai, bộ lọc chủ đề/từ cần ôn. Lưu tối đa 50 kết quả, tránh lưu trùng ID, giữ dữ liệu từ đã học trước đây và tự đánh dấu từ sai cần ôn. Trang tiến độ hiển thị lịch sử và thống kê câu đúng thực tế. 18 unit tests và kiểm tra trình duyệt các lượt bài tập/game đều qua; bao gồm tải lại trang, sửa từ không mất lịch sử và mobile.
+- Kiểm tra cuối Phase 4: build/TypeScript, lint, 18 unit tests và 8 tests trình duyệt đã qua (4 luồng học/game, 4 luồng bài tập). Khi storage từ chối ghi, có cảnh báo và kết quả vẫn được giữ trong phiên, không thông báo đã lưu thành công.
+- Phase 5: chưa triển khai đầy đủ; đã thực hiện một phần kiểm tra giao diện và tài liệu trong các phase trước.
 
 ## Điều chỉnh sau Phase 2
 - Đổi toàn bộ font sang VT323 (latin, latin-ext, vietnamese), bỏ Arial và chú thích giọng đọc.
