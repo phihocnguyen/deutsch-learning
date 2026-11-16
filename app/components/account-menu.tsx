@@ -6,11 +6,16 @@ export async function AccountMenu() {
   const user = session?.user;
   if (!user) return null;
   const initials = (user.name ?? user.email ?? "U").trim().slice(0, 1).toLocaleUpperCase();
-  return <div className="flex items-center gap-3">
-    {user.image ? <Image src={user.image} alt="" width={36} height={36} unoptimized referrerPolicy="no-referrer" className="h-9 w-9 rounded-full border-2 border-[#29392a] object-cover" /> : <span aria-hidden="true" className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-[#29392a] bg-[#f9cd65] font-bold">{initials}</span>}
-    <div className="hidden min-w-0 sm:block"><p className="max-w-44 truncate text-sm font-bold">{user.name ?? "Người học"}</p>{user.email && <p className="max-w-44 truncate text-xs text-[#647059]">{user.email}</p>}</div>
-    <form action={async () => { "use server"; await signOut({ redirectTo: "/login" }); }}>
-      <button type="submit" className="border-2 border-[#29392a] bg-[#fffdf5] px-3 py-2 text-sm shadow-[2px_2px_0_#29392a] hover:bg-[#dbe8cc]">Đăng xuất</button>
-    </form>
-  </div>;
+  return <details className="account-menu relative">
+    <summary aria-label="Mở menu tài khoản" className="flex h-11 w-11 cursor-pointer list-none items-center justify-center rounded-full border-2 border-[#29392a] bg-[#fffdf5] shadow-[2px_2px_0_#29392a] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#63814a] [&::-webkit-details-marker]:hidden">
+      {user.image ? <Image src={user.image} alt="" width={40} height={40} unoptimized referrerPolicy="no-referrer" className="h-full w-full rounded-full object-cover" /> : <span aria-hidden="true" className="font-bold">{initials}</span>}
+    </summary>
+    <div className="absolute right-0 top-14 z-50 w-64 border-2 border-[#29392a] bg-[#fffdf5] p-4 shadow-[4px_4px_0_#29392a]">
+      <p className="truncate font-bold">{user.name ?? "Người học"}</p>
+      {user.email && <p className="mt-1 truncate text-sm text-[#647059]">{user.email}</p>}
+      <form className="mt-4 border-t-2 border-[#d8d9c9] pt-4" action={async () => { "use server"; await signOut({ redirectTo: "/login" }); }}>
+        <button type="submit" className="pixel-button w-full bg-[#f8dda7]">Đăng xuất</button>
+      </form>
+    </div>
+  </details>;
 }

@@ -1,9 +1,7 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { fullWord, type Word } from "@/lib/vocabulary";
-import { useCustomVocabulary } from "./custom-vocabulary-store";
-import { EmptyVocabulary } from "./empty-vocabulary";
 import { createDeck, isSpellingCorrect, letterTiles, makeChoices, recordAnswer, shuffle, type Answers, type GameMode } from "@/lib/games";
 import { Pronunciation } from "./pronunciation";
 import { useProgress } from "./progress-store";
@@ -81,20 +79,36 @@ function QuizGame({ session, replay, leave }: { session: Session; replay: () => 
 }
 
 export function GameHub() {
-  const custom = useCustomVocabulary();
-  const topics = custom.data.topics.map(t => t.name);
-  const [topic, setTopic] = useState("");
+  const [topicList, setTopicList] = useState<{ id: string; name: string; cardCount: number }[]>([]);
+  const [topicLoading, setTopicLoading] = useState(true);
+  const [topicError, setTopicError] = useState("");
+  const [chooseGame, setChooseGame] = useState<GameMode | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [message, setMessage] = useState("");
-  function start(mode: GameMode) {
-    const words = createDeck(topic, 5, custom.data.words);
-    if (!words.length) { setMessage("Chủ đề chưa có từ. Hãy chọn chủ đề khác."); return; }
+  useEffect(() => {
+    fetch("/api/topics", { cache: "no-store" }).then(async response => {
+      if (!response.ok) throw new Error(response.status === 401 ? "Hãy đăng nhập lại để tải bộ từ." : "Không tải được bộ từ từ cơ sở dữ liệu.");
+      const data = await response.json(); setTopicList(data.topics);
+    }).catch(error => setTopicError(error instanceof Error ? error.message : "Không tải được bộ từ."))
+      .finally(() => setTopicLoading(false));
+  }, []);
+  async function start(mode: GameMode, topicId: string) {
+    setTopicError("");
+    try {
+      const response = await fetch(`/api/topics/${topicId}/flashcards`, { cache: "no-store" });
+      if (!response.ok) throw new Error("Không tải được flashcard từ cơ sở dữ liệu.");
+      const data = await response.json();
+      const words = createDeck("", 5, data.flashcards);
+      if (!words.length) { setTopicError("Bộ này chưa có từ để chơi."); return; }
+      setChooseGame(null);
     setMessage(""); setSession(previous => ({ mode, words, key: (previous?.key ?? 0) + 1 }));
+    } catch (error) { setTopicError(error instanceof Error ? error.message : "Không tải được flashcard."); }
   }
   const current = games.find(g => g.mode === session?.mode);
-  const notice = <>{custom.error && <p role="alert" className="my-5 bg-[#fff0d5] p-4">{custom.error}</p>}{custom.ready && !custom.data.words.length && <EmptyVocabulary />}</>;
   return <><p className="eyebrow">CHƠI MỘT CHÚT · NHỚ THÊM MỘT CHÚT</p><div className="mt-4 flex flex-wrap items-center justify-between gap-4"><h1 className="text-4xl">{current?.title ?? "Khu trò chơi"}</h1>{session && <button className="pixel-button bg-[#fffdf5]" onClick={() => setSession(null)}>← Đổi trò chơi</button>}</div><p className="mt-4 mb-7 text-[#647059]">Mỗi lượt 5 từ. Đúng ngay lần đầu được 10 điểm. Chọn cách chơi theo nhịp của bạn.</p>
-    {notice}{session ? <div key={session.key}>{session.mode === "match" ? <MatchingGame words={session.words} replay={() => start(session.mode)} leave={() => setSession(null)} /> : <QuizGame session={session} replay={() => start(session.mode)} leave={() => setSession(null)} />}</div>
-      : <><label className="mb-7 block max-w-sm">Chủ đề<select disabled={!custom.ready} className="mt-2 block w-full border-2 border-[#29392a] bg-[#fffdf5] p-3" value={topic} onChange={e => setTopic(e.target.value)}><option value="">Tất cả chủ đề</option>{topics.map(t => <option key={t}>{t}</option>)}</select></label><p role="status">{message}</p><div className="grid gap-6 md:grid-cols-2">{games.map(game => <article key={game.mode} className={`pixel-panel p-6 ${game.color}`}><span className="pixel-icon bg-[#fffdf5]" aria-hidden="true">{game.icon}</span><h2 className="mt-5 text-3xl">{game.title}</h2><p className="mt-3 min-h-20 text-[#52604a]">{game.detail}</p><button className="pixel-button mt-6 bg-[#fffdf5]" disabled={!custom.ready} onClick={() => start(game.mode)}>Chơi {game.title.toLocaleLowerCase("vi")} →</button></article>)}</div></>}
+    {topicError && <p role="alert" className="my-5 bg-[#fff0d5] p-4">{topicError}</p>}
+    {session ? <div key={session.key}>{session.mode === "match" ? <MatchingGame words={session.words} replay={() => setChooseGame(session.mode)} leave={() => setSession(null)} /> : <QuizGame session={session} replay={() => setChooseGame(session.mode)} leave={() => setSession(null)} />}</div>
+      : <><p role="status">{message}</p><div className="grid gap-6 md:grid-cols-2">{games.map(game => <article key={game.mode} className={`pixel-panel p-6 ${game.color}`}><span className="pixel-icon bg-[#fffdf5]" aria-hidden="true">{game.icon}</span><h2 className="mt-5 text-3xl">{game.title}</h2><p className="mt-3 min-h-20 text-[#52604a]">{game.detail}</p><button className="pixel-button mt-6 bg-[#fffdf5]" onClick={() => { setChooseGame(game.mode); setTopicError(""); }}>Chơi {game.title.toLocaleLowerCase("vi")} →</button></article>)}</div></>}
+    {chooseGame && <dialog open className="flashcard-dialog pixel-panel bg-[#f5f3e8] p-6 sm:p-8"><div className="flex items-center justify-between gap-4"><h2 className="text-2xl font-bold">Chọn bộ từ</h2><button className="pixel-button bg-[#fffdf5]" onClick={() => setChooseGame(null)}>Đóng</button></div><p className="mt-3 text-sm text-[#647059]">Chọn một bộ để chơi {games.find(g => g.mode === chooseGame)?.title.toLocaleLowerCase("vi")}.</p>{topicLoading ? <p className="mt-5">Đang tải…</p> : topicList.length ? <div className="mt-5 grid gap-3">{topicList.map(topic => <button key={topic.id} disabled={topic.cardCount === 0} className="pixel-button justify-between bg-[#fffdf5]" onClick={() => start(chooseGame, topic.id)}><span>{topic.name}</span><span className="pixel-label">{topic.cardCount} thẻ</span></button>)}</div> : <p className="mt-5">Bạn chưa tạo bộ từ nào.</p>}</dialog>}
   </>;
 }
