@@ -81,6 +81,7 @@ Tác giả commit: kris <ng.phihoc123@gmail.com>.
 - Phase 6: hoàn tất hai mục A1/A2, mỗi mục 14 bài. Có 89 câu luyện, nguồn đối chiếu lưu trong dữ liệu/docs, quy tắc/bảng mẫu/ví dụ có audio/lỗi thường gặp/phạm vi; reference không hiện trên UI. Bài giờ có cách đọc 12/24h, vor/nach/halb/Viertel, bảng ví dụ, đồng hồ tương tác và 8 câu luyện. Bài đã đọc nền xanh nhẹ. Tiến độ ngữ pháp lưu riêng, không ảnh hưởng từ vựng; có ôn câu sai, chấm chữ hoa/dấu câu, bảo toàn điểm lần đầu. Build/TypeScript, lint, 29 unit tests và 20 tests trình duyệt production đều qua, gồm cả 28 bài ở 320px và kiểm tra đồng hồ. Chưa có giáo viên độc lập duyệt toàn bộ nội dung. Commit 6.1: `47f64b3`; 6.2: `bffe556`; 6.3: `f3137d9`; phần 6.4 là commit bàn giao tiếp theo.
 
 ## Điều chỉnh sau Phase 2
+- Bố cục dùng toàn bộ chiều rộng màn hình, sidebar co giãn theo viewport và giữ vị trí khi đổi trang; dành sẵn vùng thanh cuộn. Ba ô lọc từ vựng cùng chiều cao, ô tìm từ dùng nền xanh nhẹ khi focus thay outline. Bổ sung kiểm tra màn hình 1366/1920/2560px và chuyển sidebar giữa thư viện/Bài tập.
 - Đổi toàn bộ font sang VT323 (latin, latin-ext, vietnamese), bỏ Arial và chú thích giọng đọc.
 - Bấm trực tiếp vào mặt thẻ hoặc dùng Enter/Space để lật; nút nghe/đánh dấu độc lập.
 - Danh từ hiển thị mạo từ số ít và dạng số nhiều đầy đủ với `die` ở cả hai mặt.

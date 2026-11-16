@@ -101,7 +101,7 @@ Giữ cổng 3100 trống trước khi chạy. Dev server cổng 3000 vẫn có 
 ## Kết quả bàn giao
 
 - Lint, TypeScript và production build thành công.
-- 29 unit tests và 20 kiểm tra trình duyệt Chromium trên bản production đều qua.
+- 29 unit tests và 22 kiểm tra trình duyệt Chromium trên bản production đều qua.
 - Đã kiểm tra 6 trang ở độ rộng 320, 390, 768 và 1366px; bảng game đang chơi cũng vừa màn hình 320px.
 - Kiểm tra bàn phím, giảm chuyển động, font pixel, số nhiều, tải giọng chậm/hủy chờ, dữ liệu lỗi và đồng bộ giữa hai tab.
 - Có trang 404 tiếng Việt, tiêu đề riêng từng trang và biểu tượng pixel của ứng dụng.
