@@ -40,7 +40,7 @@ export function ProgressInsights() {
   const recentGrammarAccuracy = grammarTotal ? Math.round(grammarCorrect / grammarTotal * 100) : null;
 
   return <>
-    <p className="eyebrow">INSIGHTS · TIẾN ĐỘ HỌC</p>
+    <p className="eyebrow">NHÌN LẠI · TIẾN ĐỘ HỌC</p>
     <div className="mt-4 flex flex-wrap items-center justify-between gap-4"><h1 className="text-4xl">Tiến độ của bạn</h1><Link className="pixel-button bg-[#f9cd65]" href="/exercises">Tiếp tục luyện →</Link></div>
     <p className="mt-4 max-w-3xl leading-7 text-[#647059]">Nhìn lại nhịp học, độ chính xác và những phần nên ôn tiếp theo.</p>
     {(custom.error || progressError || grammar.error) && <p role="alert" className="my-5 border-2 border-[#b56e3e] bg-[#fff0d5] p-4 text-sm">{custom.error || progressError || grammar.error}</p>}

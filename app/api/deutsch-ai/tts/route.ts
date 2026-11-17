@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     const bytes = await response.arrayBuffer();
     const signature = new Uint8Array(bytes);
     if (bytes.byteLength < 12 || String.fromCharCode(...signature.slice(0, 4)) !== "RIFF" || String.fromCharCode(...signature.slice(8, 12)) !== "WAVE")
-      throw new Error("Dịch vụ AI trả về âm thanh WAV không hợp lệ.");
+      throw new Error("Chưa tạo được âm thanh phù hợp.");
     return new Response(bytes, { headers: { "Content-Type": "audio/wav", "Cache-Control": "private, no-store" } });
   } catch (error) { return aiError(error); }
 }

@@ -23,15 +23,15 @@ export async function POST(request: Request) {
     const mode = body.mode as ExerciseMode;
     const headers = { "Cache-Control": "private, no-store" };
     if (mode !== "gap") return Response.json({ questions: fallbackExerciseQuestions(words, mode) }, { headers });
-    if (!process.env.AI_SERVICE_TOKEN?.trim()) return Response.json({ error: "Máy chủ chưa cấu hình AI_SERVICE_TOKEN." }, { status: 503 });
+    if (!process.env.AI_SERVICE_TOKEN?.trim()) return Response.json({ questions: fallbackExerciseQuestions(words, mode), notice: "Bài tập được tạo từ câu ví dụ đã lưu hoặc câu mẫu." }, { headers });
     try {
       const response = await requestAI("qwen", exercisePrompt(words));
       const questions = parseQwenExercises(await response.text(), words, mode);
       return Response.json({ questions }, { headers });
     } catch (error) {
-      if (error instanceof Error && error.message.includes("từ chối AI_SERVICE_TOKEN")) throw error;
+      if (error instanceof Error && error.message.includes("chưa xác thực")) throw error;
       const questions = fallbackExerciseQuestions(words, mode);
-      return Response.json({ questions, notice: "AI phản hồi chậm; bài tập dùng câu ví dụ đã lưu hoặc câu mẫu." }, { headers });
+      return Response.json({ questions, notice: "Bài tập được tạo từ câu ví dụ đã lưu hoặc câu mẫu." }, { headers });
     }
   } catch (error) { return aiError(error); }
 }

@@ -85,7 +85,7 @@ export function PronunciationPractice({ word }: { word: Word }) {
   }
   const scoreColor = score === null ? "" : score < 50 ? "#b8473d" : score < 80 ? "#d5a52d" : "#4c8a50";
   return <div className="mt-5 space-y-3 border-t-2 border-[#d8d9c9] pt-5">
-    {word.ipa ? <p>IPA: <span lang="de">{word.ipa}</span></p> : <p className="text-sm text-[#647059]">Bổ sung phiên âm IPA trong phần sửa flashcard để chấm điểm.</p>}
+    {word.ipa ? <p>Phiên âm (IPA): <span lang="de">{word.ipa}</span></p> : <p className="text-sm text-[#647059]">Thêm phiên âm trong phần sửa thẻ để luyện phát âm.</p>}
     <p className="text-sm text-[#647059]">Nghe từ mẫu, rồi đọc từ tiếng Đức. Ghi âm tối đa 15 giây và gửi để chấm điểm.</p>
     <button type="button" className="pixel-button bg-[#f8dda7]" disabled={!word.ipa || state === "starting" || state === "scoring"} onClick={() => state === "recording" ? recorder.current?.stop() : void start()}>{state === "recording" ? "Dừng và chấm điểm" : state === "scoring" ? "Đang chấm điểm…" : state === "starting" ? "Đang mở micro…" : "Ghi âm phát âm"}</button>
     <div role="status">

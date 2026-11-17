@@ -38,5 +38,5 @@ export function AIExample() {
     } finally { if (pending.current === controller) setBusy(false); }
   }
 
-  return <div className="mt-4 space-y-3"><button ref={button} type="button" disabled={busy} aria-busy={busy} className="pixel-button bg-[#f8dda7]" onClick={() => void generate()}>{busy ? "Đang tạo ví dụ…" : "Tạo câu ví dụ AI"}</button><p className="text-sm text-[#647059]">Ví dụ AI sẽ điền vào hai ô trên; bạn có thể sửa trước khi lưu.</p>{error && <p role="alert" className="text-sm text-[#80421e]">{error}</p>}</div>;
+  return <div className="mt-4 space-y-3"><button ref={button} type="button" disabled={busy} aria-busy={busy} className="pixel-button bg-[#f8dda7]" onClick={() => void generate()}>{busy ? "Đang tạo ví dụ…" : "Gợi ý câu ví dụ"}</button><p className="text-sm text-[#647059]">Câu gợi ý sẽ điền vào hai ô trên. Hãy đọc lại và sửa nếu cần trước khi lưu.</p>{error && <p role="alert" className="text-sm text-[#80421e]">{error}</p>}</div>;
 }

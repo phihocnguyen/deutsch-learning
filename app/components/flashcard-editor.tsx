@@ -35,13 +35,13 @@ export function FlashcardEditor({ selectedTopic, onSelect, mode = "all" }: { sel
       validateTopicName(name, data);
       const response = await fetch("/api/topics", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name }) });
       const result = await response.json();
-      if (!response.ok) throw new Error(result.error ?? "Không thể lưu chủ đề vào cơ sở dữ liệu.");
+      if (!response.ok) throw new Error(result.error ?? "Không lưu được chủ đề. Hãy thử lại.");
       update(current => ({ ...current, topics: [...current.topics, result.topic] }));
       setEditing(null); setDeleting(false); onSelect(result.topic.name); form.reset();
       requestAnimationFrame(() => dialog.current?.querySelector<HTMLInputElement>('[name="german"]')?.focus());
-      setMessage("Đã lưu chủ đề vào cơ sở dữ liệu. Thêm flashcard đầu tiên bên dưới nhé!");
+      setMessage("Đã lưu chủ đề. Thêm thẻ từ đầu tiên bên dưới nhé!");
       if (mode === "topics") dialog.current?.close();
-    } catch (error) { setFailure(error instanceof Error ? error.message : "Không thể lưu chủ đề vào cơ sở dữ liệu."); }
+    } catch (error) { setFailure(error instanceof Error ? error.message : "Không lưu được chủ đề. Hãy thử lại."); }
     finally { setSavingTopic(false); }
   }
   async function saveWord(event: FormEvent<HTMLFormElement>) {
@@ -69,7 +69,7 @@ export function FlashcardEditor({ selectedTopic, onSelect, mode = "all" }: { sel
         body: JSON.stringify({ ...word, id: editing?.id }),
       });
       const result = await response.json();
-      if (!response.ok) throw new Error(result.error ?? "Không thể lưu flashcard vào cơ sở dữ liệu.");
+      if (!response.ok) throw new Error(result.error ?? "Không lưu được thẻ từ. Hãy thử lại.");
       const persisted: CustomWord = {
         ...result.flashcard,
         topic: topic.name,
@@ -82,8 +82,8 @@ export function FlashcardEditor({ selectedTopic, onSelect, mode = "all" }: { sel
         return { ...current, words: editing ? current.words.map(w => w.id === editing.id ? persisted : w) : [...current.words, persisted] };
       });
       setEditing(null); form.reset(); onSelect(topic.name);
-      setMessage(editing ? "Đã cập nhật flashcard trong cơ sở dữ liệu." : "Đã lưu flashcard vào cơ sở dữ liệu.");
-    } catch (error) { setFailure(error instanceof Error ? error.message : "Không thể lưu flashcard vào cơ sở dữ liệu."); }
+      setMessage(editing ? "Đã cập nhật thẻ từ." : "Đã lưu thẻ từ.");
+    } catch (error) { setFailure(error instanceof Error ? error.message : "Không lưu được thẻ từ. Hãy thử lại."); }
     finally { setSavingTopic(false); }
   }
   async function removeTopic() {
@@ -92,9 +92,9 @@ export function FlashcardEditor({ selectedTopic, onSelect, mode = "all" }: { sel
     try {
       const response = await fetch(`/api/topics/${topic.id}`, { method: "DELETE" });
       const result = await response.json();
-      if (!response.ok) throw new Error(result.error ?? "Không thể xóa chủ đề trong cơ sở dữ liệu.");
+      if (!response.ok) throw new Error(result.error ?? "Không xóa được chủ đề. Hãy thử lại.");
       update(current => ({ ...current, topics: current.topics.filter(item => item.id !== topic.id), words: current.words.filter(word => word.topicId !== topic.id) }));
-      setEditing(null); setDeleting(false); onSelect(""); setMessage("Đã xóa chủ đề và flashcard khỏi cơ sở dữ liệu.");
+      setEditing(null); setDeleting(false); onSelect(""); setMessage("Đã xóa chủ đề và các thẻ từ.");
     } catch (error) { setFailure(error instanceof Error ? error.message : "Không thể xóa chủ đề."); }
     finally { setSavingTopic(false); }
   }
@@ -104,10 +104,10 @@ export function FlashcardEditor({ selectedTopic, onSelect, mode = "all" }: { sel
     try {
       const response = await fetch(`/api/topics/${topic.id}/flashcards/${id}`, { method: "DELETE" });
       const result = await response.json();
-      if (!response.ok) throw new Error(result.error ?? "Không thể xóa flashcard trong cơ sở dữ liệu.");
+      if (!response.ok) throw new Error(result.error ?? "Không xóa được thẻ từ. Hãy thử lại.");
       update(current => ({ ...current, words: current.words.filter(word => word.id !== id) }));
       if (editing?.id === id) setEditing(null);
-      setMessage("Đã xóa flashcard khỏi cơ sở dữ liệu.");
+      setMessage("Đã xóa thẻ từ.");
     } catch (error) { setFailure(error instanceof Error ? error.message : "Không thể xóa flashcard."); }
     finally { setSavingTopic(false); }
   }

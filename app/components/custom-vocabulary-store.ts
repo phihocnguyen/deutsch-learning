@@ -11,11 +11,11 @@ const listeners = new Set<() => void>();
 async function loadDatabase(ownerId: string) {
   try {
     const response = await fetch("/api/topics", { cache: "no-store" });
-    if (!response.ok) throw new Error(response.status === 401 ? "Hãy đăng nhập lại để tải chủ đề." : "Không tải được chủ đề từ cơ sở dữ liệu.");
+    if (!response.ok) throw new Error(response.status === 401 ? "Hãy đăng nhập lại để tải chủ đề." : "Không tải được chủ đề. Hãy thử lại.");
     const { topics } = await response.json() as { topics: { id: string; name: string }[] };
     const words = (await Promise.all(topics.map(async topic => {
       const result = await fetch(`/api/topics/${topic.id}/flashcards`, { cache: "no-store" });
-      if (!result.ok) throw new Error("Không tải được flashcard từ cơ sở dữ liệu.");
+      if (!result.ok) throw new Error("Không tải được thẻ từ. Hãy thử lại.");
       const data = await result.json() as { flashcards: import("@/lib/custom-vocabulary").CustomWord[] };
       return data.flashcards.map(card => ({ ...card, article: card.article ?? undefined, plural: card.plural ?? undefined }));
     }))).flat();
@@ -25,7 +25,7 @@ async function loadDatabase(ownerId: string) {
     emit();
   } catch (error) {
     if (activeOwner !== ownerId) return;
-    snapshot = { data: emptyCustomVocabulary, ready: true, error: error instanceof Error ? error.message : "Không tải được dữ liệu từ cơ sở dữ liệu." };
+    snapshot = { data: emptyCustomVocabulary, ready: true, error: error instanceof Error ? error.message : "Không tải được bộ từ. Hãy thử lại." };
     emit();
   }
 }

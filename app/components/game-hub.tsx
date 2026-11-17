@@ -23,7 +23,7 @@ function Results({ words, answers, replay, leave }: { words: Word[]; answers: An
     <ul className="my-6 space-y-3">{words.map(w => <li key={w.id} className="border-b border-[#d8d9c9] pb-3"><span aria-label={answers[w.id] ? "Đúng" : "Cần ôn"}>{answers[w.id] ? "✓" : "↻"}</span> <span lang="de">{fullWord(w)}</span> — {w.vietnamese}</li>)}</ul>
     {wrong.length > 0 && <button className="pixel-button mb-5 bg-[#f8dda7]" disabled={!ready || saved} onClick={() => { for (const w of wrong) setStatus(w.id, "review"); setSaved(true); }}>{saved ? "Đã đánh dấu cần ôn" : `Đánh dấu ${wrong.length} từ cần ôn`}</button>}
     {error && <p role="alert" className="mb-5 text-sm text-[#80421e]">{error}</p>}
-    <div className="flex flex-wrap gap-4"><button className="pixel-button bg-[#f9cd65]" onClick={replay}>↻ Chơi lượt mới</button><button className="pixel-button bg-[#fffdf5]" onClick={leave}>Chọn game khác</button><Link className="pixel-button bg-[#dbe8cc]" href="/flashcards">Ôn flashcard →</Link></div></section>;
+    <div className="flex flex-wrap gap-4"><button className="pixel-button bg-[#f9cd65]" onClick={replay}>↻ Chơi lượt mới</button><button className="pixel-button bg-[#fffdf5]" onClick={leave}>Chọn trò chơi khác</button><Link className="pixel-button bg-[#dbe8cc]" href="/flashcards">Ôn flashcard →</Link></div></section>;
 }
 
 function MatchingGame({ words, replay, leave }: { words: Word[]; replay: () => void; leave: () => void }) {
@@ -95,7 +95,7 @@ export function GameHub() {
   }, [chooseGame]);
   useEffect(() => {
     fetch("/api/topics", { cache: "no-store" }).then(async response => {
-      if (!response.ok) throw new Error(response.status === 401 ? "Hãy đăng nhập lại để tải bộ từ." : "Không tải được bộ từ từ cơ sở dữ liệu.");
+      if (!response.ok) throw new Error(response.status === 401 ? "Hãy đăng nhập lại để tải bộ từ." : "Không tải được bộ từ. Hãy thử lại.");
       const data = await response.json(); setTopicList(data.topics);
     }).catch(error => setTopicError(error instanceof Error ? error.message : "Không tải được bộ từ."))
       .finally(() => setTopicLoading(false));
@@ -105,7 +105,7 @@ export function GameHub() {
     setCreatingGame(true);
     try {
       const response = await fetch(`/api/topics/${topicId}/flashcards`, { cache: "no-store" });
-      if (!response.ok) throw new Error("Không tải được flashcard từ cơ sở dữ liệu.");
+      if (!response.ok) throw new Error("Không tải được thẻ từ. Hãy thử lại.");
       const data = await response.json();
       const words = createDeck("", 5, data.flashcards);
       if (!words.length) { setTopicError("Chủ đề chưa có từ. Hãy chọn chủ đề khác."); return; }
