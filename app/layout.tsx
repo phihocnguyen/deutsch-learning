@@ -11,7 +11,7 @@ const pixelFont = VT323({
 
 export const metadata: Metadata = {
   title: "Deutsch Learning — Học từ vựng tiếng Đức",
-  description: "Học từ vựng Đức–Việt và ngữ pháp A1–A2 qua flashcard, trò chơi và bài tập có giải thích.",
+  description: "Học từ vựng Đức–Việt và ngữ pháp A1–B2 chọn lọc qua flashcard, trò chơi và bài tập có giải thích.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

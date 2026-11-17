@@ -156,4 +156,15 @@ export const a2Lessons: GrammarLesson[] = [
     sources: [dw(7, "Tolle Idee · Passiv"), ids("progr%40mm/6723", "Aktiv und Passiv", "Perspektive / Bildung des Passivs", "Werden + Partizip II và thay đổi góc nhìn."), ids("sgt/2237?termini=term", "Passiv", "Vorgangspassiv / Zustandspassiv", "Phân biệt werden-Passiv và sein-Passiv.")],
     questions: [q("1", "Điền: Das Auto ____ repariert. (werden, Präsens Passiv)", "wird", "Chủ ngữ số ít dùng wird."), q("2", "Điền: Die Tür wird ____. (öffnen)", "geöffnet", "Partizip II của öffnen là geöffnet."), q("3", "Chọn: Die Briefe ____ geschrieben. (Präsens Passiv)", "werden", "Chủ ngữ số nhiều dùng werden.", ["wird", "werden", "wirst"])],
   },
+  {
+    id: "a2-personal-pronouns", level: "A2", title: "Đại từ nhân xưng ở ba cách", summary: "Ich, mich, mir: chọn đại từ theo vai trò trong câu.", prerequisites: ["a1-pronouns", "a1-accusative", "a1-dative", "a2-two-objects"],
+    objectives: ["Đối chiếu đủ dạng Nominativ, Akkusativ và Dativ", "Chọn đại từ theo cấu trúc động từ và giới từ"],
+    rules: ["Nominativ thường đánh dấu chủ ngữ; Akkusativ và Dativ có vai trò tùy cấu trúc động từ hoặc giới từ. Học cả cụm, không chỉ dựa vào bản dịch tiếng Việt.", "Sehen nhận tân ngữ Akkusativ trong mẫu Ich sehe ihn; helfen nhận Dativ trong Ich helfe ihm.", "Sie viết hoa là xưng hô lịch sự; sie viết thường có thể chỉ cô ấy hoặc họ. Dạng động từ và ngữ cảnh giúp phân biệt."],
+    table: { headers: ["Người/vật", "Nominativ", "Akkusativ", "Dativ"], rows: [["tôi", "ich", "mich", "mir"], ["bạn", "du", "dich", "dir"], ["anh ấy", "er", "ihn", "ihm"], ["cô ấy", "sie", "sie", "ihr"], ["nó", "es", "es", "ihm"], ["chúng tôi", "wir", "uns", "uns"], ["các bạn", "ihr", "euch", "euch"], ["họ", "sie", "sie", "ihnen"], ["quý vị", "Sie", "Sie", "Ihnen"]] },
+    examples: [{ de: "Ich sehe ihn jeden Morgen.", vi: "Tôi gặp anh ấy mỗi sáng." }, { de: "Kannst du mir das Foto zeigen?", vi: "Bạn cho tôi xem bức ảnh được không?" }],
+    mistake: { wrong: "Ich helfe ihn.", right: "Ich helfe ihm.", why: "Helfen đi với Dativ; đại từ của er ở Dativ là ihm." },
+    scope: "Ôn và hoàn chỉnh bảng đại từ nhân xưng Nom/Akk/Dat từ PDF đọc thử, trang 46–52. Chưa gồm Genitiv của đại từ hay mọi cách dùng đặc biệt.",
+    sources: [reference("Goethe-Institut", "Deutsch Online A2 — Übersicht Redemittel und Grammatik", "https://lernplattform.goethe.de/pluginfile.php/1496709/mod_folder/content/0/DTonlineA2_K08_GR-RM_Rueckschau_DE.pdf#page=6", "Kapitel 8 · Wiederholung Personalpronomen, trang 6", "Bảng đại từ Nom, Akk và Dat trong tài liệu A2."), ids("progr%40mm/6855", "Personalpronomen", "Formen und Kasus", "Đại từ nhân xưng thay đổi theo cách ngữ pháp.")],
+    questions: [q("1", "Điền: Ich sehe ____ jeden Morgen. (er)", "ihn", "Sehen nhận tân ngữ Akkusativ; er → ihn."), q("2", "Điền: Wir helfen ____. (sie = cô ấy)", "ihr", "Helfen đi với Dativ; sie → ihr."), q("3", "Điền: Kannst du ____ das Foto zeigen? (ich)", "mir", "Người nhận trong mẫu zeigen là Dativ: ich → mir.")],
+  },
 ];

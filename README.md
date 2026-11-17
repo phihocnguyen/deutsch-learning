@@ -1,6 +1,6 @@
 ﻿# Deutsch Learning
 
-Website học từ vựng Đức–Việt và ngữ pháp A1–A2 bằng Next.js 16, React 19 và Tailwind CSS 4, giao diện pixel.
+Website học từ vựng Đức–Việt và ngữ pháp A1–A2 cùng bài B1–B2 chọn lọc bằng Next.js 16, React 19 và Tailwind CSS 4, giao diện pixel.
 
 Trang quản trị: `/admin/login` → `/admin/users`, quản lý tài khoản người học, khóa/mở khóa và thu hồi phiên. Hướng dẫn tạo tài khoản admin và cấu hình: [docs/admin.md](docs/admin.md).
 
@@ -32,7 +32,7 @@ Tests dùng khả năng chạy TypeScript trực tiếp của Node.js; dùng Nod
 - `/progress`: thống kê từ, danh sách từ theo trạng thái thực tế và lịch sử 50 lượt bài tập gần nhất.
 - `/games`: nối từ, chọn nghĩa, nghe đoán từ, sắp xếp chữ; chọn chủ đề, 5 từ/lượt, chấm điểm lần đầu, xem kết quả, chơi lại và lưu các từ sai vào danh sách cần ôn.
 - `/exercises`: điền từ vào câu ví dụ, chọn mạo từ và dịch Việt–Đức. Câu điền từ chỉ dùng ví dụ có chứa nguyên từ đã nhập (không tự đoán dạng chia động từ). Có nghe đáp án, thử lại và lượt ôn riêng cho những từ sai; lọc theo chủ đề hoặc từ cần ôn.
-- `/grammar`: hai mục ngữ pháp A1 và A2, mỗi mục 14 bài; tổng 28 bài và 89 câu luyện. Bài đã đánh dấu đọc có nền xanh nhẹ. Mỗi bài có mục tiêu, quy tắc, bảng mẫu, ví dụ có audio, lỗi thường gặp và phạm vi áp dụng.
+- `/grammar`: A1 có 14 bài, A2 có 15 bài; B1 có 3 bài và B2 có 1 bài chọn lọc từ PDF người dùng cung cấp, tổng 33 bài và 104 câu luyện. Bài đã đánh dấu đọc có nền xanh nhẹ. Mỗi bài có mục tiêu, quy tắc, bảng mẫu, ví dụ có audio, lỗi thường gặp và phạm vi áp dụng.
 - `/grammar/a1?lesson=a1-time`: bài đọc giờ chi tiết với vor/nach/halb/Viertel, đồng hồ tương tác, hai cách đọc 12/24 giờ và 8 câu luyện.
 - Ngữ pháp có nguồn đối chiếu trong `lib/grammar/` và `docs/grammar/`; theo yêu cầu người dùng, reference không hiển thị trên giao diện học.
 - Font pixel VT323 hỗ trợ tiếng Việt và tiếng Đức, được Next.js tự phục vụ từ ứng dụng.
@@ -92,7 +92,7 @@ không phân biệt hoa/thường của bài từ vựng cho mọi bài ngữ ph
 - `tests/grammar.test.mjs`, `tests/time.test.mjs`: phạm vi bài học, đáp án thay thế, chữ hoa/dấu, dữ liệu ngữ pháp và các mốc giờ.
 - `e2e/learning.spec.ts`, `e2e/exercises.spec.ts`: kiểm tra giao diện, lượt chơi và bài tập bằng Playwright.
 - `e2e/quality.spec.ts`: kiểm tra màn hình nhỏ, điều hướng, bàn phím, giảm chuyển động, lỗi dữ liệu, đồng bộ hai tab, audio và 404.
-- `e2e/grammar.spec.ts`: hai mục A1/A2, 28 bài học, luyện/ôn/lưu, highlight bài đọc, màn hình nhỏ và đồng hồ tương tác.
+- `e2e/grammar.spec.ts`: bốn mục A1/A2/B1/B2, 33 bài học, luyện/ôn/lưu, highlight bài đọc, màn hình nhỏ và đồng hồ tương tác.
 - `scripts/test-production.mjs`: mở và dừng production server cho kiểm tra tự động, kể cả trên Windows.
 - `PLAN.md`: trạng thái và commit từng phase.
 

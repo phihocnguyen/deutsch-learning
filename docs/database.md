@@ -3,6 +3,8 @@
 Schema thực thi: `database/schema.sql` (PostgreSQL trên Neon). Auth.js dùng Neon adapter và
 Google OAuth; schema gồm bảng Auth.js và bảng chủ đề/thẻ/tiến độ theo chủ tài khoản.
 Schema không tạo chủ đề hay flashcard mẫu. Ngữ pháp vẫn là nội dung tĩnh riêng.
+`feedback_reports` lưu góp ý/báo lỗi của người học để admin xem; khi xóa tài khoản,
+liên kết người gửi được đặt thành `NULL`.
 
 ```mermaid
 erDiagram

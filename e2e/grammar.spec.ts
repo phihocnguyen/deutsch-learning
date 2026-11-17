@@ -1,15 +1,16 @@
 import { test, expect } from "@playwright/test";
 import { grammarLessons } from "../lib/grammar";
+import { grammarPath } from "../lib/grammar/types";
 
-test("two grammar topics link to 14 lessons each and every lesson has rules and exercises", async ({ page }) => {
+test("grammar levels link to their lessons and every lesson has rules and exercises", async ({ page }) => {
   await page.goto("/grammar");
   await expect(page.getByRole("heading", { name: "Ngữ pháp tiếng Đức", exact: true })).toBeVisible();
-  for (const level of ["a1", "a2"]) {
+  for (const [level, count] of [["a1", 14], ["a2", 15], ["b1", 3], ["b2", 1]] as const) {
     await page.goto(`/grammar/${level}`);
-    await expect(page.locator(`main a[href^="/grammar/${level}?lesson="]`)).toHaveCount(14);
+    await expect(page.locator(`main a[href^="/grammar/${level}?lesson="]`)).toHaveCount(count);
   }
   for (const lesson of grammarLessons) {
-    await page.goto(`/grammar/${lesson.level.toLowerCase()}?lesson=${lesson.id}`);
+    await page.goto(`${grammarPath(lesson.level)}?lesson=${lesson.id}`);
     await expect(page.getByRole("heading", { name: lesson.title, exact: true })).toBeVisible();
     await expect(page.getByRole("table")).toBeVisible();
     await expect(page.getByRole("heading", { name: "Phạm vi và lưu ý", exact: true })).toBeVisible();
@@ -74,7 +75,7 @@ test("grammar pages, long titles and tables fit a 320px phone without client err
   await page.setViewportSize({ width: 320, height: 844 });
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
-  for (const path of ["/grammar", "/grammar/a1", "/grammar/a2", ...grammarLessons.map(l => `/grammar/${l.level.toLowerCase()}?lesson=${l.id}`)]) {
+  for (const path of ["/grammar", "/grammar/a1", "/grammar/a2", "/grammar/b1", "/grammar/b2", ...grammarLessons.map(l => `${grammarPath(l.level)}?lesson=${l.id}`)]) {
     await page.goto(path);
     await expect(page.locator("main h1")).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), path).toBe(true);

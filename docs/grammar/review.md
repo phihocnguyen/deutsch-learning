@@ -4,10 +4,10 @@ Ngày: 2026-11-16. Người biên soạn/đối chiếu: Codex. Chưa có giáo 
 
 ## Phạm vi nội dung
 
-- Hai mục A1/A2, mỗi mục 14 bài nền tảng. Không tuyên bố bao phủ mọi nội dung
-  của mọi giáo trình A1/A2 hoặc là khóa luyện đủ kỹ năng để thi chứng chỉ.
-- 89 câu luyện: A1 có 47, A2 có 42. Bài đọc giờ có 8 câu; các bài khác có 3 câu.
-- Ví dụ và câu luyện được tự biên soạn. Nguồn trong `a1.ts`, `a2.ts`, `sources.ts`
+- A1 có 14 bài, A2 có 15 bài; B1 có 3 bài và B2 có 1 bài chọn lọc từ PDF.
+  Không tuyên bố bao phủ toàn bộ giáo trình hay đủ kỹ năng thi chứng chỉ.
+- 104 câu luyện: A1 có 47, A2 có 45, B1 có 9, B2 có 3.
+- Ví dụ và câu luyện được tự biên soạn. Nguồn trong `a1.ts`, `a2.ts`, `b1.ts`, `b2.ts`, `sources.ts`
   ghi tổ chức, mục/trang, ngày truy cập và điều được đối chiếu.
 - Theo yêu cầu người dùng, không hiển thị reference trên UI; hồ sơ đối chiếu vẫn
   được giữ trong repository, không thay bằng nhãn tự nhận đã được tổ chức chứng nhận.
@@ -66,8 +66,8 @@ trang về đại từ, danh từ và bốn cách, giới từ, Präteritum, đ�
 Konjunktiv I. [Sổ tay bổ sung](bo-sung-tu-pdf.md) ghi rõ trang và cung cấp ví dụ,
 bài tập do dự án viết mới.
 
-Các phần đại từ, cách, giới từ và Präteritum củng cố bài A1/A2 hiện có. Đồng vị,
-Futur I và Konjunktiv I được ghi là phần mở rộng sau A2, chưa đưa vào giao diện
-hay tính là nội dung của 28 bài. Khi rà lại, không dùng mẹo “hễ chuyển động là
+Đại từ ba cách nằm trong bài A2 mới; Genitiv, đồng vị, Futur I ở B1; Konjunktiv I
+ở B2 theo phân bổ của Goethe Online B2. Giới từ và Präteritum củng cố các bài
+A1/A2 hiện có. Khi rà lại, không dùng mẹo “hễ chuyển động là
 Akkusativ” hoặc “Futur I là mọi hành động tương lai” như quy tắc tuyệt đối.
 Các điểm này đã được đối chiếu thêm với các mục IDS grammis liên kết trong sổ tay.

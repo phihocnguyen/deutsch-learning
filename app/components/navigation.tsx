@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-const links = [["/", "⌂", "Tổng quan"], ["/vocabulary", "▥", "Thư viện từ"], ["/flashcards", "▤", "Flashcard"], ["/grammar", "¶", "Ngữ pháp A1–A2"], ["/games", "✚", "Trò chơi"], ["/exercises", "✎", "Bài tập"], ["/progress", "↗", "Tiến độ"]];
+const links = [["/", "⌂", "Tổng quan"], ["/vocabulary", "▥", "Thư viện từ"], ["/flashcards", "▤", "Flashcard"], ["/grammar", "¶", "Ngữ pháp"], ["/games", "✚", "Trò chơi"], ["/exercises", "✎", "Bài tập"], ["/progress", "↗", "Tiến độ"]];
 export function Navigation() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);

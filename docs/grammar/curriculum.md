@@ -5,8 +5,8 @@ chứng nhận hoặc bản sao toàn bộ giáo trình của tổ chức nào. 
 độc lập trên giao diện; các bài bên trong có trình tự và kiến thức tiên quyết.
 
 Đọc thêm [sổ tay bổ sung từ bản PDF đọc thử](bo-sung-tu-pdf.md) để ôn bảng đại từ,
-bốn cách, giới từ và các chủ đề mở rộng sau A2. Tài liệu bổ sung không thay đổi
-phạm vi 28 bài đang có trong ứng dụng.
+bốn cách, giới từ và các chủ đề đã đưa vào A2, B1, B2. B1/B2 là bài chọn lọc,
+không phải khóa đầy đủ cho hai cấp độ đó.
 
 ## Nguồn nền
 
@@ -37,7 +37,7 @@ phạm vi 28 bài đang có trong ứng dụng.
 | 13 | Imperativ du/ihr/Sie; các dạng đặc biệt cơ bản | 02 | tr. 72, 74 |
 | 14 | Präteritum của sein/haben | 01–03 | tr. 42 |
 
-## A2 — 14 bài mở rộng
+## A2 — 15 bài mở rộng
 
 | Bài | Phạm vi thực dạy | Kiến thức cần trước | D2 / nguồn quy tắc |
 | --- | --- | --- | --- |
@@ -55,6 +55,21 @@ phạm vi 28 bài đang có trong ứng dụng.
 | 12 | Mục đích: um … zu và damit | A2-01 | tr. 7; [IDS, Zweck](https://grammis.ids-mannheim.de/progr%40mm/6822) |
 | 13 | Động từ hai tân ngữ; mẫu danh từ/đại từ | A1-06, 10 | tr. 6; [IDS, Komplemente](https://grammis.ids-mannheim.de/progr%40mm/5251) |
 | 14 | Giới thiệu werden-Passiv Präsens | A1-12, A2-01 | tr. 7; [IDS, Aktiv/Passiv](https://grammis.ids-mannheim.de/progr%40mm/6723) |
+| 15 | Đại từ nhân xưng Nom/Akk/Dat từ PDF đọc thử tr. 46–52 | A1-01, 06, 10; A2-13 | [Goethe Online A2, Kapitel 8 tr. 6](https://lernplattform.goethe.de/pluginfile.php/1496709/mod_folder/content/0/DTonlineA2_K08_GR-RM_Rueckschau_DE.pdf#page=6) |
+
+## B1 — 3 bài chọn lọc từ PDF
+
+| Bài | Phạm vi | Nguồn đối chiếu |
+| --- | --- | --- |
+| 01 | Genitiv và bảng mạo từ bốn cách | PDF tr. 20–45; [Goethe, Deutsche Grammatik](https://www.goethe.de/ins/de/de/prf/grm.html) |
+| 02 | Đồng vị lỏng, Nom/Akk/Dat | PDF tr. 97–99; [IDS, Appositionen](https://grammis.ids-mannheim.de/systematische-grammatik/1676) |
+| 03 | Futur I, dự đoán và Präsens tương lai | PDF tr. 100–104; [Goethe Training Online B1, tr. 37 và 68](https://lernplattform.goethe.de/pluginfile.php/1502007/mod_folder/content/0/DT_Training_Online_B1_RM-GR_K01-18_de.pdf#page=37) |
+
+## B2 — 1 bài chọn lọc từ PDF
+
+| Bài | Phạm vi | Nguồn đối chiếu |
+| --- | --- | --- |
+| 01 | Konjunktiv I trong lời thuật | PDF tr. 105–115; [Goethe Online B2, tr. 85](https://lernen.goethe.de/deutschonline/B2/PDF/B2_erweitert/DT-online_B2_K01-14_GR-RM_Rueckschau_de.pdf#page=85) |
 
 ## Quy tắc biên tập và chấm
 
@@ -74,7 +89,8 @@ phạm vi 28 bài đang có trong ứng dụng.
 
 ## Trạng thái nghiên cứu
 
-Đã biên soạn 28 bài, 89 câu luyện và đối chiếu các mẫu trong phạm vi nguồn đã ghi.
+Đã biên soạn 33 bài, 104 câu luyện (A1 14 bài, A2 15 bài, B1 3 bài, B2 1 bài)
+và đối chiếu các mẫu trong phạm vi nguồn đã ghi.
 Nguồn Goethe A2 khác tìm thấy qua tìm kiếm nhưng không truy cập được ổn định;
 không dùng làm nguồn đã đọc. Chưa có giáo viên độc lập duyệt.
 Các lưu ý rà soát nội dung được ghi trong `review.md`; kiểm tra phần mềm là một

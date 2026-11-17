@@ -57,7 +57,8 @@ Không bắt buộc người dùng cung cấp giáo trình. Nếu có giáo trì
 
 ## Trạng thái
 
-Đã hoàn thành đề cương và bản biên soạn 28 bài (14 A1, 14 A2), cùng 89 câu luyện.
+Đã hoàn thành đề cương nền tảng A1/A2 và bổ sung các chủ đề từ PDF thành 33 bài
+(14 A1, 15 A2, 3 B1, 1 B2), cùng 104 câu luyện. B1/B2 là bài chọn lọc.
 Phạm vi và nguồn nằm trong `lib/grammar/` và `curriculum.md`; nguồn được đối chiếu
 ở các mục đã ghi, không suy ra từ tên tổ chức đơn thuần. Bài giờ được mở rộng theo
 phản hồi người dùng, có đồng hồ tương tác và hai cách đọc. Chưa có giáo viên độc lập

@@ -10,12 +10,12 @@ Các câu ví dụ và bài tập dưới đây được viết mới; số tran
 | --- | ---: | --- |
 | Đại từ chủ ngữ, chia hiện tại | 8–19 | A1 bài 1–2 |
 | Danh từ, mạo từ, số nhiều, các cách | 20–45 | A1 bài 4, 6–7, 10 |
-| Đại từ làm tân ngữ | 46–52 | Ôn cùng A1 bài 6 và 10; bảng đầy đủ ở dưới |
+| Đại từ làm tân ngữ | 46–52 | Ôn cùng A1 bài 6 và 10; bài A2 về đại từ ba cách |
 | Giới từ và nơi chốn/đích đến | 53–79 | A1 bài 10, A2 bài 8 |
 | Präteritum | 80–96 | A1 bài 14, A2 bài 9 |
-| Đồng vị | 97–99 | Phần mở rộng sau A2 ở dưới |
-| Futur I | 100–104 | Phần mở rộng sau A2 ở dưới |
-| Konjunktiv I trong lời nói gián tiếp | 105–115 | Phần mở rộng sau A2 ở dưới |
+| Đồng vị | 97–99 | B1: đồng vị |
+| Futur I | 100–104 | B1: Futur I và dự đoán |
+| Konjunktiv I trong lời nói gián tiếp | 105–115 | B2: lời thuật trong văn viết |
 
 ## 1. Đại từ: cùng một người, nhiều vai trò
 
@@ -158,8 +158,8 @@ và đồng vị lỏng có chi tiết khác nhau nên không áp một khuôn c
 - `Ich spreche mit Herrn Weber, meinem Nachbarn.` — Tôi nói chuyện với ông
   Weber, hàng xóm của tôi. `mit` kéo hai cụm về Dativ.
 
-Đây là chủ đề mở rộng sau A2; người học A1 chỉ cần nhận ra phần giữa dấu phẩy
-là thông tin bổ sung, không cần tự tạo mọi dạng biến cách.
+Chủ đề này được đưa vào bài B1 chọn lọc. Người học A1 chỉ cần nhận ra phần giữa
+dấu phẩy là thông tin bổ sung, không cần tự tạo mọi dạng biến cách.
 
 ## 7. Konjunktiv I: thuật lại lời người khác
 
@@ -183,8 +183,8 @@ Konjunktiv II thường được dùng để giữ dấu hiệu lời thuật.
 - Câu hỏi gián tiếp: `Mira fragt, wann der Kurs beginne.` — Mira hỏi khi nào
   khóa học bắt đầu. Mệnh đề hỏi gián tiếp dùng động từ ở cuối.
 
-Đây là phần sau A2 trong lộ trình này; không trộn với Konjunktiv II dùng cho
-yêu cầu lịch sự ở A2.
+Phần này được đưa vào bài B2 chọn lọc, theo phân bổ của Goethe Online B2; không
+trộn với Konjunktiv II dùng cho yêu cầu lịch sự ở A2.
 
 ## 8. Tự kiểm tra
 
@@ -226,6 +226,5 @@ yêu cầu lịch sự ở A2.
 - [IDS grammis: Appositionen](https://grammis.ids-mannheim.de/systematische-grammatik/1676).
 - [IDS grammis: Konjunktiv I](https://grammis.ids-mannheim.de/terminologie/400).
 
-Tài liệu học bổ sung này chưa qua giáo viên độc lập duyệt. Các bài A1/A2 trong
-ứng dụng vẫn theo phạm vi ở [đề cương](curriculum.md); các mục 6–7 là mở rộng,
-không được tính là đã đưa vào bài học trong giao diện.
+Tài liệu học bổ sung này chưa qua giáo viên độc lập duyệt. Các chủ đề đã được
+phân vào bài A2, B1 và B2 chọn lọc trong ứng dụng; xem [đề cương](curriculum.md).

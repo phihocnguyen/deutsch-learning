@@ -3,9 +3,10 @@ import assert from "node:assert/strict";
 import { grammarLessons, findGrammarLesson, gradeGrammarAnswer } from "../lib/grammar/index.ts";
 import { emptyGrammarProgress, appendGrammarAttempt, parseGrammarProgress, latestGrammarAnswers } from "../lib/grammar/progress.ts";
 
-test("two levels contain 28 unique lessons, with prerequisites already introduced", () => {
+test("four levels contain 33 unique lessons, with prerequisites already introduced", () => {
   const seen = new Set();
-  for (const level of ["A1", "A2"]) assert.equal(grammarLessons.filter(l => l.level === level).length, 14);
+  for (const [level, count] of [["A1", 14], ["A2", 15], ["B1", 3], ["B2", 1]]) assert.equal(grammarLessons.filter(l => l.level === level).length, count);
+  assert.equal(grammarLessons.length, 33);
   for (const lesson of grammarLessons) {
     assert.ok(!seen.has(lesson.id));
     for (const required of lesson.prerequisites) assert.ok(seen.has(required), `${lesson.id}: ${required}`);
@@ -24,7 +25,7 @@ test("lessons have scoped rules, valid tables, original examples and traceable s
     if (lesson.level === "A2") assert.ok(lesson.sources.some(s => s.publisher !== "Deutsche Welle"), "A level index alone does not support a rule");
   }
 });
-test("89 exercise questions have unique local IDs and grade all declared alternatives", () => {
+test("104 exercise questions have unique local IDs and grade all declared alternatives", () => {
   let count = 0;
   for (const lesson of grammarLessons) {
     assert.equal(new Set(lesson.questions.map(q => q.id)).size, lesson.questions.length);
@@ -36,7 +37,16 @@ test("89 exercise questions have unique local IDs and grade all declared alterna
       assert.equal(gradeGrammarAnswer(question, ""), false);
     }
   }
-  assert.equal(count, 89);
+  assert.equal(count, 104);
+});
+test("PDF topics are assigned to their lessons and all new exercises are answerable", () => {
+  for (const [id, level] of [["a2-personal-pronouns", "A2"], ["b1-genitive", "B1"], ["b1-apposition", "B1"], ["b1-future", "B1"], ["b2-reported-speech", "B2"]]) {
+    const lesson = findGrammarLesson(id);
+    assert.equal(lesson.level, level);
+    assert.match(lesson.scope, /PDF/);
+    assert.equal(lesson.questions.length, 3);
+    for (const question of lesson.questions) assert.ok(gradeGrammarAnswer(question, question.answers[0]));
+  }
 });
 test("grammar grading preserves capitalization, umlauts, sharp s and required punctuation", () => {
   const plural = findGrammarLesson("a1-articles").questions[1];

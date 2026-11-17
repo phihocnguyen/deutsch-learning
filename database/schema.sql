@@ -86,3 +86,14 @@ CREATE TABLE IF NOT EXISTS flashcard_progress (
   FOREIGN KEY(flashcard_id, owner_id) REFERENCES flashcards(id, owner_id) ON DELETE CASCADE
 );
 CREATE INDEX IF NOT EXISTS flashcard_progress_status_index ON flashcard_progress(owner_id,status);
+
+CREATE TABLE IF NOT EXISTS feedback_reports (
+  id BIGSERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+  category VARCHAR(12) NOT NULL CHECK (category IN ('feedback','bug')),
+  message VARCHAR(2000) NOT NULL CHECK (length(trim(message)) BETWEEN 10 AND 2000),
+  page_path VARCHAR(300) NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS feedback_reports_created_index ON feedback_reports(created_at DESC, id DESC);
+CREATE INDEX IF NOT EXISTS feedback_reports_user_index ON feedback_reports(user_id, created_at DESC);
