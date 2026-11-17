@@ -3,9 +3,18 @@ import { Suspense } from "react";
 import { Navigation } from "@/app/components/navigation";
 import { AccountMenu } from "@/app/components/account-menu";
 import { LoadingIndicator } from "@/app/components/loading-indicator";
+import { LearningOwnerProvider } from "@/app/components/learning-owner";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
+import { connection } from "next/server";
 
-export default function LearningLayout({ children }: { children: React.ReactNode }) {
-  return <>
+export const instant = false;
+
+export default async function LearningLayout({ children }: { children: React.ReactNode }) {
+  await connection();
+  const session = await auth();
+  if (!session?.user?.id) redirect("/login");
+  return <LearningOwnerProvider ownerId={session.user.id}><>
         <a href="#main" className="skip-link">Đến nội dung chính</a>
         <div className="min-h-dvh w-full lg:grid lg:grid-cols-[clamp(245px,18vw,320px)_minmax(0,1fr)]">
           <aside className="border-b-2 border-[#d8d9c9] bg-[#f5f3e8] p-5 lg:sticky lg:top-0 lg:flex lg:h-dvh lg:self-start lg:overflow-y-auto lg:flex-col lg:border-r-2 lg:border-b-0 lg:px-6 lg:py-9">
@@ -18,5 +27,5 @@ export default function LearningLayout({ children }: { children: React.ReactNode
           <main id="main" tabIndex={-1} className="w-full px-6 py-8 sm:px-10 sm:py-10">{children}</main>
           <footer className="mx-6 flex flex-wrap justify-between gap-3 border-t-2 border-[#d8d9c9] py-6 text-xs text-[#6c7163] sm:mx-10"><span>Được tạo cho những bước tiến nhỏ mỗi ngày.</span><span className="font-mono">VIEL ERFOLG! ✦</span></footer></div>
         </div>
-  </>;
+  </></LearningOwnerProvider>;
 }

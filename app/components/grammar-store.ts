@@ -1,30 +1,34 @@
 "use client";
 import { useSyncExternalStore } from "react";
 import { appendGrammarAttempt, emptyGrammarProgress, GRAMMAR_STORAGE_KEY, parseGrammarProgress, type GrammarAttempt, type GrammarProgress } from "@/lib/grammar/progress";
+import { ownerStorageKey } from "@/lib/owner-storage";
+import { useLearningOwner } from "./learning-owner";
 const initial = { progress: emptyGrammarProgress(), ready: false, error: "" };
 let snapshot = initial;
 let initialized = false;
+let activeKey = "";
 const listeners = new Set<() => void>();
 function emit() { for (const listener of listeners) listener(); }
-function load() {
-  try { snapshot = { progress: parseGrammarProgress(localStorage.getItem(GRAMMAR_STORAGE_KEY)), ready: true, error: "" }; }
+function load(key: string) {
+  try { snapshot = { progress: parseGrammarProgress(localStorage.getItem(key)), ready: true, error: "" }; }
   catch { snapshot = { progress: snapshot.progress, ready: true, error: "Không đọc được tiến độ ngữ pháp. Dữ liệu cũ được giữ nguyên cho tới khi bạn chọn lưu thay đổi mới." }; }
 }
-function getSnapshot() { if (!initialized && typeof window !== "undefined") { initialized = true; load(); } return snapshot; }
-function subscribe(listener: () => void) {
+function getSnapshot(key: string) { if (typeof window !== "undefined" && (!initialized || activeKey !== key)) { initialized = true; activeKey = key; snapshot = initial; load(key); } return snapshot; }
+function subscribe(key: string, listener: () => void) {
   listeners.add(listener);
-  const sync = (event: StorageEvent) => { if (event.key === GRAMMAR_STORAGE_KEY || event.key === null) { load(); emit(); } };
+  const sync = (event: StorageEvent) => { if (activeKey === key && (event.key === key || event.key === null)) { load(key); emit(); } };
   window.addEventListener("storage", sync);
   return () => { listeners.delete(listener); window.removeEventListener("storage", sync); };
 }
 export function useGrammarProgress() {
-  const state = useSyncExternalStore(subscribe, getSnapshot, () => initial);
+  const key = ownerStorageKey(GRAMMAR_STORAGE_KEY, useLearningOwner());
+  const state = useSyncExternalStore(listener => subscribe(key, listener), () => getSnapshot(key), () => initial);
   function update(change: (current: GrammarProgress) => GrammarProgress) {
     let current = snapshot.progress;
-    try { if (!snapshot.error) current = parseGrammarProgress(localStorage.getItem(GRAMMAR_STORAGE_KEY)); } catch { /* Preserve session state. */ }
+    try { if (!snapshot.error) current = parseGrammarProgress(localStorage.getItem(key)); } catch { /* Preserve session state. */ }
     const progress = change(current);
     let error = "";
-    try { localStorage.setItem(GRAMMAR_STORAGE_KEY, JSON.stringify(progress)); }
+    try { localStorage.setItem(key, JSON.stringify(progress)); }
     catch { error = "Không lưu được tiến độ ngữ pháp trên thiết bị. Thay đổi được giữ trong phiên hiện tại."; }
     snapshot = { progress, ready: true, error }; emit();
   }
